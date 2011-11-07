@@ -2,5 +2,13 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
+	<classpathentry kind="lib" path="/Users/sylvain/Documents/Projets/yourobot/lib/jbox2d-library-2.1.2.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:file:/Users/sylvain/Documents/Projets/yourobot/lib/jbox2d-library-2.1.2.0-javadoc.jar!/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="/Users/sylvain/Documents/Projets/yourobot/lib/zen.jar"/>
+	<classpathentry kind="lib" path="/Users/sylvain/Documents/Projets/yourobot/lib/slf4j-nop-1.6.4.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
