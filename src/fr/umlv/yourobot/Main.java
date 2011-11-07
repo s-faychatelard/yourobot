@@ -39,6 +39,8 @@ public class Main {
 						public void render(Graphics2D graphics) {
 							double x = ellipse.getX();
 							double y = ellipse.getY();
+							graphics.setBackground(new Color(255,255,255));
+							//graphics.clearRect(0, 0, WIDTH, HEIGHT);
 							graphics.clearRect((int)x, (int)y, (int)ellipse.getWidth(), (int)ellipse.getHeight());
 							switch(event.getKey()) {
 							case UP:
@@ -59,6 +61,7 @@ public class Main {
 							RadialGradientPaint paint = new RadialGradientPaint((float)x, (float)y, SIZE, new float[]{0f, 1f}, new Color[]{color, Color.RED});
 							ellipse.setFrame(x, y, ellipse.getWidth(), ellipse.getHeight());
 							graphics.setPaint(paint);
+							ellipse.getBounds().translate(100, 0);
 							graphics.fill(ellipse);
 							System.out.println(event.toString());
 						}
