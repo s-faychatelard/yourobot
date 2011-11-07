@@ -39,7 +39,9 @@ public class Main {
 						public void render(Graphics2D graphics) {
 							double x = ellipse.getX();
 							double y = ellipse.getY();
-							graphics.clearRect((int)x, (int)y, (int)ellipse.getWidth(), (int)ellipse.getHeight());
+							graphics.setColor(Color.WHITE);
+							graphics.clearRect(0, 0, WIDTH, HEIGHT);
+							//graphics.clearRect((int)x, (int)y, (int)ellipse.getWidth(), (int)ellipse.getHeight());
 							switch(event.getKey()) {
 							case UP:
 								y-=10;
