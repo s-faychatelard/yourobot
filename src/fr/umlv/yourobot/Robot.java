@@ -18,7 +18,7 @@ public class Robot implements Element {
 	private FixtureDef fixtureDef;
 	private Body body;
 	
-	private double direction = 90.;
+	private double direction = 240.;
 	
 	public Robot(Vec2 position) {	
 		PolygonShape blockShape;
@@ -47,6 +47,7 @@ public class Robot implements Element {
 	}
 	
 	public void rotateLeft() {
+		//TODO get direction from this.body.getVelocity()
 		direction = (direction - 10.)%360;
 		if(direction<0) direction = 360;
 		System.out.println(direction);
@@ -57,6 +58,7 @@ public class Robot implements Element {
 	}
 	
 	public void rotateRight() {
+		//TODO get direction from this.body.getVelocity()
 		direction = (direction + 10.)%360;
 		System.out.println(direction);
 		Vec2 vec = new Vec2();

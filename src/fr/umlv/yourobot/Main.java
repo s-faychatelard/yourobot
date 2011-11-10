@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 
 import org.jbox2d.common.Vec2;
-import org.jbox2d.dynamics.BodyType;
 
 import fr.umlv.zen.Application;
 import fr.umlv.zen.ApplicationCode;
@@ -23,7 +22,6 @@ public class Main {
 				final PhysicsWorld world = new PhysicsWorld();
 				final Robot robot = (Robot)world.addElement(new Robot(new Vec2(400, 300)));
 				final Robot robot2 = (Robot)world.addElement(new Robot(new Vec2(300, 300)));
-				robot2.getBody().setType(BodyType.STATIC);
 				for(;;) {
 					final KeyboardEvent event = context.pollKeyboard();
 					context.render(new ApplicationRenderCode() {
