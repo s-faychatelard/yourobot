@@ -18,7 +18,7 @@ public class Robot implements Element {
 	private FixtureDef fixtureDef;
 	private Body body;
 	
-	private double direction = 240.;
+	private double direction = 270.;
 	
 	public Robot(Vec2 position) {	
 		PolygonShape blockShape;
