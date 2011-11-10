@@ -30,28 +30,28 @@ public class Main {
 							if(event != null) {
 								switch(event.getKey()) {
 									case UP:
-										robot.translate(new Vec2(0,-10));
+										robot.translate(new Vec2(0,-10000));
 										break;
 									case DOWN:
-										robot.translate(new Vec2(0,10));
+										robot.translate(new Vec2(0,10000));
 										break;
 									case LEFT:
-										robot.translate(new Vec2(-10,0));
+										robot.translate(new Vec2(-10000,0));
 										break;
 									case RIGHT:
-										robot.translate(new Vec2(10,0));
+										robot.translate(new Vec2(10000,0));
 										break;
 									case Z:
-										robot2.translate(new Vec2(0,-10));
+										robot2.translate(new Vec2(0,-10000));
 										break;
 									case S:
-										robot2.translate(new Vec2(0,10));
+										robot2.translate(new Vec2(0,10000));
 										break;
 									case Q:
-										robot2.translate(new Vec2(-10,0));
+										robot2.translate(new Vec2(-10000,0));
 										break;
 									case D:
-										robot2.translate(new Vec2(10,0));
+										robot2.translate(new Vec2(10000,0));
 										break;
 								}
 							}

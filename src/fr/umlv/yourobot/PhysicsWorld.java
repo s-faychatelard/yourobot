@@ -10,13 +10,16 @@ import org.jbox2d.dynamics.World;
 
 public class PhysicsWorld {
 	private static World world;
-	
-	ArrayList<Element> elementList;
+	private static ArrayList<Element> elementList;
 
 	public PhysicsWorld() {
-		world = new World(new Vec2(0,9.8f), true);
+		world = new World(new Vec2(0,0), true);
 		world.setContactListener(new PhysicsCollision());
 		elementList = new ArrayList<>();
+	}
+	
+	public static ArrayList<Element> getAllElement() {
+		return elementList;
 	}
 	
 	public Element addElement(Element element) {
