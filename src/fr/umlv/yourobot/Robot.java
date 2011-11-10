@@ -30,9 +30,9 @@ public class Robot implements Element {
 
 		fixtureDef = new FixtureDef();
 		fixtureDef.shape = blockShape;
-		fixtureDef.density = 1.f;
-		fixtureDef.friction = 1.f;
-		fixtureDef.restitution = 1.f;
+		fixtureDef.density = .0f;
+		fixtureDef.friction = .0f;
+		fixtureDef.restitution = .0f;
 	}
 	
 	@Override
@@ -44,7 +44,9 @@ public class Robot implements Element {
 	}
 	
 	public void translate(Vec2 vec) {
-			this.body.applyForce(vec, this.body.getLocalCenter());
+		vec.x *= 10000;
+		vec.y *= 10000;
+		this.body.applyForce(vec, this.body.getLocalCenter());
 		//if(this.body.getContactList()==null)
 			//this.body.setTransform(new Vec2(this.body.getPosition().x + vec.x, this.body.getPosition().y + vec.y), 0);
 	}

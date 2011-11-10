@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 
 import org.jbox2d.common.Vec2;
+import org.jbox2d.dynamics.BodyType;
 
 import fr.umlv.zen.Application;
 import fr.umlv.zen.ApplicationCode;
@@ -12,16 +13,17 @@ import fr.umlv.zen.ApplicationRenderCode;
 import fr.umlv.zen.KeyboardEvent;
 
 public class Main {
+	public static final int WIDTH = 800;
+	public static final int HEIGHT = 600;
+	
 	public static void main(String[] args) {
-		final int WIDTH = 800;
-		final int HEIGHT = 600;
-
-		Application.run("You robot", WIDTH, HEIGHT, new ApplicationCode() {
+		Application.run("You robot", Main.WIDTH, Main.HEIGHT, new ApplicationCode() {
 			@Override
 			public void run(final ApplicationContext context) {
 				final PhysicsWorld world = new PhysicsWorld();
 				final Robot robot = (Robot)world.addElement(new Robot(new Vec2(400, 300)));
 				final Robot robot2 = (Robot)world.addElement(new Robot(new Vec2(300, 300)));
+				robot2.getBody().setType(BodyType.STATIC);
 				for(;;) {
 					final KeyboardEvent event = context.pollKeyboard();
 					context.render(new ApplicationRenderCode() {
@@ -30,28 +32,28 @@ public class Main {
 							if(event != null) {
 								switch(event.getKey()) {
 									case UP:
-										robot.translate(new Vec2(0,-10000));
+										robot.translate(new Vec2(0,-10));
 										break;
 									case DOWN:
-										robot.translate(new Vec2(0,10000));
+										robot.translate(new Vec2(0,10));
 										break;
 									case LEFT:
-										robot.translate(new Vec2(-10000,0));
+										robot.translate(new Vec2(-10,0));
 										break;
 									case RIGHT:
-										robot.translate(new Vec2(10000,0));
+										robot.translate(new Vec2(10,0));
 										break;
 									case Z:
-										robot2.translate(new Vec2(0,-10000));
+										robot2.translate(new Vec2(0,-10));
 										break;
 									case S:
-										robot2.translate(new Vec2(0,10000));
+										robot2.translate(new Vec2(0,10));
 										break;
 									case Q:
-										robot2.translate(new Vec2(-10000,0));
+										robot2.translate(new Vec2(-10,0));
 										break;
 									case D:
-										robot2.translate(new Vec2(10000,0));
+										robot2.translate(new Vec2(10,0));
 										break;
 								}
 							}
