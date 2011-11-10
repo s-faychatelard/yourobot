@@ -13,9 +13,12 @@ import org.jbox2d.dynamics.FixtureDef;
 public class Robot implements Element {
 	private final static int ROBOT_WIDTH = 20;
 	private final static int ROBOT_HEIGTH = ROBOT_WIDTH;
+	private final static int INITIAL_SPEED = 1000000;
 	private BodyDef bodyDef;
 	private FixtureDef fixtureDef;
 	private Body body;
+	
+	private double direction = 90.;
 	
 	public Robot(Vec2 position) {	
 		PolygonShape blockShape;
@@ -30,9 +33,9 @@ public class Robot implements Element {
 
 		fixtureDef = new FixtureDef();
 		fixtureDef.shape = blockShape;
-		fixtureDef.density = .0f;
-		fixtureDef.friction = .0f;
-		fixtureDef.restitution = .0f;
+		fixtureDef.density = 1.f;
+		fixtureDef.friction = .8f;
+		fixtureDef.restitution = .1f;
 	}
 	
 	@Override
@@ -43,12 +46,23 @@ public class Robot implements Element {
 		graphics.fillRect((int)p.x, (int)p.y, ROBOT_WIDTH, ROBOT_HEIGTH);
 	}
 	
-	public void translate(Vec2 vec) {
-		vec.x *= 10000;
-		vec.y *= 10000;
-		this.body.applyForce(vec, this.body.getLocalCenter());
-		//if(this.body.getContactList()==null)
-			//this.body.setTransform(new Vec2(this.body.getPosition().x + vec.x, this.body.getPosition().y + vec.y), 0);
+	public void rotateLeft() {
+		direction = (direction - 10.)%360;
+		if(direction<0) direction = 360;
+		System.out.println(direction);
+		Vec2 vec = new Vec2();
+		vec.x = (float)Math.cos(direction/180*3.14)*INITIAL_SPEED;
+		vec.y = (float)Math.sin(direction/180*3.14)*INITIAL_SPEED;
+		this.body.setLinearVelocity(vec);
+	}
+	
+	public void rotateRight() {
+		direction = (direction + 10.)%360;
+		System.out.println(direction);
+		Vec2 vec = new Vec2();
+		vec.x = (float)Math.cos(direction/180*3.14)*INITIAL_SPEED;
+		vec.y = (float)Math.sin(direction/180*3.14)*INITIAL_SPEED;
+		this.body.setLinearVelocity(vec);
 	}
 	
 	@Override

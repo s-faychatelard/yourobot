@@ -31,29 +31,17 @@ public class Main {
 						public void render(Graphics2D graphics) {
 							if(event != null) {
 								switch(event.getKey()) {
-									case UP:
-										robot.translate(new Vec2(0,-10));
-										break;
-									case DOWN:
-										robot.translate(new Vec2(0,10));
-										break;
 									case LEFT:
-										robot.translate(new Vec2(-10,0));
+										robot.rotateLeft();
 										break;
 									case RIGHT:
-										robot.translate(new Vec2(10,0));
-										break;
-									case Z:
-										robot2.translate(new Vec2(0,-10));
-										break;
-									case S:
-										robot2.translate(new Vec2(0,10));
+										robot.rotateRight();
 										break;
 									case Q:
-										robot2.translate(new Vec2(-10,0));
+										robot2.rotateLeft();
 										break;
 									case D:
-										robot2.translate(new Vec2(10,0));
+										robot2.rotateRight();
 										break;
 								}
 							}

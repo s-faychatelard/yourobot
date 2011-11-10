@@ -21,7 +21,7 @@ public class PhysicsWorld {
 		world.setContactListener(new PhysicsCollision());
 		elementList = new ArrayList<>();
 
-		BodyDef bodyDef = new BodyDef();
+		/*BodyDef bodyDef = new BodyDef();
 		bodyDef.type = BodyType.DYNAMIC;
 		bodyDef.position.set(0, 0);
 		PolygonShape blockShape = new PolygonShape();
@@ -75,7 +75,7 @@ public class PhysicsWorld {
 		fixtureDef.restitution = .0f;
 		elementBody = world.createBody(bodyDef);
 		elementBody.createFixture(fixtureDef);
-		elementBody.setType(BodyType.STATIC);
+		elementBody.setType(BodyType.STATIC);*/
 	}
 	
 	public static ArrayList<Element> getAllElement() {
