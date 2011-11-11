@@ -22,6 +22,12 @@ public class Main {
 				final PhysicsWorld world = new PhysicsWorld();
 				final Robot robot = (Robot)world.addElement(new Robot(new Vec2(400, 300)));
 				final Robot robot2 = (Robot)world.addElement(new Robot(new Vec2(300, 300)));
+				@SuppressWarnings("unused")
+				final RobotIA robot3 = (RobotIA)world.addElement(new RobotIA(new Vec2(600, 300)));
+				@SuppressWarnings("unused")
+				final RobotIA robot4 = (RobotIA)world.addElement(new RobotIA(new Vec2(600, 400)));
+				@SuppressWarnings("unused")
+				final RobotIA robot5 = (RobotIA)world.addElement(new RobotIA(new Vec2(600, 500)));
 				for(;;) {
 					final KeyboardEvent event = context.pollKeyboard();
 					context.render(new ApplicationRenderCode() {
