@@ -95,15 +95,10 @@ public class PhysicsWorld {
 	}
 
 	public void render(Graphics2D graphics) {
-		world.step(1/10f, 15, 8);
+		world.step(1/60f, 15, 8);
 		graphics.setColor(Color.BLACK);
 		for(Element e : elementList) {
 			e.draw(graphics);
-			//System.out.println(e.getBody().getPosition() +" " + world.getGravity());
 		}
-		graphics.fillRect((int)limits[0].getPosition().x, (int)limits[0].getPosition().y, Main.WIDTH, 15);
-		graphics.fillRect((int)limits[1].getPosition().x, (int)limits[1].getPosition().y, 15, Main.HEIGHT);
-		graphics.fillRect((int)limits[2].getPosition().x, (int)limits[2].getPosition().y, Main.WIDTH, 15);
-		graphics.fillRect((int)limits[3].getPosition().x, (int)limits[3].getPosition().y, 15, Main.HEIGHT);
 	}
 }
