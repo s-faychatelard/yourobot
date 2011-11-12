@@ -18,10 +18,6 @@ public class Main {
 	
 
 	public static void main(String[] args) {
-		/**
-		 * Essai de modification pour faire un commit
-		 */
-		System.out.println("tutututututu");
 		Application.run("You robot", Main.WIDTH, Main.HEIGHT, new ApplicationCode() {
 			@Override
 			public void run(final ApplicationContext context) {
