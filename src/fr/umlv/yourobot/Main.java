@@ -15,8 +15,9 @@ import fr.umlv.zen.KeyboardEvent;
 public class Main {
 	public static final int WIDTH = 800;
 	public static final int HEIGHT = 600;
-
+	
 	public static void main(String[] args) {
+		//test
 		Application.run("You robot", Main.WIDTH, Main.HEIGHT, new ApplicationCode() {
 			@Override
 			public void run(final ApplicationContext context) {
