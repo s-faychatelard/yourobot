@@ -17,6 +17,10 @@ public class PhysicsWorld {
 	private static ArrayList<Element> elementList;
 	Body []limits;
 
+	/**
+	 * TODO
+	 * Passer le numero du niveau en param pour gérer le niveau de difficulté. 
+	 */
 	public PhysicsWorld() {
 		world = new World(new Vec2(0,0), true);
 		world.setContactListener(new PhysicsCollision());
@@ -79,6 +83,26 @@ public class PhysicsWorld {
 		limits[3] = world.createBody(bodyDef);
 		limits[3].createFixture(fixtureDef);
 		limits[3].setType(BodyType.STATIC);
+		
+		
+		generateWalls(20);
+		
+	}
+	
+	/**
+	 * @param difficulty
+	 */
+	private void generateWalls(int difficulty){
+
+		int numberOfWalls = Main.WIDTH * Main.HEIGHT / (Wall.WALL_WIDTH * Wall.WALL_HEIGTH) / 30;
+		numberOfWalls = Math.round (numberOfWalls * (1 + (difficulty/10)));
+		
+		/** TODO
+		 *  - gestion des positions des murs / entrée /sortie
+		 *  pour éviter les collisiotns */
+		for (int i=0; i<numberOfWalls; i++)
+			this.addElement(new Wall(new Vec2((float) (Math.random()* (Main.WIDTH - Wall.WALL_WIDTH)), (float) (Math.random()* (Main.HEIGHT - Wall.WALL_HEIGTH)))));
+
 	}
 	
 	public static ArrayList<Element> getAllElement() {
@@ -88,7 +112,7 @@ public class PhysicsWorld {
 	public Element addElement(Element element) {
 		Body elementBody = world.createBody(element.getBodyDef());
 		elementBody.createFixture(element.getFixtureDef());
-		elementBody.setType(element.getBodyDef().type);
+		elementBody.setType(element.getBodyDef().type);		
 		element.setBody(elementBody);
 		elementList.add(element);
 		return element;
