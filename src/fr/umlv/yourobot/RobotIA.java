@@ -5,6 +5,7 @@ import java.util.Objects;
 import java.util.Random;
 
 import org.jbox2d.common.Vec2;
+import org.jbox2d.*;
 
 public class RobotIA extends Robot {
 	private static double diagonal = -1;
@@ -57,7 +58,7 @@ public class RobotIA extends Robot {
 					
 					point1 = new Vec2(getBody().getPosition());
 			        point2 = new Vec2((int)getBody().getPosition().x,(int)(getBody().getPosition().y+diagonal));
-			        PhysicsWorld.addRaycast(raycastCallback, point1, point2);
+			    //    PhysicsWorld.addRaycast(raycastCallback, point1, point2);
 				}
 			}
 		}).start();

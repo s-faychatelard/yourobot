@@ -93,9 +93,31 @@ public class PhysicsWorld {
 	
 	private void bonusManager() {
 		
+		Thread t = new Thread(new Runnable() {
+			@Override
+			public void run() {
+				while(true){
+					try {
+						Thread.sleep(1000);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+					
+					int i = (new Random()).nextInt(matrix.length);
+					int j = (new Random()).nextInt(matrix[0].length);
+					
+					for (; i<matrix.length; i++) {
+						for (; j<matrix[0].length; j++) {
+							
+							
+						}
+					}
+				}
+				
+			}
+		});
 		
-		
-		
+		t.start();
 	}
 
 	/**
