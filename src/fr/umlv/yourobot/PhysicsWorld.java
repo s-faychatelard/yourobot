@@ -5,6 +5,7 @@ import java.awt.Graphics2D;
 import java.util.ArrayList;
 import java.util.Random;
 
+import org.jbox2d.callbacks.RayCastCallback;
 import org.jbox2d.collision.shapes.PolygonShape;
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.Body;
@@ -140,6 +141,10 @@ public class PhysicsWorld {
 		element.setBody(elementBody);
 		elementList.add(element);
 		return element;
+	}
+	
+	public static void addRaycast(RayCastCallback callback, Vec2 point1, Vec2 point2) {
+		world.raycast(callback, point1, point2);
 	}
 
 	public void render(Graphics2D graphics) {
