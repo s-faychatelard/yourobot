@@ -18,7 +18,7 @@ public class RayCastCallbackRobotIA implements RayCastCallback {
 	}
 
 	public float reportFixture(Fixture fixture, Vec2 point, Vec2 normal, float fraction) {
-		ArrayList<Element> elements = PhysicsWorld.getAllElement();
+		LinkedBlockingDeque<Element> elements = PhysicsWorld.getAllElement();
 		for(Element e : elements) {
 			if(e.getBody() == fixture.getBody()) {
 				this.hit = true;
