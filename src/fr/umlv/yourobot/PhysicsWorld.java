@@ -3,10 +3,8 @@ package fr.umlv.yourobot;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.util.ArrayList;
-import java.util.Objects;
 import java.util.Random;
 
-import org.jbox2d.callbacks.RayCastCallback;
 import org.jbox2d.collision.shapes.PolygonShape;
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.Body;
@@ -90,7 +88,7 @@ public class PhysicsWorld {
 		generateWalls(0);
 	}
 	
-/**
+	/**
 	 * @param difficulty
 	 */
 	private void generateWalls(int difficulty){
@@ -99,32 +97,36 @@ public class PhysicsWorld {
 		int cellHeight = Main.HEIGHT / Wall.WALL_HEIGTH;
 		boolean matrice[][] =  new boolean[cellWidth][cellHeight];
 
-		int numberOfWalls = Main.WIDTH * Main.HEIGHT / (Wall.WALL_WIDTH * Wall.WALL_HEIGTH) / 20;
+		int numberOfWalls = Main.WIDTH * Main.HEIGHT / (Wall.WALL_WIDTH * Wall.WALL_HEIGTH) / 30;
 		numberOfWalls = Math.round (numberOfWalls * (1 + (difficulty/10)));
 		
+		System.out.println(numberOfWalls);
+		System.out.println(matrice[0].length * matrice.length);
+		
 		Random rand = new Random();
+		int cpt = 0;
 		for (int i=0; i < matrice.length - 1; i++) {
 			for (int j=0; j< matrice[0].length - 1; j++) {
 				if(rand.nextInt(matrice[0].length * matrice.length) < numberOfWalls) {
+					this.addElement(new IceWall(new Vec2((i * Wall.WALL_WIDTH), (j * Wall.WALL_HEIGTH))));
+					matrice[i][j] = true;
+					cpt++;
 					
-					int r = rand.nextInt(3);
-					Vec2 v = new Vec2((i * Wall.WALL_WIDTH), (j * Wall.WALL_HEIGTH));
-					switch(r) {
-					case 0 :
-						this.addElement(new IceWall(v));
-					break;
-					case 1 :
-						this.addElement(new WoodWall(v));
-					break;	
-					default :
-						this.addElement(new StoneWall(v));
-					break;
-					}
-					
-					matrice[i][j] = true;					
 				}
 			}
 		}
+		System.out.println(cpt);
+		
+		
+		
+	/*	for (int i=0; i < matrice.length - 1; i++) {
+			for (int j=0; j< matrice[0].length - 1; j++) {
+			
+					System.out.println(matrice[i][j]);
+					
+			
+			}
+		}*/
 	}
 	
 	public static ArrayList<Element> getAllElement() {
@@ -132,17 +134,12 @@ public class PhysicsWorld {
 	}
 	
 	public Element addElement(Element element) {
-		Objects.requireNonNull(element);
 		Body elementBody = world.createBody(element.getBodyDef());
 		elementBody.createFixture(element.getFixtureDef());
 		elementBody.setType(element.getBodyDef().type);		
 		element.setBody(elementBody);
 		elementList.add(element);
 		return element;
-	}
-	
-	public static void addRaycast(RayCastCallback callback, Vec2 point1, Vec2 point2) {
-		world.raycast(callback, point1, point2);
 	}
 
 	public void render(Graphics2D graphics) {

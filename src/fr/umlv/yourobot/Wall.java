@@ -1,8 +1,18 @@
 package fr.umlv.yourobot;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.Toolkit;
+import java.awt.geom.AffineTransform;
+import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
+import java.awt.image.BufferedImageOp;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
+
 import org.jbox2d.collision.shapes.PolygonShape;
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.Body;
@@ -65,19 +75,32 @@ public abstract class Wall implements Element {
 	
 	@Override
 	public void draw(Graphics2D graphics) {
+
 		Vec2 p = this.body.getPosition();
+		//Load only once the picture
+		if(getImage()==null) {
+			setImage(Toolkit.getDefaultToolkit().getImage("iceWall.jpg"));
+		}
+		
 		System.out.println(getImage().getWidth(null));
 	    graphics.drawImage(getImage(), (int)p.x, (int)p.y, WALL_WIDTH, WALL_HEIGTH, null);
+	    //graphics.fillRect((int)p.x, (int)p.y, WALL_HEIGTH, WALL_WIDTH);
+		
+		
+		//Vec2 p = this.body.getPosition();
+		//float angle = (float) Math.toDegrees(body.getAngle());
+		//graphics.setColor(Color.MAGENTA);
+		
+		/*if(image==null) {
+			try {
+				File f = new File("/Users/sylvain/Documents/Projets/yourobot/robot.png");
+				System.out.println(f);
+				image = ImageIO.read(f);
+			} catch (IOException e) {
+			}
+		}
+		System.out.println(image);
+		graphics.drawImage(image, (int)p.x, (int)p.y, null);*/
 	}
-
-	public int getLife() {
-		return life;
-	}
-
-	public void setLife(int life) {
-		this.life = life;
-	}
-	
-	
 
 }
