@@ -3,6 +3,8 @@ package fr.umlv.yourobot;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
+import java.util.concurrent.locks.Lock;
+
 import org.jbox2d.collision.shapes.PolygonShape;
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.Body;
@@ -13,12 +15,13 @@ import org.jbox2d.dynamics.FixtureDef;
 public abstract class Bonus implements Element {
 	final static int BONUS_WIDTH = 50;
 	final static int BONUS_HEIGTH = BONUS_WIDTH;
-	private BodyDef bodyDef;
-	private FixtureDef fixtureDef;
+	private final BodyDef bodyDef;
+	private final FixtureDef fixtureDef;
 	protected Body body;
 	private static BufferedImage image;
 
 	public  Bonus(Vec2 position) {	
+			
 			PolygonShape blockShape;
 
 			bodyDef = new BodyDef();
@@ -28,11 +31,11 @@ public abstract class Bonus implements Element {
 			blockShape = new PolygonShape();
 			blockShape.setAsBox(BONUS_WIDTH/2, BONUS_HEIGTH/2);
 
-//			fixtureDef = new FixtureDef();
-//			fixtureDef.shape = blockShape;
-//			fixtureDef.density = 0.f;
-//			fixtureDef.friction = 0.f;
-//			fixtureDef.restitution = 0.f;
+			fixtureDef = new FixtureDef();
+			fixtureDef.shape = blockShape;
+			fixtureDef.density = 0.f;
+			fixtureDef.friction = 0.f;
+			fixtureDef.restitution = 0.f;
 			
 	}
 
