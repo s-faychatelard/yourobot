@@ -17,14 +17,16 @@ public class Main {
 	public static final int WIDTH = 800;
 	public static final int HEIGHT = 600;
 	private static Image ground;
+	public static RobotPlayer robot;
+	public static RobotPlayer robot2;
 
 	public static void main(String[] args) {
 		Application.run("You robot", Main.WIDTH, Main.HEIGHT, new ApplicationCode() {
 			@Override
 			public void run(final ApplicationContext context) {
 				final PhysicsWorld world = new PhysicsWorld();
-				final RobotPlayer robot = (RobotPlayer)world.addElement(new RobotPlayer(new Vec2(300, 390)));
-				final RobotPlayer robot2 = (RobotPlayer)world.addElement(new RobotPlayer(new Vec2(300, 300)));
+				robot = (RobotPlayer)world.addElement(new RobotPlayer(new Vec2(300, 390)));
+				robot2 = (RobotPlayer)world.addElement(new RobotPlayer(new Vec2(300, 300)));
 				System.out.println(robot.getBody());
 				System.out.println(robot2.getBody());
 				System.out.println("------------------");
@@ -64,9 +66,6 @@ public class Main {
 									break;
 								}
 							}
-							graphics.setBackground(Color.WHITE);
-							graphics.setColor(Color.WHITE);
-							graphics.fillRect(0,0,800,600);
 							graphics.drawImage(ground, 0, 0, 800, 600, Color.WHITE, null);
 							world.render(graphics);
 							graphics.finalize();
