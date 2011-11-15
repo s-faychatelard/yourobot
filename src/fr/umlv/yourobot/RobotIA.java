@@ -31,7 +31,7 @@ public class RobotIA extends Robot {
 							for(int i=0; i<val; i++) {
 								rotateLeft();
 								try {
-									Thread.sleep(rand.nextInt(500));
+									Thread.sleep(rand.nextInt(3000));
 								} catch (InterruptedException e) {
 									e.printStackTrace();
 								}
@@ -41,7 +41,7 @@ public class RobotIA extends Robot {
 							for(int i=0; i<val; i++) {
 								rotateRight();
 								try {
-									Thread.sleep(rand.nextInt(500));
+									Thread.sleep(rand.nextInt(3000));
 								} catch (InterruptedException e) {
 									e.printStackTrace();
 								}

@@ -10,12 +10,13 @@ public class SnapBonus extends Bonus {
 
 	public SnapBonus(Vec2 position) {
 		super(position);
+		if (image == null)
+			setImage(Toolkit.getDefaultToolkit().getImage("bomberBonus.png"));
 	}
 	
 	@Override
 	public Image getImage() {
-		if (image == null)
-			setImage(Toolkit.getDefaultToolkit().getImage("bomberBonus.png"));
+
 
 		return this.image;
 	}

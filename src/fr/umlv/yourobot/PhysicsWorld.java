@@ -2,15 +2,11 @@ package fr.umlv.yourobot;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
-import java.awt.Toolkit;
-import java.sql.Struct;
-import java.util.ArrayList;
 import java.util.Random;
-import java.util.concurrent.Callable;
 import java.util.concurrent.LinkedBlockingDeque;
-import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
-import org.jbox2d.callbacks.RayCastCallback;
 import org.jbox2d.collision.shapes.PolygonShape;
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.Body;
@@ -19,20 +15,27 @@ import org.jbox2d.dynamics.BodyType;
 import org.jbox2d.dynamics.FixtureDef;
 import org.jbox2d.dynamics.World;
 
+
 public class PhysicsWorld {
 	private static World world;
 	private static LinkedBlockingDeque<Element> elementList;
 	Body []limits;
 	boolean matrix[][];
+	private Lock lock;
+
+
+
 
 	/**
 	 * TODO
 	 * Passer le numero du niveau en param pour gérer le niveau de difficulté. 
 	 */
 	public PhysicsWorld() {
+		lock = new ReentrantLock();
+		
 		world = new World(new Vec2(0,0), true);
 		world.setContactListener(new PhysicsCollision());
-		elementList = new LinkedBlockingDeque<>(1000);
+		elementList = new LinkedBlockingDeque<>(1000); /** TODO*/
 
 		//TODO transform limits has Wall but keep this position and size
 		limits = new Body[4];
@@ -104,25 +107,28 @@ public class PhysicsWorld {
 			public void run() {
 				while(true){
 					try {
-						Thread.sleep((new Random()).nextInt(10000));
+						Thread.sleep((new Random()).nextInt(50));
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}
 
-					int i = (new Random()).nextInt(matrix.length);
-					int j = (new Random()).nextInt(matrix[0].length);
-
-					for (; i<matrix.length; i++) {
-						for (; j<matrix[i].length; j++) {
-							if(!matrix[i][j]) {
-								Vec2 v = new Vec2((float)i * Wall.WALL_WIDTH, (float)j * Wall.WALL_HEIGTH);
-								Bonus b = new SnapBonus(v);
-								/** TODO : pb de concurrence **/
-								addElement(b);
-								i = matrix.length; /**TODO**/
-								break;
-
+					int r1 = (new Random()).nextInt(matrix.length);
+					int r2 = (new Random()).nextInt(matrix[0].length);
+			
+					// note : it's impossible to fill all the matrix : there is at less a player that will take a bonus
+					for (int i=0; i<matrix.length; i++) {
+						for (int j=0; j<matrix[0].length; j++) {
+							if(matrix[(i+r1)%matrix.length][(j+r2)%matrix[0].length]) {
+								continue;
 							}
+							Vec2 v = new Vec2((float)((i+r1)%matrix.length) * Wall.WALL_WIDTH, (float)((j+r2)%matrix[0].length) * Wall.WALL_HEIGTH);
+							 final Bonus b = new SnapBonus(v);
+							/** TODO : pb de concurrence **/
+							addElement(b);
+							matrix[(i+r1)%matrix.length][(j+r2)%matrix[0].length] = true;
+							i = matrix.length; /**TODO : expliquer en quoi ça permet de sortir des 2 boucles**/
+							break;
+
 						}
 					}
 				}
@@ -178,12 +184,29 @@ public class PhysicsWorld {
 	}
 
 	public Element addElement(Element element) {
-		Body elementBody = world.createBody(element.getBodyDef());
-		if(element.getFixtureDef() != null)
-			elementBody.createFixture(element.getFixtureDef());
-		elementBody.setType(element.getBodyDef().type);		
-		element.setBody(elementBody);
-		elementList.addFirst(element);
+		Body elementBody = null;
+		
+		while (!lock.tryLock()) {
+			try {
+				Thread.sleep(50);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		try {
+			//createBody auto lock
+			elementBody = world.createBody(element.getBodyDef());
+			if(element.getFixtureDef() != null)
+				elementBody.createFixture(element.getFixtureDef());
+			elementBody.setType(element.getBodyDef().type);		
+			element.setBody(elementBody);
+			elementList.addFirst(element);
+		} finally {
+			lock.unlock();
+		}
+		
 		return element;
 	}
 
@@ -192,7 +215,15 @@ public class PhysicsWorld {
 	}
 
 	public void render(Graphics2D graphics) {
-		world.step(1/60f, 15, 8);
+		
+		if (lock.tryLock()) {
+			try {
+				world.step(1/60f, 15, 8);
+			} finally {
+				lock.unlock();
+			}
+		}
+		
 		graphics.setColor(Color.BLACK);
 		for(Element e : elementList) {
 			e.draw(graphics);
