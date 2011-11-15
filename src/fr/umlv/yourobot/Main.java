@@ -23,14 +23,11 @@ public class Main {
 			@Override
 			public void run(final ApplicationContext context) {
 				final PhysicsWorld world = new PhysicsWorld();
-				final Robot robot = (Robot)world.addElement(new Robot(new Vec2(300, 390)));
-				final Robot robot2 = (Robot)world.addElement(new Robot(new Vec2(300, 300)));
+				final RobotPlayer robot = (RobotPlayer)world.addElement(new RobotPlayer(new Vec2(300, 390)));
+				final RobotPlayer robot2 = (RobotPlayer)world.addElement(new RobotPlayer(new Vec2(300, 300)));
 				final RobotIA robot3 = (RobotIA)world.addElement(new RobotIA(new Vec2(600, 300)));
 				final RobotIA robot4 = (RobotIA)world.addElement(new RobotIA(new Vec2(600, 400)));
 				final RobotIA robot5 = (RobotIA)world.addElement(new RobotIA(new Vec2(600, 500)));
-				
-
-				
 				robot3.start();
 				robot4.start();
 				robot5.start();
