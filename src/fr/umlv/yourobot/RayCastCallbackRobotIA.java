@@ -1,6 +1,6 @@
 package fr.umlv.yourobot;
 
-import java.util.ArrayList;
+import java.util.concurrent.LinkedBlockingDeque;
 
 import org.jbox2d.callbacks.RayCastCallback;
 import org.jbox2d.common.Vec2;
@@ -30,5 +30,4 @@ public class RayCastCallbackRobotIA implements RayCastCallback {
 		}
 		return -1f;
 	}
-
 };

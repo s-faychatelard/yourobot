@@ -28,8 +28,7 @@ public abstract class Wall implements Element {
 		bodyDef.position.set(position.x, position.y);
 
 		blockShape = new PolygonShape();
-		blockShape.setAsBox(WALL_WIDTH/2, WALL_HEIGTH/2);
-
+		blockShape.setAsBox(WALL_WIDTH / 2, WALL_HEIGTH / 2);
 		fixtureDef = new FixtureDef();
 		fixtureDef.shape = blockShape;
 		fixtureDef.density = 1.f;
@@ -65,10 +64,9 @@ public abstract class Wall implements Element {
 	
 	@Override
 	public void draw(Graphics2D graphics) {
-
 		Vec2 p = this.body.getPosition();
-	    graphics.drawImage(getImage(), (int)p.x, (int)p.y, WALL_WIDTH, WALL_HEIGTH, null);
-		}
+	    graphics.drawImage(getImage(), (int)p.x - (WALL_WIDTH/2) , (int)p.y  - (WALL_HEIGTH/2), WALL_WIDTH, WALL_HEIGTH, null);
+	}
 		
 	public int getLife() {
 		return life;
@@ -77,7 +75,4 @@ public abstract class Wall implements Element {
 	public void setLife(int life) {
 		this.life = life;
 	}
-		
-		
-
 }
