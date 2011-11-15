@@ -18,6 +18,7 @@ public class PhysicsWorld {
 	private static World world;
 	private static ArrayList<Element> elementList;
 	Body []limits;
+	boolean matrix[][];
 
 	/**
 	 * TODO
@@ -87,8 +88,17 @@ public class PhysicsWorld {
 		limits[3].setType(BodyType.STATIC);
 		
 		generateWalls(0);
+		
+		bonusManager();
 	}
 	
+	private void bonusManager() {
+		
+		
+		
+		
+	}
+
 	/**
 	 * @param difficulty
 	 */
@@ -96,38 +106,37 @@ public class PhysicsWorld {
 		
 		int cellWidth = Main.WIDTH / Wall.WALL_WIDTH;
 		int cellHeight = Main.HEIGHT / Wall.WALL_HEIGTH;
-		boolean matrice[][] =  new boolean[cellWidth][cellHeight];
+		boolean matrix[][] =  new boolean[cellWidth][cellHeight];
 
-		int numberOfWalls = Main.WIDTH * Main.HEIGHT / (Wall.WALL_WIDTH * Wall.WALL_HEIGTH) / 30;
+		int numberOfWalls = Main.WIDTH * Main.HEIGHT / (Wall.WALL_WIDTH * Wall.WALL_HEIGTH) / 20;
 		numberOfWalls = Math.round (numberOfWalls * (1 + (difficulty/10)));
 		
-		System.out.println(numberOfWalls);
-		System.out.println(matrice[0].length * matrice.length);
-		
 		Random rand = new Random();
-		int cpt = 0;
-		for (int i=0; i < matrice.length - 1; i++) {
-			for (int j=0; j< matrice[0].length - 1; j++) {
-				if(rand.nextInt(matrice[0].length * matrice.length) < numberOfWalls) {
-					this.addElement(new IceWall(new Vec2((i * Wall.WALL_WIDTH), (j * Wall.WALL_HEIGTH))));
-					matrice[i][j] = true;
-					cpt++;
+		for (int i=0; i < matrix.length - 1; i++) {
+			for (int j=0; j< matrix[0].length - 1; j++) {
+				if(rand.nextInt(matrix[0].length * matrix.length) < numberOfWalls) {
+
+					int r = rand.nextInt(3);
+					Vec2 v = new Vec2((i * Wall.WALL_WIDTH), (j * Wall.WALL_HEIGTH));
+					switch(r) {
+					case 0 :
+						this.addElement(new IceWall(v));
+					break;
+					case 1 :
+						this.addElement(new WoodWall(v));
+					break;	
+					default :
+						this.addElement(new StoneWall(v));
+					break;
+					}
 					
+					matrix[i][j] = true;					
+
 				}
 			}
 		}
-		System.out.println(cpt);
-		
-		
-		
-	/*	for (int i=0; i < matrice.length - 1; i++) {
-			for (int j=0; j< matrice[0].length - 1; j++) {
-			
-					System.out.println(matrice[i][j]);
-					
-			
-			}
-		}*/
+		this.matrix = matrix;
+
 	}
 	
 	public static ArrayList<Element> getAllElement() {
