@@ -25,13 +25,21 @@ public class Main {
 				final PhysicsWorld world = new PhysicsWorld();
 				final RobotPlayer robot = (RobotPlayer)world.addElement(new RobotPlayer(new Vec2(300, 390)));
 				final RobotPlayer robot2 = (RobotPlayer)world.addElement(new RobotPlayer(new Vec2(300, 300)));
+				System.out.println(robot.getBody());
+				System.out.println(robot2.getBody());
+				System.out.println("------------------");
 				final RobotIA robot3 = (RobotIA)world.addElement(new RobotIA(new Vec2(600, 300)));
 				final RobotIA robot4 = (RobotIA)world.addElement(new RobotIA(new Vec2(600, 400)));
 				final RobotIA robot5 = (RobotIA)world.addElement(new RobotIA(new Vec2(600, 500)));
 				robot3.start();
 				robot4.start();
 				robot5.start();
-				
+				robot3.detect(robot);
+				robot3.detect(robot2);
+				robot4.detect(robot);
+				robot4.detect(robot2);
+				robot5.detect(robot);
+				robot5.detect(robot2);
 				//Load background texture
 				ground = Toolkit.getDefaultToolkit().getImage("ground.jpg");
 				

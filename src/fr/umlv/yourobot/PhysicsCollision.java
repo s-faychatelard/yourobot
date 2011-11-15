@@ -9,12 +9,12 @@ public class PhysicsCollision implements ContactListener {
 
 	@Override
 	public void beginContact(Contact contact) {
-		System.out.println("===> Contact start");
+		//System.out.println("===> Contact start");
 	}
 
 	@Override
 	public void endContact(Contact contact) {
-		System.out.println("===> Contact ended");
+		//System.out.println("===> Contact ended");
 	}
 
 	@Override

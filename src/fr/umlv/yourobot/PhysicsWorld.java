@@ -3,7 +3,9 @@ package fr.umlv.yourobot;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.util.ArrayList;
+import java.util.Objects;
 
+import org.jbox2d.callbacks.RayCastCallback;
 import org.jbox2d.collision.shapes.PolygonShape;
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.Body;
@@ -110,12 +112,17 @@ public class PhysicsWorld {
 	}
 	
 	public Element addElement(Element element) {
+		Objects.requireNonNull(element);
 		Body elementBody = world.createBody(element.getBodyDef());
 		elementBody.createFixture(element.getFixtureDef());
 		elementBody.setType(element.getBodyDef().type);		
 		element.setBody(elementBody);
 		elementList.add(element);
 		return element;
+	}
+	
+	public static void addRaycast(RayCastCallback callback, Vec2 point1, Vec2 point2) {
+		world.raycast(callback, point1, point2);
 	}
 
 	public void render(Graphics2D graphics) {
