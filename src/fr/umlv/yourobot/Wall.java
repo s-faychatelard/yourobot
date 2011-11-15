@@ -65,18 +65,19 @@ public abstract class Wall implements Element {
 	
 	@Override
 	public void draw(Graphics2D graphics) {
+
 		Vec2 p = this.body.getPosition();
 	    graphics.drawImage(getImage(), (int)p.x, (int)p.y, WALL_WIDTH, WALL_HEIGTH, null);
-	}
-
+		}
+		
 	public int getLife() {
 		return life;
 	}
-
+		
 	public void setLife(int life) {
 		this.life = life;
 	}
-	
-	
+		
+		
 
 }

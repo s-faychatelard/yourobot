@@ -114,7 +114,7 @@ public class PhysicsWorld {
 		for (int i=0; i < matrix.length - 1; i++) {
 			for (int j=0; j< matrix[0].length - 1; j++) {
 				if(rand.nextInt(matrix[0].length * matrix.length) < numberOfWalls) {
-					
+
 					int r = rand.nextInt(3);
 					Vec2 v = new Vec2((i * Wall.WALL_WIDTH), (j * Wall.WALL_HEIGTH));
 					switch(r) {
@@ -130,10 +130,12 @@ public class PhysicsWorld {
 					}
 					
 					matrix[i][j] = true;					
+
 				}
 			}
 		}
 		this.matrix = matrix;
+
 	}
 	
 	public static ArrayList<Element> getAllElement() {
