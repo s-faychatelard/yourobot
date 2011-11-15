@@ -31,7 +31,7 @@ public class RobotIA extends Robot {
 				while(true) {
 					int val = rand.nextInt(45);
 					if(rand.nextBoolean()) {
-						for(int i=0; i<val; i++) {
+						for(int i=val; i<val; i++) {
 							rotateLeft();
 							try {
 								Thread.sleep(rand.nextInt(500));
@@ -39,9 +39,10 @@ public class RobotIA extends Robot {
 								e.printStackTrace();
 							}
 						}
+						rotateLeft();
 					}
 					else {
-						for(int i=0; i<val; i++) {
+						for(int i=val; i<val; i++) {
 							rotateRight();
 							try {
 								Thread.sleep(rand.nextInt(500));
@@ -49,9 +50,10 @@ public class RobotIA extends Robot {
 								e.printStackTrace();
 							}
 						}
+						rotateRight();
 					}
 					try {
-						Thread.sleep(rand.nextInt(5000));
+						Thread.sleep(rand.nextInt(10000));
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}

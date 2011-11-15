@@ -62,6 +62,6 @@ public abstract class Bonus implements Element {
 	@Override
 	public void draw(Graphics2D graphics) {
 		Vec2 p = this.body.getPosition();
-	    graphics.drawImage(getImage(), (int)p.x - (BONUS_WIDTH/2) , (int)p.y - (BONUS_HEIGTH/2), BONUS_WIDTH, BONUS_HEIGTH, null);
+	    graphics.drawImage(getImage(), (int)p.x , (int)p.y, BONUS_WIDTH, BONUS_HEIGTH, null);
 	}
 }

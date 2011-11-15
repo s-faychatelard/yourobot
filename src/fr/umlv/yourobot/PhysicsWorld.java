@@ -2,8 +2,6 @@ package fr.umlv.yourobot;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
-import java.awt.Toolkit;
-import java.util.ArrayList;
 import java.util.Random;
 import java.util.concurrent.LinkedBlockingDeque;
 
@@ -166,8 +164,13 @@ public class PhysicsWorld {
 			}
 		}
 		this.matrix = matrix;
+		
+		Vec2 v = new Vec2((5 * Wall.WALL_WIDTH), (4 * Wall.WALL_HEIGTH));
+		this.addElement(new IceWall(v));
 
 	}
+	
+	
 	
 	public static LinkedBlockingDeque<Element> getAllElement() {
 		return elementList;

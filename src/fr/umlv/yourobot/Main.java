@@ -75,7 +75,7 @@ public class Main {
 					});
 					//Need wait to delete flashing
 					try {
-						Thread.sleep(50);
+						Thread.sleep(40);
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 						return;

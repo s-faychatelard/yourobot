@@ -17,8 +17,8 @@ import org.jbox2d.dynamics.FixtureDef;
 
 public abstract class Robot implements Element {
 	private final static int ROBOT_WIDTH = 44;
-	private final static int ROBOT_HEIGTH = 40;
-	private final static int INITIAL_SPEED = 1000000;
+	private final static int ROBOT_HEIGTH = 44;
+	private final static int INITIAL_SPEED = 1000000000;
 	private PolygonShape blockShape;
 	private BodyDef bodyDef;
 	private FixtureDef fixtureDef;
@@ -34,10 +34,9 @@ public abstract class Robot implements Element {
 
 		blockShape = new PolygonShape();
 		blockShape.setAsBox(ROBOT_WIDTH/2, ROBOT_HEIGTH/2);
-
 		fixtureDef = new FixtureDef();
 		fixtureDef.shape = blockShape;
-		fixtureDef.density = 1.f;
+		fixtureDef.density = 0.f;
 		fixtureDef.friction = 1.f;
 		fixtureDef.restitution = 0.f;
 	}
@@ -50,40 +49,44 @@ public abstract class Robot implements Element {
 			image = Toolkit.getDefaultToolkit().getImage("robot.png");
 		}
 		//The number 20 is just for the offset to allow picture cut
-	    BufferedImage sourceBI = new BufferedImage(ROBOT_WIDTH+20, ROBOT_HEIGTH+20, BufferedImage.TYPE_INT_ARGB);
+	    BufferedImage sourceBI = new BufferedImage(ROBOT_WIDTH, ROBOT_HEIGTH, BufferedImage.TYPE_INT_ARGB);
 	    Graphics2D g = (Graphics2D) sourceBI.getGraphics();
 	    //Idem than the number 20, it's just to allow picture cut
-	    g.drawImage(image, 10, 10, null);
+	    g.drawImage(image, 0, 0, null);
 	    AffineTransform at = new AffineTransform();
 	    at.scale(1.,1.);
 	    //The picture is 20pixels larger than the original
-	    at.rotate(this.direction*Math.PI/180, ROBOT_WIDTH/2+10, ROBOT_HEIGTH/2+10);
+	    at.rotate(this.direction*Math.PI/180, ROBOT_WIDTH/2, ROBOT_HEIGTH/2);
 	    BufferedImageOp bio = new AffineTransformOp(at, AffineTransformOp.TYPE_BILINEAR);
 	    BufferedImage destinationBI = bio.filter(sourceBI, null);
-	    graphics.drawImage(destinationBI, (int)p.x-ROBOT_WIDTH/2, (int)p.y-ROBOT_HEIGTH/2, null);
+	    graphics.drawImage(destinationBI, (int)p.x, (int)p.y, null);
+	    
+	    
 	}
 
 	public void rotateLeft() {
 		//TODO get direction from this.body.getVelocity() ???
-		direction = (direction - 10.)%360;
+		direction = (direction - 90)%360;
 		if(direction<0) direction = 360;
 		Vec2 vec = new Vec2();
 		vec.x = (float)Math.cos(Math.toRadians(direction))*INITIAL_SPEED;
 		vec.y = (float)Math.sin(Math.toRadians(direction))*INITIAL_SPEED;
 		this.body.setLinearVelocity(vec);
+		
+		
 		//TODO need to check dimension of the PolygonShape because I think something is wrong collision are a little bit weird sometimes
-	    blockShape.setAsBox(ROBOT_WIDTH/2, ROBOT_HEIGTH/2, new Vec2(vec.x-ROBOT_WIDTH/2, vec.y-ROBOT_HEIGTH/2), (int)direction);
+	    blockShape.setAsBox(ROBOT_WIDTH/2, ROBOT_HEIGTH/2, new Vec2(ROBOT_WIDTH - (ROBOT_WIDTH/2), ROBOT_HEIGTH - (ROBOT_HEIGTH/2)), (float)direction);
 	}
 
 	public void rotateRight() {
 		//TODO get direction from this.body.getVelocity() ???
-		direction = (direction + 10.)%360;
+		direction = (direction + 90)%360;
 		Vec2 vec = new Vec2();
 		vec.x = (float)Math.cos(Math.toRadians(direction))*INITIAL_SPEED;
 		vec.y = (float)Math.sin(Math.toRadians(direction))*INITIAL_SPEED;
 		this.body.setLinearVelocity(vec);
 		//TODO need to check dimension of the PolygonShape, I think something is wrong collision are a little bit weird sometimes
-	    blockShape.setAsBox(ROBOT_WIDTH/2, ROBOT_HEIGTH/2, new Vec2(vec.x-ROBOT_WIDTH/2, vec.y-ROBOT_HEIGTH/2), (int)direction);
+	    blockShape.setAsBox(ROBOT_WIDTH/2, ROBOT_HEIGTH/2, new Vec2(ROBOT_WIDTH - (ROBOT_WIDTH/2), ROBOT_HEIGTH - (ROBOT_HEIGTH/2)), (float)direction);
 	}
 
 	@Override

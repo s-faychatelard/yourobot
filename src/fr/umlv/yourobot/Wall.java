@@ -26,12 +26,11 @@ public abstract class Wall implements Element {
 		bodyDef = new BodyDef();
 		bodyDef.type = BodyType.STATIC;
 		bodyDef.position.set(position.x, position.y);
-
 		blockShape = new PolygonShape();
-		blockShape.setAsBox(WALL_WIDTH / 2, WALL_HEIGTH / 2);
+		blockShape.setAsBox(WALL_WIDTH/2, WALL_HEIGTH/2);
 		fixtureDef = new FixtureDef();
 		fixtureDef.shape = blockShape;
-		fixtureDef.density = 1.f;
+		fixtureDef.density = 0.f;
 		fixtureDef.friction = .8f;
 		fixtureDef.restitution = 0.f;
 	}
@@ -65,7 +64,8 @@ public abstract class Wall implements Element {
 	@Override
 	public void draw(Graphics2D graphics) {
 		Vec2 p = this.body.getPosition();
-	    graphics.drawImage(getImage(), (int)p.x - (WALL_WIDTH/2) , (int)p.y  - (WALL_HEIGTH/2), WALL_WIDTH, WALL_HEIGTH, null);
+		/**TODO la constante 4 "corrige" le bug avec les walls */
+	    graphics.drawImage(getImage(), (int)p.x - 4 , (int)p.y - 4, WALL_WIDTH, WALL_HEIGTH, null);
 	}
 		
 	public int getLife() {
