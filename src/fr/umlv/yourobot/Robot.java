@@ -15,7 +15,7 @@ import org.jbox2d.dynamics.BodyDef;
 import org.jbox2d.dynamics.BodyType;
 import org.jbox2d.dynamics.FixtureDef;
 
-public class Robot implements Element {
+public abstract class Robot implements Element {
 	private final static int ROBOT_WIDTH = 44;
 	private final static int ROBOT_HEIGTH = 40;
 	private final static int INITIAL_SPEED = 1000000;
@@ -39,7 +39,7 @@ public class Robot implements Element {
 		fixtureDef.shape = blockShape;
 		fixtureDef.density = 1.f;
 		fixtureDef.friction = 1.f;
-		fixtureDef.restitution = .1f;
+		fixtureDef.restitution = 0.f;
 	}
 
 	@Override

@@ -28,9 +28,6 @@ public class Main {
 				final RobotIA robot3 = (RobotIA)world.addElement(new RobotIA(new Vec2(600, 300)));
 				final RobotIA robot4 = (RobotIA)world.addElement(new RobotIA(new Vec2(600, 400)));
 				final RobotIA robot5 = (RobotIA)world.addElement(new RobotIA(new Vec2(600, 500)));
-				
-
-				
 				robot3.start();
 				robot4.start();
 				robot5.start();
