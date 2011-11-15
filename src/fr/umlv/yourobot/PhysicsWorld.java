@@ -3,6 +3,7 @@ package fr.umlv.yourobot;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.util.ArrayList;
+import java.util.Random;
 
 import org.jbox2d.collision.shapes.PolygonShape;
 import org.jbox2d.common.Vec2;
@@ -84,25 +85,48 @@ public class PhysicsWorld {
 		limits[3].createFixture(fixtureDef);
 		limits[3].setType(BodyType.STATIC);
 		
-		
-		generateWalls(20);
-		
+		generateWalls(0);
 	}
 	
 	/**
 	 * @param difficulty
 	 */
 	private void generateWalls(int difficulty){
+		
+		int cellWidth = Main.WIDTH / Wall.WALL_WIDTH;
+		int cellHeight = Main.HEIGHT / Wall.WALL_HEIGTH;
+		boolean matrice[][] =  new boolean[cellWidth][cellHeight];
 
 		int numberOfWalls = Main.WIDTH * Main.HEIGHT / (Wall.WALL_WIDTH * Wall.WALL_HEIGTH) / 30;
 		numberOfWalls = Math.round (numberOfWalls * (1 + (difficulty/10)));
 		
-		/** TODO
-		 *  - gestion des positions des murs / entrée /sortie
-		 *  pour éviter les collisiotns */
-		for (int i=0; i<numberOfWalls; i++)
-			this.addElement(new Wall(new Vec2((float) (Math.random()* (Main.WIDTH - Wall.WALL_WIDTH)), (float) (Math.random()* (Main.HEIGHT - Wall.WALL_HEIGTH)))));
-
+		System.out.println(numberOfWalls);
+		System.out.println(matrice[0].length * matrice.length);
+		
+		Random rand = new Random();
+		int cpt = 0;
+		for (int i=0; i < matrice.length - 1; i++) {
+			for (int j=0; j< matrice[0].length - 1; j++) {
+				if(rand.nextInt(matrice[0].length * matrice.length) < numberOfWalls) {
+					this.addElement(new IceWall(new Vec2((i * Wall.WALL_WIDTH), (j * Wall.WALL_HEIGTH))));
+					matrice[i][j] = true;
+					cpt++;
+					
+				}
+			}
+		}
+		System.out.println(cpt);
+		
+		
+		
+	/*	for (int i=0; i < matrice.length - 1; i++) {
+			for (int j=0; j< matrice[0].length - 1; j++) {
+			
+					System.out.println(matrice[i][j]);
+					
+			
+			}
+		}*/
 	}
 	
 	public static ArrayList<Element> getAllElement() {
