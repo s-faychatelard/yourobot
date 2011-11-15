@@ -66,7 +66,6 @@ public abstract class Wall implements Element {
 	@Override
 	public void draw(Graphics2D graphics) {
 		Vec2 p = this.body.getPosition();
-		System.out.println(getImage().getWidth(null));
 	    graphics.drawImage(getImage(), (int)p.x, (int)p.y, WALL_WIDTH, WALL_HEIGTH, null);
 	}
 

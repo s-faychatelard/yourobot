@@ -17,6 +17,7 @@ public class PhysicsWorld {
 	private static World world;
 	private static ArrayList<Element> elementList;
 	Body []limits;
+	boolean matrix[][];
 
 	/**
 	 * TODO
@@ -86,8 +87,17 @@ public class PhysicsWorld {
 		limits[3].setType(BodyType.STATIC);
 		
 		generateWalls(0);
+		
+		bonusManager();
 	}
 	
+	private void bonusManager() {
+		
+		
+		
+		
+	}
+
 	/**
 	 * @param difficulty
 	 */
@@ -95,15 +105,15 @@ public class PhysicsWorld {
 		
 		int cellWidth = Main.WIDTH / Wall.WALL_WIDTH;
 		int cellHeight = Main.HEIGHT / Wall.WALL_HEIGTH;
-		boolean matrice[][] =  new boolean[cellWidth][cellHeight];
+		boolean matrix[][] =  new boolean[cellWidth][cellHeight];
 
 		int numberOfWalls = Main.WIDTH * Main.HEIGHT / (Wall.WALL_WIDTH * Wall.WALL_HEIGTH) / 20;
 		numberOfWalls = Math.round (numberOfWalls * (1 + (difficulty/10)));
 		
 		Random rand = new Random();
-		for (int i=0; i < matrice.length - 1; i++) {
-			for (int j=0; j< matrice[0].length - 1; j++) {
-				if(rand.nextInt(matrice[0].length * matrice.length) < numberOfWalls) {
+		for (int i=0; i < matrix.length - 1; i++) {
+			for (int j=0; j< matrix[0].length - 1; j++) {
+				if(rand.nextInt(matrix[0].length * matrix.length) < numberOfWalls) {
 					
 					int r = rand.nextInt(3);
 					Vec2 v = new Vec2((i * Wall.WALL_WIDTH), (j * Wall.WALL_HEIGTH));
@@ -119,10 +129,11 @@ public class PhysicsWorld {
 					break;
 					}
 					
-					matrice[i][j] = true;					
+					matrix[i][j] = true;					
 				}
 			}
 		}
+		this.matrix = matrix;
 	}
 	
 	public static ArrayList<Element> getAllElement() {
