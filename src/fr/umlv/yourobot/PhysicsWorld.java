@@ -3,6 +3,7 @@ package fr.umlv.yourobot;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.Random;
 
 import org.jbox2d.callbacks.RayCastCallback;

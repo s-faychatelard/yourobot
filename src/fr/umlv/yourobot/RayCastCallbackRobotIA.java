@@ -19,7 +19,6 @@ public class RayCastCallbackRobotIA implements RayCastCallback {
         public float reportFixture(Fixture fixture, Vec2 point, Vec2 normal, float fraction) {
         		ArrayList<Element> elements = PhysicsWorld.getAllElement();
         		for(Element e : elements) {
-        			//TODO degeulasse
         			if(e.getBody().equals(fixture.getBody())) {
         				System.out.println("Robot hit");
         				this.fixture = fixture;
