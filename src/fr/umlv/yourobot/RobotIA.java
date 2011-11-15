@@ -26,35 +26,39 @@ public class RobotIA extends Robot {
 				Random rand = new Random();
 				while(true) {
 					if(enemyPosition==null) {
-						int val = rand.nextInt(45);
-						if(rand.nextBoolean()) {
-							for(int i=0; i<val; i++) {
+						//int val = rand.nextInt(45);
+						if(rand.nextInt(3)==2) {
+							if(rand.nextBoolean()) {
+								/*for(int i=0; i<val; i++) {
 								rotateLeft();
 								try {
 									Thread.sleep(rand.nextInt(500));
 								} catch (InterruptedException e) {
 									e.printStackTrace();
 								}
+							}*/
+								rotateLeft();
 							}
-						}
-						else {
-							for(int i=0; i<val; i++) {
+							else {
+								/*for(int i=0; i<val; i++) {
 								rotateRight();
 								try {
 									Thread.sleep(rand.nextInt(500));
 								} catch (InterruptedException e) {
 									e.printStackTrace();
 								}
+							}*/
+								rotateRight();
 							}
 						}
 						try {
-							Thread.sleep(rand.nextInt(5000));
+							Thread.sleep(rand.nextInt(1000));
 						} catch (InterruptedException e) {
 							e.printStackTrace();
 						}
 					}
 					else {
-						System.out.println("Run : Go to " + enemyPosition);
+						jumpTo(enemyPosition);
 					}
 				}
 			}

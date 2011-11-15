@@ -37,7 +37,7 @@ public class RobotDetection implements Runnable {
 	@Override
 	public void run() {
 		while(true) {
-			int i=0;
+			Vec2 res = null;
 			for(RobotPlayer rp : this.robot.getRobotsDetected()) {
 				if(detect(rp)) {
 					Vec2 vec1 = this.robot.getBody().getPosition();
@@ -47,22 +47,16 @@ public class RobotDetection implements Runnable {
 						try {
 							this.robot.getBody().getWorld().raycast(callback, vec1, vec2);
 							if(callback.count<=1) {
-								this.robot.goTo(rp.getBody().getPosition());
-								System.out.println("Detect robot " + i);
-							}
-							else {
-								this.robot.goTo(null);
+								res = rp.getBody().getPosition();
+								break;
 							}
 						} finally {
 							lock.unlock();
 						}
 					}
 				}
-				else {
-					this.robot.goTo(null);
-				}
-				i++;
 			}
+			this.robot.goTo(res);
 			try {
 				Thread.sleep(50);
 			} catch (InterruptedException e) {

@@ -88,6 +88,21 @@ public abstract class Robot implements Element {
 		//TODO need to check dimension of the PolygonShape, I think something is wrong collision are a little bit weird sometimes
 	    blockShape.setAsBox(ROBOT_WIDTH/2, ROBOT_HEIGTH/2, new Vec2(ROBOT_WIDTH - (ROBOT_WIDTH/2), ROBOT_HEIGTH - (ROBOT_HEIGTH/2)), (float)direction);
 	}
+	
+	public void jumpTo(Vec2 vec) {
+		Vec2 p1 = this.getBody().getPosition();
+		Vec2 p2 = vec;
+		double newDirection = Math.atan((p2.y-p1.y) / (p2.x-p1.x));
+		newDirection = Math.toDegrees(newDirection);
+		newDirection = (newDirection + 180)%360;
+		if(newDirection<0) newDirection = 360+newDirection;
+		vec = new Vec2();
+		vec.x = (float)Math.cos(Math.toRadians(newDirection))*INITIAL_SPEED;
+		vec.y = (float)Math.sin(Math.toRadians(newDirection))*INITIAL_SPEED;
+		this.body.applyForce(vec, this.getBody().getLocalCenter());
+		//TODO need to check dimension of the PolygonShape, I think something is wrong collision are a little bit weird sometimes
+	    blockShape.setAsBox(ROBOT_WIDTH/2, ROBOT_HEIGTH/2, new Vec2(ROBOT_WIDTH - (ROBOT_WIDTH/2), ROBOT_HEIGTH - (ROBOT_HEIGTH/2)), (float)direction);
+	}
 
 	@Override
 	public void setBody(Body body) {
