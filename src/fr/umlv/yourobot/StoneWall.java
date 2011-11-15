@@ -4,24 +4,24 @@ import java.awt.Image;
 import java.awt.Toolkit;
 import org.jbox2d.common.Vec2;
 
-public class IceWall extends Wall {
+public class StoneWall extends Wall {
 	
 	private Image image;
 
-	public IceWall(Vec2 position) {
+	public StoneWall(Vec2 position) {
 		super(position);
 	}
 
 	@Override
 	public int attackWithIce() {
-		int life = getLife() - 100;
+		int life = getLife() - 50;
 		setLife(life);
 		return life;
 	}
 
 	@Override
 	public int attackWithStone() {
-		int life = getLife() - 50;
+		int life = getLife() - 100;
 		setLife(life);
 		return life;
 	}
@@ -36,7 +36,7 @@ public class IceWall extends Wall {
 	@Override
 	public Image getImage() {
 		if (image == null)
-			setImage(Toolkit.getDefaultToolkit().getImage("iceWall.jpg"));
+			setImage(Toolkit.getDefaultToolkit().getImage("stoneWall.jpg"));
 
 		return this.image;
 	}
