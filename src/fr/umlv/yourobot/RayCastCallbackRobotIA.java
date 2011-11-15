@@ -1,6 +1,6 @@
 package fr.umlv.yourobot;
 
-import java.util.ArrayList;
+import java.util.concurrent.LinkedBlockingDeque;
 
 import org.jbox2d.callbacks.RayCastCallback;
 import org.jbox2d.common.Vec2;
@@ -17,7 +17,7 @@ public class RayCastCallbackRobotIA implements RayCastCallback {
         }
         
         public float reportFixture(Fixture fixture, Vec2 point, Vec2 normal, float fraction) {
-        		ArrayList<Element> elements = PhysicsWorld.getAllElement();
+        		LinkedBlockingDeque<Element> elements = PhysicsWorld.getAllElement();
         		for(Element e : elements) {
         			if(e.getBody().equals(fixture.getBody())) {
         				System.out.println("Robot hit");

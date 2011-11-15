@@ -2,8 +2,10 @@ package fr.umlv.yourobot;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Toolkit;
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.concurrent.LinkedBlockingDeque;
 
 import org.jbox2d.collision.shapes.PolygonShape;
 import org.jbox2d.common.Vec2;
@@ -15,7 +17,7 @@ import org.jbox2d.dynamics.World;
 
 public class PhysicsWorld {
 	private static World world;
-	private static ArrayList<Element> elementList;
+	private static LinkedBlockingDeque<Element> elementList;
 	Body []limits;
 	boolean matrix[][];
 
@@ -26,7 +28,7 @@ public class PhysicsWorld {
 	public PhysicsWorld() {
 		world = new World(new Vec2(0,0), true);
 		world.setContactListener(new PhysicsCollision());
-		elementList = new ArrayList<>();
+		elementList = new LinkedBlockingDeque<>(1000);
 
 		//TODO transform limits has Wall but keep this position and size
 		limits = new Body[4];
@@ -98,7 +100,7 @@ public class PhysicsWorld {
 			public void run() {
 				while(true){
 					try {
-						Thread.sleep(1000);
+						Thread.sleep((new Random()).nextInt(10000));
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}
@@ -107,9 +109,16 @@ public class PhysicsWorld {
 					int j = (new Random()).nextInt(matrix[0].length);
 					
 					for (; i<matrix.length; i++) {
-						for (; j<matrix[0].length; j++) {
-							
-							
+						for (; j<matrix[i].length; j++) {
+							if(!matrix[i][j]) {
+								Vec2 v = new Vec2((float)i * Wall.WALL_WIDTH, (float)j * Wall.WALL_HEIGTH);
+								Bonus b = new SnapBonus(v);
+								/** TODO : pb de concurrence **/
+								addElement(b);
+								i = matrix.length; /**TODO**/
+								break;
+								
+							}
 						}
 					}
 				}
@@ -160,16 +169,17 @@ public class PhysicsWorld {
 
 	}
 	
-	public static ArrayList<Element> getAllElement() {
+	public static LinkedBlockingDeque<Element> getAllElement() {
 		return elementList;
 	}
 	
 	public Element addElement(Element element) {
 		Body elementBody = world.createBody(element.getBodyDef());
-		elementBody.createFixture(element.getFixtureDef());
+		if(element.getFixtureDef() != null)
+			elementBody.createFixture(element.getFixtureDef());
 		elementBody.setType(element.getBodyDef().type);		
 		element.setBody(elementBody);
-		elementList.add(element);
+		elementList.addFirst(element);
 		return element;
 	}
 
