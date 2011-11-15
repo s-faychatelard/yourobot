@@ -151,10 +151,6 @@ public class PhysicsWorld {
 		elementList.add(element);
 		return element;
 	}
-	
-	public static void addRaycast(RayCastCallback callback, Vec2 point1, Vec2 point2) {
-		world.raycast(callback, point1, point2);
-	}
 
 	public void render(Graphics2D graphics) {
 		world.step(1/60f, 15, 8);

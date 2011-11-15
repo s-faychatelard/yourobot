@@ -7,26 +7,21 @@ import java.util.Random;
 import org.jbox2d.common.Vec2;
 
 public class RobotIA extends Robot {
-	private static double diagonal = -1;
 	private ArrayList<RobotPlayer> robotsDetection;
-	private RayCastCallbackRobotIA raycastCallback;
-	private Vec2 point1;
-	private Vec2 point2;
 
 	public RobotIA(Vec2 position) {
 		super(position);
 		robotsDetection = new ArrayList<>();
-		raycastCallback = new RayCastCallbackRobotIA();
-		raycastCallback.init();
-		if(diagonal == -1)
-			diagonal = Math.sqrt((Main.WIDTH*Main.WIDTH) + (Main.HEIGHT*Main.HEIGHT)) / 4;
 	}
 	
 	public void start() {
-		final Random rand = new Random();
+		//Start detection
+		new Thread(new RobotDetection(this)).start();
+		//Start movement
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
+				Random rand = new Random();
 				while(true) {
 					int val = rand.nextInt(45);
 					if(rand.nextBoolean()) {
@@ -54,15 +49,15 @@ public class RobotIA extends Robot {
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}
-					
-					point1 = new Vec2(getBody().getPosition());
-			        point2 = new Vec2((int)getBody().getPosition().x,(int)(getBody().getPosition().y+diagonal));
-			        PhysicsWorld.addRaycast(raycastCallback, point1, point2);
 				}
 			}
 		}).start();
 	}
 
+	public ArrayList<RobotPlayer> getRobotsDetected() {
+		return this.robotsDetection;
+	}
+	
 	public void detect(RobotPlayer robot) {
 		Objects.requireNonNull(robot);
 		robotsDetection.add(robot);
