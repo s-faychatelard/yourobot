@@ -1,9 +1,8 @@
 package fr.umlv.yourobot;
 
 import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
-import org.jbox2d.collision.RayCastInput;
-import org.jbox2d.collision.RayCastOutput;
 import org.jbox2d.common.Vec2;
 
 public class RobotDetection implements Runnable {
@@ -12,6 +11,7 @@ public class RobotDetection implements Runnable {
 	private Vec2 p1;
 	private Vec2 p2;
 	private static double diagonal = -1;
+	private static Lock lock;
 
 	public RobotDetection(RobotIA robot) {
 		this.robot = robot;
@@ -19,6 +19,8 @@ public class RobotDetection implements Runnable {
 			diagonal = Math.sqrt((Main.WIDTH*Main.WIDTH) + (Main.HEIGHT*Main.HEIGHT)) / 4;
 		if(callback == null)
 			callback = new RayCastCallbackRobotIA();
+		if(lock == null)
+			lock = new ReentrantLock();
 		System.out.println(diagonal);
 	}
 
@@ -41,10 +43,19 @@ public class RobotDetection implements Runnable {
 					Vec2 vec1 = this.robot.getBody().getPosition();
 					Vec2 vec2 = rp.getBody().getPosition();
 					callback.init();
-					this.robot.getBody().getWorld().raycast(callback, vec1, vec2);
-					if(callback.count<=1) {
-						this.robot.goTo(rp.getBody().getPosition());
-						System.out.println("Detect robot " + i);
+					if (lock.tryLock()) {
+						try {
+							this.robot.getBody().getWorld().raycast(callback, vec1, vec2);
+							if(callback.count<=1) {
+								this.robot.goTo(rp.getBody().getPosition());
+								System.out.println("Detect robot " + i);
+							}
+							else {
+								this.robot.goTo(null);
+							}
+						} finally {
+							lock.unlock();
+						}
 					}
 				}
 				else {

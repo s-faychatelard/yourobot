@@ -8,7 +8,7 @@ import org.jbox2d.common.Vec2;
 
 public class RobotIA extends Robot {
 	private ArrayList<RobotPlayer> robotsDetection;
-	private Vec2 enemyPosition; 
+	private Vec2 enemyPosition;
 
 	public RobotIA(Vec2 position) {
 		super(position);
@@ -19,14 +19,13 @@ public class RobotIA extends Robot {
 		//Start detection
 		new Thread(new RobotDetection(this)).start();
 
-		final Vec2 pos = this.enemyPosition;
 		//Start movement
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
 				Random rand = new Random();
 				while(true) {
-					if(pos==null) {
+					if(enemyPosition==null) {
 						int val = rand.nextInt(45);
 						if(rand.nextBoolean()) {
 							for(int i=0; i<val; i++) {
@@ -55,7 +54,7 @@ public class RobotIA extends Robot {
 						}
 					}
 					else {
-						System.out.println("Run : Go to " + pos);
+						System.out.println("Run : Go to " + enemyPosition);
 					}
 				}
 			}
