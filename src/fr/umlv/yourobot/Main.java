@@ -66,9 +66,6 @@ public class Main {
 									break;
 								}
 							}
-							graphics.setBackground(Color.WHITE);
-							graphics.setColor(Color.WHITE);
-							graphics.fillRect(0,0,800,600);
 							graphics.drawImage(ground, 0, 0, 800, 600, Color.WHITE, null);
 							world.render(graphics);
 							graphics.finalize();

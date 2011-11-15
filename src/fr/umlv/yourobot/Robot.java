@@ -38,7 +38,7 @@ public abstract class Robot implements Element {
 		fixtureDef = new FixtureDef();
 		fixtureDef.shape = blockShape;
 		fixtureDef.density = 1.f;
-		fixtureDef.friction = .0f;
+		fixtureDef.friction = 1.f;
 		fixtureDef.restitution = 0.f;
 	}
 
