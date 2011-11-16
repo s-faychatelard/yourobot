@@ -16,7 +16,6 @@ public abstract class Wall implements Element {
 	private BodyDef bodyDef;
 	private FixtureDef fixtureDef;
 	protected Body body;
-	private static BufferedImage image;
 	private int life = 100;
 
 
@@ -64,8 +63,7 @@ public abstract class Wall implements Element {
 	@Override
 	public void draw(Graphics2D graphics) {
 		Vec2 p = this.body.getPosition();
-		/**TODO la constante 4 "corrige" le bug avec les walls */
-	    graphics.drawImage(getImage(), (int)p.x - 4 , (int)p.y - 4, WALL_WIDTH, WALL_HEIGTH, null);
+	    graphics.drawImage(getImage(), (int)p.x , (int)p.y, WALL_WIDTH, WALL_HEIGTH, null);
 	}
 		
 	public int getLife() {

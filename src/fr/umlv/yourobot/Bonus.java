@@ -3,7 +3,6 @@ package fr.umlv.yourobot;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
-import java.util.concurrent.locks.Lock;
 
 import org.jbox2d.collision.shapes.PolygonShape;
 import org.jbox2d.common.Vec2;
@@ -18,7 +17,7 @@ public abstract class Bonus implements Element {
 	private final BodyDef bodyDef;
 	private final FixtureDef fixtureDef;
 	protected Body body;
-	private static BufferedImage image;
+	private BufferedImage image;
 
 	public  Bonus(Vec2 position) {	
 			

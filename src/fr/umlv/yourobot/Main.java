@@ -23,7 +23,7 @@ public class Main {
 			@Override
 			public void run(final ApplicationContext context) {
 				final PhysicsWorld world = new PhysicsWorld();
-				final RobotPlayer robot = (RobotPlayer)world.addElement(new RobotPlayer(new Vec2(300, 390)));
+				final RobotPlayer robot = (RobotPlayer)world.addElement(new RobotPlayer(new Vec2(50, 50)));
 				final RobotPlayer robot2 = (RobotPlayer)world.addElement(new RobotPlayer(new Vec2(300, 300)));
 				System.out.println("Robot " + robot.getBody());
 				System.out.println("Robot2 " + robot2.getBody());
@@ -41,6 +41,11 @@ public class Main {
 				robot5.detect(robot);
 				/*robot5.detect(robot2);*/
 				//Load background texture
+				
+				
+				final FakeRobot fake = (FakeRobot)world.addElement(new FakeRobot(new Vec2(100, 100)));
+
+				
 				ground = Toolkit.getDefaultToolkit().getImage("ground.jpg");
 
 				new Thread(new Runnable() {

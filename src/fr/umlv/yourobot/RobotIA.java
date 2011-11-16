@@ -1,5 +1,7 @@
 package fr.umlv.yourobot;
 
+import java.awt.Image;
+import java.awt.Toolkit;
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Random;
@@ -14,7 +16,20 @@ public class RobotIA extends Robot {
 		super(position);
 		robotsDetection = new ArrayList<>();
 	}
-
+	
+	@Override
+	public Image getImage() {
+		if(image==null)
+			image = Toolkit.getDefaultToolkit().getImage("robot.png");
+	
+		return this.image;
+	}
+	
+	@Override
+	public void setImage(Image img) {
+		this.image = img;
+	}
+	
 	public void start() {
 		//Start detection
 		new Thread(new RobotDetection(this)).start();

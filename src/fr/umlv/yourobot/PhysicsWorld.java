@@ -7,11 +7,14 @@ import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+import org.jbox2d.callbacks.QueryCallback;
+import org.jbox2d.collision.AABB;
 import org.jbox2d.collision.shapes.PolygonShape;
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.Body;
 import org.jbox2d.dynamics.BodyDef;
 import org.jbox2d.dynamics.BodyType;
+import org.jbox2d.dynamics.Fixture;
 import org.jbox2d.dynamics.FixtureDef;
 import org.jbox2d.dynamics.World;
 
@@ -19,7 +22,6 @@ import org.jbox2d.dynamics.World;
 public class PhysicsWorld {
 	private static World world;
 	private static LinkedBlockingDeque<Element> elementList;
-	Body []limits;
 	boolean matrix[][];
 	private Lock lock;
 
@@ -38,8 +40,18 @@ public class PhysicsWorld {
 		world.setContactListener(new PhysicsCollision());
 		elementList = new LinkedBlockingDeque<>(1000); /** TODO*/
 
-		//TODO transform limits has Wall but keep this position and size
-		limits = new Body[4];
+		
+		generateWorldBounds();
+		generateWalls(0);
+
+		bonusManager();
+	}
+
+	private void generateWorldBounds() {
+
+		
+		// Top border
+		Body [] limits = new Body[4];
 		BodyDef bodyDef = new BodyDef();
 		bodyDef.type = BodyType.STATIC;
 		bodyDef.position.set(0, -15);
@@ -52,8 +64,8 @@ public class PhysicsWorld {
 		fixtureDef.restitution = .1f;
 		limits[0] = world.createBody(bodyDef);
 		limits[0].createFixture(fixtureDef);
-		limits[0].setType(BodyType.STATIC);
 
+		// left border
 		bodyDef = new BodyDef();
 		bodyDef.type = BodyType.STATIC;
 		bodyDef.position.set(-15, 0);
@@ -66,8 +78,8 @@ public class PhysicsWorld {
 		fixtureDef.restitution = .1f;
 		limits[1] = world.createBody(bodyDef);
 		limits[1].createFixture(fixtureDef);
-		limits[1].setType(BodyType.STATIC);
 
+		//bottom
 		bodyDef = new BodyDef();
 		bodyDef.type = BodyType.STATIC;
 		bodyDef.position.set(0, Main.HEIGHT);
@@ -80,8 +92,8 @@ public class PhysicsWorld {
 		fixtureDef.restitution = .1f;
 		limits[2] = world.createBody(bodyDef);
 		limits[2].createFixture(fixtureDef);
-		limits[2].setType(BodyType.STATIC);
 
+		// right
 		bodyDef = new BodyDef();
 		bodyDef.type = BodyType.STATIC;
 		bodyDef.position.set(Main.WIDTH, 0);
@@ -94,16 +106,11 @@ public class PhysicsWorld {
 		fixtureDef.restitution = .1f;
 		limits[3] = world.createBody(bodyDef);
 		limits[3].createFixture(fixtureDef);
-		limits[3].setType(BodyType.STATIC);
-
-		generateWalls(0);
-
-		bonusManager();
 	}
 
 	private void bonusManager() {
 
-		/*Thread t = new Thread(new Runnable() {
+		Thread t = new Thread(new Runnable() {
 			@Override
 			public void run() {
 				while(true){
@@ -124,10 +131,10 @@ public class PhysicsWorld {
 							}
 							Vec2 v = new Vec2((float)((i+r1)%matrix.length) * Wall.WALL_WIDTH, (float)((j+r2)%matrix[0].length) * Wall.WALL_HEIGTH);
 							 final Bonus b = new SnapBonus(v);
-							/** TODO : pb de concurrence **
+							/** TODO : pb de concurrence **/
 							addElement(b);
 							matrix[(i+r1)%matrix.length][(j+r2)%matrix[0].length] = true;
-							i = matrix.length; /**TODO : expliquer en quoi ça permet de sortir des 2 boucles**
+							i = matrix.length; /**TODO : expliquer en quoi ça permet de sortir des 2 boucles**/
 							break;
 
 						}
@@ -137,7 +144,7 @@ public class PhysicsWorld {
 			}
 		});
 
-		t.start();*/
+		t.start();
 	}
 
 	/**
