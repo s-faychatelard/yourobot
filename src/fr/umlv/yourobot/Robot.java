@@ -18,7 +18,7 @@ import org.jbox2d.dynamics.FixtureDef;
 public abstract class Robot implements Element {
 	private final static int ROBOT_WIDTH = 44;
 	private final static int ROBOT_HEIGTH = 44;
-	private final static int INITIAL_SPEED = 1000000000;
+	private final static int INITIAL_SPEED = 10;
 	private PolygonShape blockShape;
 	private BodyDef bodyDef;
 	private FixtureDef fixtureDef;
@@ -67,7 +67,7 @@ public abstract class Robot implements Element {
 	public void rotateLeft() {
 		//TODO get direction from this.body.getVelocity() ???
 		direction = (direction - 90)%360;
-		if(direction<0) direction = 360;
+		if(direction<0) direction = 360+direction;
 		Vec2 vec = new Vec2();
 		vec.x = (float)Math.cos(Math.toRadians(direction))*INITIAL_SPEED;
 		vec.y = (float)Math.sin(Math.toRadians(direction))*INITIAL_SPEED;
@@ -90,18 +90,26 @@ public abstract class Robot implements Element {
 	}
 	
 	public void jumpTo(Vec2 vec) {
+		if(vec == null) {
+			this.body.applyForce(new Vec2(0,0), this.getBody().getLocalCenter());
+			return;
+		}
+		System.out.println("Jump");
 		Vec2 p1 = this.getBody().getPosition();
 		Vec2 p2 = vec;
 		double newDirection = Math.atan((p2.y-p1.y) / (p2.x-p1.x));
 		newDirection = Math.toDegrees(newDirection);
-		newDirection = (newDirection + 180)%360;
 		if(newDirection<0) newDirection = 360+newDirection;
+		System.out.println(newDirection);
 		vec = new Vec2();
-		vec.x = (float)Math.cos(Math.toRadians(newDirection))*INITIAL_SPEED;
-		vec.y = (float)Math.sin(Math.toRadians(newDirection))*INITIAL_SPEED;
+		vec.x = (float)Math.cos(Math.toRadians(newDirection))*INITIAL_SPEED*100;
+		vec.y = (float)Math.sin(Math.toRadians(newDirection))*INITIAL_SPEED*100;
+		//Remove current speed
+		this.body.setLinearVelocity(new Vec2(0,0));
+		//Apply directional force
 		this.body.applyForce(vec, this.getBody().getLocalCenter());
-		//TODO need to check dimension of the PolygonShape, I think something is wrong collision are a little bit weird sometimes
-	    blockShape.setAsBox(ROBOT_WIDTH/2, ROBOT_HEIGTH/2, new Vec2(ROBOT_WIDTH - (ROBOT_WIDTH/2), ROBOT_HEIGTH - (ROBOT_HEIGTH/2)), (float)direction);
+		//TODO refresh shape like rotate
+	    //blockShape.setAsBox(ROBOT_WIDTH/2, ROBOT_HEIGTH/2, new Vec2(ROBOT_WIDTH - (ROBOT_WIDTH/2), ROBOT_HEIGTH - (ROBOT_HEIGTH/2)), (float)direction);
 	}
 
 	@Override

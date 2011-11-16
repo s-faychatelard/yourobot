@@ -102,12 +102,12 @@ public class PhysicsWorld {
 
 	private void bonusManager() {
 
-		Thread t = new Thread(new Runnable() {
+		/*Thread t = new Thread(new Runnable() {
 			@Override
 			public void run() {
 				while(true){
 					try {
-						Thread.sleep((new Random()).nextInt(50));
+						Thread.sleep((new Random()).nextInt(5000)+1000);
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}
@@ -123,10 +123,10 @@ public class PhysicsWorld {
 							}
 							Vec2 v = new Vec2((float)((i+r1)%matrix.length) * Wall.WALL_WIDTH, (float)((j+r2)%matrix[0].length) * Wall.WALL_HEIGTH);
 							 final Bonus b = new SnapBonus(v);
-							/** TODO : pb de concurrence **/
+							/** TODO : pb de concurrence **
 							addElement(b);
 							matrix[(i+r1)%matrix.length][(j+r2)%matrix[0].length] = true;
-							i = matrix.length; /**TODO : expliquer en quoi ça permet de sortir des 2 boucles**/
+							i = matrix.length; /**TODO : expliquer en quoi ça permet de sortir des 2 boucles**
 							break;
 
 						}
@@ -136,7 +136,7 @@ public class PhysicsWorld {
 			}
 		});
 
-		t.start();
+		t.start();*/
 	}
 
 	/**
@@ -202,6 +202,7 @@ public class PhysicsWorld {
 				elementBody.createFixture(element.getFixtureDef());
 			elementBody.setType(element.getBodyDef().type);		
 			element.setBody(elementBody);
+			elementBody.setUserData(element);
 			elementList.addFirst(element);
 		} finally {
 			lock.unlock();

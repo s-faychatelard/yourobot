@@ -19,7 +19,7 @@ public class Main {
 	private static Image ground;
 
 	public static void main(String[] args) {
-		Application.run("You robot", Main.WIDTH, Main.HEIGHT, new ApplicationCode() {
+		Application.run("YRobot", Main.WIDTH, Main.HEIGHT, new ApplicationCode() {
 			@Override
 			public void run(final ApplicationContext context) {
 				final PhysicsWorld world = new PhysicsWorld();
@@ -34,12 +34,12 @@ public class Main {
 				robot3.start();
 				robot4.start();
 				robot5.start();
-				robot3.detect(robot);
+				/*robot3.detect(robot);
 				robot3.detect(robot2);
 				robot4.detect(robot);
-				robot4.detect(robot2);
+				robot4.detect(robot2);*/
 				robot5.detect(robot);
-				robot5.detect(robot2);
+				/*robot5.detect(robot2);*/
 				//Load background texture
 				ground = Toolkit.getDefaultToolkit().getImage("ground.jpg");
 				
@@ -64,7 +64,7 @@ public class Main {
 									break;
 								}
 							}
-							graphics.drawImage(ground, 0, 0, 800, 600, Color.WHITE, null);
+							graphics.drawImage(ground, 0, 0, Main.WIDTH, Main.HEIGHT, Color.WHITE, null);
 							world.render(graphics);
 							graphics.finalize();
 							graphics.dispose();
@@ -72,7 +72,7 @@ public class Main {
 					});
 					//Need wait to delete flashing
 					try {
-						Thread.sleep(40);
+						Thread.sleep(2);
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 						return;

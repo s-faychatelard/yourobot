@@ -59,6 +59,13 @@ public class RobotIA extends Robot {
 					}
 					else {
 						jumpTo(enemyPosition);
+						try {
+							Thread.sleep(4000);
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						}
+						goTo(null);
+						jumpTo(null);
 					}
 				}
 			}

@@ -21,7 +21,6 @@ public class RobotDetection implements Runnable {
 			callback = new RayCastCallbackRobotIA();
 		if(lock == null)
 			lock = new ReentrantLock();
-		System.out.println(diagonal);
 	}
 
 	public boolean detect(RobotPlayer robot) {
@@ -40,11 +39,11 @@ public class RobotDetection implements Runnable {
 			Vec2 res = null;
 			for(RobotPlayer rp : this.robot.getRobotsDetected()) {
 				if(detect(rp)) {
-					Vec2 vec1 = this.robot.getBody().getPosition();
-					Vec2 vec2 = rp.getBody().getPosition();
-					callback.init();
 					if (lock.tryLock()) {
 						try {
+							Vec2 vec1 = this.robot.getBody().getPosition();
+							Vec2 vec2 = rp.getBody().getPosition();
+							callback.init();
 							this.robot.getBody().getWorld().raycast(callback, vec1, vec2);
 							if(callback.count<=1) {
 								res = rp.getBody().getPosition();
