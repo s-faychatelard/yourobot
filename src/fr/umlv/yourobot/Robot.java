@@ -2,12 +2,7 @@ package fr.umlv.yourobot;
 
 import java.awt.Graphics2D;
 import java.awt.Image;
-import java.awt.Toolkit;
 import java.awt.geom.AffineTransform;
-import java.awt.image.AffineTransformOp;
-import java.awt.image.BufferedImage;
-import java.awt.image.BufferedImageOp;
-
 import org.jbox2d.collision.shapes.PolygonShape;
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.Body;
@@ -24,9 +19,8 @@ public abstract class Robot implements Element {
 	private FixtureDef fixtureDef;
 	private Body body;
 	protected Image image; // TODO laisser en private - idem pour WALL
-
+	private int life;
 	private double direction = 0.;
-
 	public abstract Image getImage();
 
 	public abstract void setImage(Image img);
@@ -37,17 +31,20 @@ public abstract class Robot implements Element {
 		bodyDef.position.set(position.x, position.y);
 
 		blockShape = new PolygonShape();
-		blockShape.setAsBox(ROBOT_WIDTH / 2, ROBOT_HEIGTH / 2);
+		blockShape.setAsBox(ROBOT_WIDTH/2, ROBOT_HEIGTH/2);
 		fixtureDef = new FixtureDef();
 		fixtureDef.shape = blockShape;
 		fixtureDef.density = 0.f;
 		fixtureDef.friction = 1.f;
 		fixtureDef.restitution = 0.f;
+		
+		life = 100;
 	}
 
 	@Override
 	public void draw(Graphics2D graphics) {
 		Vec2 p = this.body.getPosition();
+
 		AffineTransform affineTransform = new AffineTransform();
 		affineTransform.setToTranslation(p.x, p.y);
 		affineTransform.rotate(Math.toRadians(this.direction), ROBOT_WIDTH / 2, ROBOT_HEIGTH / 2);
@@ -55,9 +52,10 @@ public abstract class Robot implements Element {
 	}
 
 	public void rotate(int rotation) {
-		direction = (direction + rotation) % 360;
-		if (direction < 0)
-			direction = 360 + direction;
+		if(this.life<=0) return;
+		direction = (direction + rotation)%360;
+		if(direction<0) direction = 360+direction;
+
 		Vec2 vec = new Vec2();
 		vec.x = (float) Math.cos(Math.toRadians(direction)) * INITIAL_SPEED;
 		vec.y = (float) Math.sin(Math.toRadians(direction)) * INITIAL_SPEED;
@@ -73,36 +71,41 @@ public abstract class Robot implements Element {
 		rotate(10);
 	}
 
-	public void jumpTo(Vec2 vec) {
-		if (vec == null) {
-			this.body.applyForce(new Vec2(0, 0), this.getBody()
-					.getLocalCenter());
+public void jumpTo(Vec2 vec) {
+		if(vec == null) {
+			this.body.applyForce(new Vec2(0,0), this.getBody().getLocalCenter());
 			rotate(0);
 			return;
 		}
-		System.out.println("Jump");
 		Vec2 p1 = this.getBody().getPosition();
 		Vec2 p2 = vec;
-		direction = Math
-				.atan((Math.abs(p1.y - p2.y)) / (Math.abs(p1.x - p2.x)));
-		// if(direction<0) direction = 1+direction;
-		// System.out.println(newDirection);
+		int x = (int)(p2.x - p1.x);
+		int y = -(int)(p2.y - p1.y);
+		double hypo = Math.sqrt(x*x + y*y);
+		direction = Math.toDegrees(Math.acos(y/hypo));
+		if(x<0)
+			direction = 360 - direction;
+		direction = direction - 90;
+		if(direction<0) direction = 360+direction;
 		vec = new Vec2();
-		vec.x = (float) Math.cos(direction) * INITIAL_SPEED * 10;
-		vec.y = (float) Math.sin(direction) * INITIAL_SPEED * 10;
-		// direction = Math.toDegrees(direction);
-
-		System.out.println(direction);
-		// Remove current speed
+		vec.x = (float)Math.cos(Math.toRadians(direction))*INITIAL_SPEED*100;
+		vec.y = (float)Math.sin(Math.toRadians(direction))*INITIAL_SPEED*100;
 		this.body.setLinearVelocity(vec);
-		// Apply directional force
-		// this.body.applyForce(vec, this.getBody().getLocalCenter());
-		// TODO refresh shape like rotate
-		// blockShape.setAsBox(ROBOT_WIDTH/2, ROBOT_HEIGTH/2, new
-		// Vec2(ROBOT_WIDTH - (ROBOT_WIDTH/2), ROBOT_HEIGTH - (ROBOT_HEIGTH/2)),
-		// (float)newDirection);
+	}
+	
+	public void setLife(int life) {
+		this.life = life;
+		//System.out.println("new life : " + life);
+		if(this.life <= 0) {
+			this.body.setLinearVelocity(new Vec2(0,0));
+			//System.out.println("dead");
+		}
 	}
 
+	public int getLife() {
+		return this.life;
+	}
+	
 	@Override
 	public void setBody(Body body) {
 		this.body = body;

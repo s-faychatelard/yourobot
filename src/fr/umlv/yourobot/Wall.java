@@ -2,7 +2,6 @@ package fr.umlv.yourobot;
 
 import java.awt.Graphics2D;
 import java.awt.Image;
-import java.awt.image.BufferedImage;
 import org.jbox2d.collision.shapes.PolygonShape;
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.Body;
@@ -65,11 +64,13 @@ public abstract class Wall implements Element {
 		Vec2 p = this.body.getPosition();
 	    graphics.drawImage(getImage(), (int)p.x , (int)p.y, WALL_WIDTH, WALL_HEIGTH, null);
 	}
-		
+	
+	@Override
 	public int getLife() {
 		return life;
 	}
-		
+	
+	@Override
 	public void setLife(int life) {
 		this.life = life;
 	}

@@ -3,8 +3,6 @@ package fr.umlv.yourobot;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Toolkit;
-import java.awt.image.BufferedImage;
-
 import org.jbox2d.collision.shapes.PolygonShape;
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.Body;
@@ -65,5 +63,17 @@ public class StartPoint implements Element {
 	@Override
 	public FixtureDef getFixtureDef() {
 		return fixtureDef;
+	}
+
+	@Override
+	public void setLife(int life) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public int getLife() {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 }
