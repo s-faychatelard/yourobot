@@ -17,20 +17,20 @@ public class RobotIA extends Robot {
 		super(position);
 		robotsDetection = new ArrayBlockingQueue<RobotPlayer>(5);
 	}
-	
+
 	@Override
 	public Image getImage() {
 		if(image==null)
 			image = Toolkit.getDefaultToolkit().getImage("robot.png");
-	
+
 		return this.image;
 	}
-	
+
 	@Override
 	public void setImage(Image img) {
 		this.image = img;
 	}
-	
+
 	public void start() {
 		//Start detection
 		new Thread(new RobotDetection(this)).start();
@@ -43,11 +43,13 @@ public class RobotIA extends Robot {
 				while(true) {
 					if(enemyPosition==null) {
 						int val = rand.nextInt(45);
-						if(rand.nextBoolean()) {
-							rotate(-val);
-						}
-						else {
-							rotate(val);
+						if(rand.nextInt(3) == 2) {
+							if(rand.nextBoolean()) {
+								rotate(-val);
+							}
+							else {
+								rotate(val);
+							}
 						}
 						try {
 							Thread.sleep(rand.nextInt(500));
@@ -59,13 +61,6 @@ public class RobotIA extends Robot {
 						jumpTo(enemyPosition);
 						try {
 							Thread.sleep(3000);
-						} catch (InterruptedException e) {
-							e.printStackTrace();
-						}
-						//Let's try to the player to go somewhere else
-						jumpTo(new Vec2(rand.nextInt(500), rand.nextInt(500)));
-						try {
-							Thread.sleep(1000);
 						} catch (InterruptedException e) {
 							e.printStackTrace();
 						}

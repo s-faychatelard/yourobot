@@ -3,44 +3,42 @@ package fr.umlv.yourobot;
 import org.jbox2d.callbacks.ContactImpulse;
 import org.jbox2d.callbacks.ContactListener;
 import org.jbox2d.collision.Manifold;
+import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.contacts.Contact;
 
 public class PhysicsCollision implements ContactListener {
 
 	@Override
 	public void beginContact(Contact contact) {
-		//System.out.println("===> Contact start");
-		/*if(contact.getFixtureA().getBody().getUserData() instanceof RobotIA && contact.getFixtureB().getBody().getUserData() instanceof RobotPlayer) {
-			Element e = (Element)contact.getFixtureA().getBody().getUserData();
-			e.getBody().setType(BodyType.STATIC);
+		if(contact.getFixtureA().getBody().getUserData() instanceof RobotPlayer && contact.getFixtureB().getBody().getUserData() instanceof RobotIA) {
+			RobotPlayer robotPlayer = (RobotPlayer)contact.getFixtureA().getBody().getUserData();
+			RobotIA robotIA = (RobotIA)contact.getFixtureB().getBody().getUserData();
+			Vec2 vecPlayer = robotPlayer.getBody().getLinearVelocity();
+			Vec2 vecIA = robotIA.getBody().getLinearVelocity();
+			System.out.println(vecPlayer + " " + vecIA);
+			int x = (int)(vecPlayer.x - vecIA.x);
+			int y = -(int)(vecPlayer.y - vecIA.y);
+			double hypo = Math.sqrt(x*x + y*y);
+			robotPlayer.setLife((int)(robotPlayer.getLife()-hypo/2));
 		}
-		else if(contact.getFixtureB().getBody().getUserData() instanceof RobotIA && contact.getFixtureA().getBody().getUserData() instanceof RobotPlayer) {
-			Element e = (Element)contact.getFixtureB().getBody().getUserData();
-			e.getBody().setType(BodyType.STATIC);
-		}*/
+		if(contact.getFixtureA().getBody().getUserData() instanceof RobotIA) {
+			RobotIA robotIA = (RobotIA)contact.getFixtureA().getBody().getUserData();
+			robotIA.rotate(180);
+			robotIA.jumpTo(null);
+		}
+		else if(contact.getFixtureB().getBody().getUserData() instanceof RobotIA) {
+			RobotIA robotIA = (RobotIA)contact.getFixtureB().getBody().getUserData();
+			robotIA.rotate(180);
+			robotIA.jumpTo(null);
+		}
 	}
 
 	@Override
-	public void endContact(Contact contact) {
-		//System.out.println("===> Contact ended");
-		/*if(contact.getFixtureA().getBody().getUserData() instanceof RobotIA && contact.getFixtureB().getBody().getUserData() instanceof RobotPlayer) {
-			Element e = (Element)contact.getFixtureA().getBody().getUserData();
-			e.getBody().setType(BodyType.DYNAMIC);
-		}
-		else if(contact.getFixtureB().getBody().getUserData() instanceof RobotIA && contact.getFixtureA().getBody().getUserData() instanceof RobotPlayer) {
-			Element e = (Element)contact.getFixtureB().getBody().getUserData();
-			e.getBody().setType(BodyType.DYNAMIC);
-		}*/
-	}
+	public void endContact(Contact contact) { }
 	
 	@Override
 	public void preSolve(Contact contact, Manifold oldManifold) { }
 
 	@Override
-	public void postSolve(Contact contact, ContactImpulse impulse) {
-		if(contact.getFixtureA().getBody().getUserData() instanceof RobotPlayer && contact.getFixtureB().getBody().getUserData() instanceof RobotIA) {
-			Element e = (Element)contact.getFixtureA().getBody().getUserData();
-			e.setLife((int)(e.getLife()-impulse.normalImpulses[0]));
-		}
-	}
+	public void postSolve(Contact contact, ContactImpulse impulse) { }
 }

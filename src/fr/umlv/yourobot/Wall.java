@@ -65,12 +65,10 @@ public abstract class Wall implements Element {
 	    graphics.drawImage(getImage(), (int)p.x , (int)p.y, WALL_WIDTH, WALL_HEIGTH, null);
 	}
 	
-	@Override
 	public int getLife() {
 		return life;
 	}
-	
-	@Override
+
 	public void setLife(int life) {
 		this.life = life;
 	}

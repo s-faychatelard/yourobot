@@ -11,6 +11,4 @@ public interface Element {
 	public Body getBody();
 	public BodyDef getBodyDef();
 	public FixtureDef getFixtureDef();
-	public void setLife(int life);
-	public int getLife();
 }

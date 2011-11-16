@@ -110,7 +110,7 @@ public class PhysicsWorld {
 			public void run() {
 				while(true){
 					try {
-						Thread.sleep((new Random()).nextInt(5000)+1000);
+						Thread.sleep((new Random()).nextInt(5000)+4000);
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}
