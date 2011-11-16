@@ -32,8 +32,9 @@ public class PhysicsWorld {
 	 */
 	public PhysicsWorld() {
 		lock = new ReentrantLock();
-		
+
 		world = new World(new Vec2(0,0), true);
+
 		world.setContactListener(new PhysicsCollision());
 		elementList = new LinkedBlockingDeque<>(1000); /** TODO*/
 
@@ -114,7 +115,7 @@ public class PhysicsWorld {
 
 					int r1 = (new Random()).nextInt(matrix.length);
 					int r2 = (new Random()).nextInt(matrix[0].length);
-			
+
 					// note : it's impossible to fill all the matrix : there is at less a player that will take a bonus
 					for (int i=0; i<matrix.length; i++) {
 						for (int j=0; j<matrix[0].length; j++) {
@@ -185,7 +186,7 @@ public class PhysicsWorld {
 
 	public Element addElement(Element element) {
 		Body elementBody = null;
-		
+
 		while (!lock.tryLock()) {
 			try {
 				Thread.sleep(50);
@@ -194,7 +195,7 @@ public class PhysicsWorld {
 				e.printStackTrace();
 			}
 		}
-		
+
 		try {
 			//createBody auto lock
 			elementBody = world.createBody(element.getBodyDef());
@@ -207,7 +208,7 @@ public class PhysicsWorld {
 		} finally {
 			lock.unlock();
 		}
-		
+
 		return element;
 	}
 
@@ -215,19 +216,23 @@ public class PhysicsWorld {
 		world.raycast(raycastCallback, point1, point2);
 	}
 
-	public void render(Graphics2D graphics) {
-		
-		if (lock.tryLock()) {
+	public void updateWorld() {
+		while(!lock.tryLock()) {
 			try {
-				world.step(1/60f, 15, 8);
-			} finally {
-				lock.unlock();
+				Thread.sleep(10);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
 			}
 		}
-		
-		graphics.setColor(Color.BLACK);
-		for(Element e : elementList) {
-			e.draw(graphics);
+		try {
+			world.step(1/30f, 15, 8);
+		} finally {
+			lock.unlock();
 		}
+	}
+
+	public void render(Graphics2D graphics) {
+		for(Element e : elementList)
+			e.draw(graphics);
 	}
 }

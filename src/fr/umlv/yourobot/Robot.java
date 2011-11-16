@@ -18,7 +18,7 @@ import org.jbox2d.dynamics.FixtureDef;
 public abstract class Robot implements Element {
 	private final static int ROBOT_WIDTH = 44;
 	private final static int ROBOT_HEIGTH = 44;
-	private final static int INITIAL_SPEED = 10;
+	private final static int INITIAL_SPEED = 50;
 	private PolygonShape blockShape;
 	private BodyDef bodyDef;
 	private FixtureDef fixtureDef;
@@ -63,53 +63,47 @@ public abstract class Robot implements Element {
 	    
 	    
 	}
-
-	public void rotateLeft() {
-		//TODO get direction from this.body.getVelocity() ???
-		direction = (direction - 90)%360;
+	
+	public void rotate(int rotation) {
+		direction = (direction + rotation)%360;
 		if(direction<0) direction = 360+direction;
 		Vec2 vec = new Vec2();
 		vec.x = (float)Math.cos(Math.toRadians(direction))*INITIAL_SPEED;
 		vec.y = (float)Math.sin(Math.toRadians(direction))*INITIAL_SPEED;
 		this.body.setLinearVelocity(vec);
-		
-		
-		//TODO need to check dimension of the PolygonShape because I think something is wrong collision are a little bit weird sometimes
-	    blockShape.setAsBox(ROBOT_WIDTH/2, ROBOT_HEIGTH/2, new Vec2(ROBOT_WIDTH - (ROBOT_WIDTH/2), ROBOT_HEIGTH - (ROBOT_HEIGTH/2)), (float)direction);
+	}
+
+	public void rotateLeft() {
+		rotate(-20);
 	}
 
 	public void rotateRight() {
-		//TODO get direction from this.body.getVelocity() ???
-		direction = (direction + 90)%360;
-		Vec2 vec = new Vec2();
-		vec.x = (float)Math.cos(Math.toRadians(direction))*INITIAL_SPEED;
-		vec.y = (float)Math.sin(Math.toRadians(direction))*INITIAL_SPEED;
-		this.body.setLinearVelocity(vec);
-		//TODO need to check dimension of the PolygonShape, I think something is wrong collision are a little bit weird sometimes
-	    blockShape.setAsBox(ROBOT_WIDTH/2, ROBOT_HEIGTH/2, new Vec2(ROBOT_WIDTH - (ROBOT_WIDTH/2), ROBOT_HEIGTH - (ROBOT_HEIGTH/2)), (float)direction);
+		rotate(20);
 	}
 	
 	public void jumpTo(Vec2 vec) {
 		if(vec == null) {
 			this.body.applyForce(new Vec2(0,0), this.getBody().getLocalCenter());
+			rotate(0);
 			return;
 		}
 		System.out.println("Jump");
 		Vec2 p1 = this.getBody().getPosition();
 		Vec2 p2 = vec;
-		double newDirection = Math.atan((p2.y-p1.y) / (p2.x-p1.x));
-		newDirection = Math.toDegrees(newDirection);
-		if(newDirection<0) newDirection = 360+newDirection;
-		System.out.println(newDirection);
+		direction = Math.atan((p2.y-p1.y) / (p2.x-p1.x));
+		if(direction<0) direction = 1+direction;
+		//System.out.println(newDirection);
 		vec = new Vec2();
-		vec.x = (float)Math.cos(Math.toRadians(newDirection))*INITIAL_SPEED*100;
-		vec.y = (float)Math.sin(Math.toRadians(newDirection))*INITIAL_SPEED*100;
+		vec.x = (float)Math.cos(direction)*INITIAL_SPEED*10;
+		vec.y = (float)Math.sin(direction)*INITIAL_SPEED*10;
+		direction = Math.toDegrees(direction);
+		System.out.println(p1 + "  " + p2 + "  " + direction);
 		//Remove current speed
-		this.body.setLinearVelocity(new Vec2(0,0));
+		this.body.setLinearVelocity(vec);
 		//Apply directional force
-		this.body.applyForce(vec, this.getBody().getLocalCenter());
+		//this.body.applyForce(vec, this.getBody().getLocalCenter());
 		//TODO refresh shape like rotate
-	    //blockShape.setAsBox(ROBOT_WIDTH/2, ROBOT_HEIGTH/2, new Vec2(ROBOT_WIDTH - (ROBOT_WIDTH/2), ROBOT_HEIGTH - (ROBOT_HEIGTH/2)), (float)direction);
+	    //blockShape.setAsBox(ROBOT_WIDTH/2, ROBOT_HEIGTH/2, new Vec2(ROBOT_WIDTH - (ROBOT_WIDTH/2), ROBOT_HEIGTH - (ROBOT_HEIGTH/2)), (float)newDirection);
 	}
 
 	@Override

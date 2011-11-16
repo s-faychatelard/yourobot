@@ -28,11 +28,11 @@ public class Main {
 				System.out.println("Robot " + robot.getBody());
 				System.out.println("Robot2 " + robot2.getBody());
 				System.out.println("------------------");
-				final RobotIA robot3 = (RobotIA)world.addElement(new RobotIA(new Vec2(600, 300)));
-				final RobotIA robot4 = (RobotIA)world.addElement(new RobotIA(new Vec2(600, 400)));
+				//final RobotIA robot3 = (RobotIA)world.addElement(new RobotIA(new Vec2(600, 300)));
+				//final RobotIA robot4 = (RobotIA)world.addElement(new RobotIA(new Vec2(600, 400)));
 				final RobotIA robot5 = (RobotIA)world.addElement(new RobotIA(new Vec2(600, 500)));
-				robot3.start();
-				robot4.start();
+				//robot3.start();
+				//robot4.start();
 				robot5.start();
 				/*robot3.detect(robot);
 				robot3.detect(robot2);
@@ -42,7 +42,22 @@ public class Main {
 				/*robot5.detect(robot2);*/
 				//Load background texture
 				ground = Toolkit.getDefaultToolkit().getImage("ground.jpg");
-				
+
+				new Thread(new Runnable() {
+
+					@Override
+					public void run() {
+						while(true) {
+							world.updateWorld();
+							try {
+								Thread.sleep(30);
+							} catch (InterruptedException e) {
+								e.printStackTrace();
+							}
+						}
+					}
+				}).start();
+
 				for(;;) {
 					final KeyboardEvent event = context.pollKeyboard();
 					context.render(new ApplicationRenderCode() {
@@ -72,7 +87,7 @@ public class Main {
 					});
 					//Need wait to delete flashing
 					try {
-						Thread.sleep(2);
+						Thread.sleep(50);
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 						return;
