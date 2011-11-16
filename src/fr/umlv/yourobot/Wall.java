@@ -67,11 +67,13 @@ public abstract class Wall implements Element {
 		/**TODO la constante 4 "corrige" le bug avec les walls */
 	    graphics.drawImage(getImage(), (int)p.x - 4 , (int)p.y - 4, WALL_WIDTH, WALL_HEIGTH, null);
 	}
-		
+	
+	@Override
 	public int getLife() {
 		return life;
 	}
-		
+	
+	@Override
 	public void setLife(int life) {
 		this.life = life;
 	}

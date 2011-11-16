@@ -67,4 +67,10 @@ public abstract class Bonus implements Element {
 		Vec2 p = this.body.getPosition();
 	    graphics.drawImage(getImage(), (int)p.x , (int)p.y, BONUS_WIDTH, BONUS_HEIGTH, null);
 	}
+	
+	@Override
+	public void setLife(int life) {}
+
+	@Override
+	public int getLife() { return -1; }
 }

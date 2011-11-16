@@ -24,6 +24,7 @@ public abstract class Robot implements Element {
 	private FixtureDef fixtureDef;
 	private Body body;
 	private static Image image;
+	private int life;
 
 	private double direction = 0.;
 
@@ -39,6 +40,8 @@ public abstract class Robot implements Element {
 		fixtureDef.density = 0.f;
 		fixtureDef.friction = 1.f;
 		fixtureDef.restitution = 0.f;
+		
+		life = 100;
 	}
 
 	@Override
@@ -60,11 +63,10 @@ public abstract class Robot implements Element {
 	    BufferedImageOp bio = new AffineTransformOp(at, AffineTransformOp.TYPE_BILINEAR);
 	    BufferedImage destinationBI = bio.filter(sourceBI, null);
 	    graphics.drawImage(destinationBI, (int)p.x, (int)p.y, null);
-	    
-	    
 	}
 	
 	public void rotate(int rotation) {
+		if(this.life<=0) return;
 		direction = (direction + rotation)%360;
 		if(direction<0) direction = 360+direction;
 		Vec2 vec = new Vec2();
@@ -87,25 +89,35 @@ public abstract class Robot implements Element {
 			rotate(0);
 			return;
 		}
-		System.out.println("Jump");
 		Vec2 p1 = this.getBody().getPosition();
 		Vec2 p2 = vec;
-		direction = Math.atan((p2.y-p1.y) / (p2.x-p1.x));
-		if(direction<0) direction = 1+direction;
-		//System.out.println(newDirection);
+		int x = (int)(p2.x - p1.x);
+		int y = -(int)(p2.y - p1.y);
+		double hypo = Math.sqrt(x*x + y*y);
+		direction = Math.toDegrees(Math.acos(y/hypo));
+		if(x<0)
+			direction = 360 - direction;
+		direction = direction - 90;
+		if(direction<0) direction = 360+direction;
 		vec = new Vec2();
-		vec.x = (float)Math.cos(direction)*INITIAL_SPEED*10;
-		vec.y = (float)Math.sin(direction)*INITIAL_SPEED*10;
-		direction = Math.toDegrees(direction);
-		System.out.println(p1 + "  " + p2 + "  " + direction);
-		//Remove current speed
+		vec.x = (float)Math.cos(Math.toRadians(direction))*INITIAL_SPEED*100;
+		vec.y = (float)Math.sin(Math.toRadians(direction))*INITIAL_SPEED*100;
 		this.body.setLinearVelocity(vec);
-		//Apply directional force
-		//this.body.applyForce(vec, this.getBody().getLocalCenter());
-		//TODO refresh shape like rotate
-	    //blockShape.setAsBox(ROBOT_WIDTH/2, ROBOT_HEIGTH/2, new Vec2(ROBOT_WIDTH - (ROBOT_WIDTH/2), ROBOT_HEIGTH - (ROBOT_HEIGTH/2)), (float)newDirection);
+	}
+	
+	public void setLife(int life) {
+		this.life = life;
+		//System.out.println("new life : " + life);
+		if(this.life <= 0) {
+			this.body.setLinearVelocity(new Vec2(0,0));
+			//System.out.println("dead");
+		}
 	}
 
+	public int getLife() {
+		return this.life;
+	}
+	
 	@Override
 	public void setBody(Body body) {
 		this.body = body;

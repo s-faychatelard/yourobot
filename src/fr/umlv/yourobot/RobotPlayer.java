@@ -7,5 +7,4 @@ public class RobotPlayer extends Robot {
 	public RobotPlayer(Vec2 position) {
 		super(position);
 	}
-
 }
