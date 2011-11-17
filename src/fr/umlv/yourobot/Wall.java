@@ -1,7 +1,6 @@
 package fr.umlv.yourobot;
 
 import java.awt.Graphics2D;
-import java.awt.Image;
 import org.jbox2d.collision.shapes.PolygonShape;
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.Body;
@@ -56,13 +55,12 @@ public abstract class Wall implements Element {
 	public abstract int attackWithIce();
 	public abstract int attackWithStone();
 	public abstract int attackWithWood();
-	public abstract Image getImage();
-	public abstract void setImage(Image img);
+	abstract String getImagePath();
 	
 	@Override
 	public void draw(Graphics2D graphics) {
 		Vec2 p = this.body.getPosition();
-	    graphics.drawImage(getImage(), (int)p.x , (int)p.y, WALL_WIDTH, WALL_HEIGTH, null);
+	    graphics.drawImage(ImageFactory.getImage(getImagePath()), (int)p.x , (int)p.y, WALL_WIDTH, WALL_HEIGTH, null);
 	}
 	
 	@Override

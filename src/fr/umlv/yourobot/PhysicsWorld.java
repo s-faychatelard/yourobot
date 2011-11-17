@@ -36,6 +36,9 @@ public class PhysicsWorld {
 		elementList = new LinkedBlockingDeque<>(1000); /** TODO*/
 
 		
+		this.addElement(new StartPoint(new Vec2(0, 0)));
+		this.addElement(new EndPoint(new Vec2(Main.WIDTH-50, Main.HEIGHT-50)));
+
 		generateWorldBounds();
 		generateWalls(0);
 
@@ -44,6 +47,7 @@ public class PhysicsWorld {
 
 	private void generateWorldBounds() {
 
+		
 		
 		// Top border
 		Body [] limits = new Body[4];
@@ -110,7 +114,7 @@ public class PhysicsWorld {
 			public void run() {
 				while(true){
 					try {
-						Thread.sleep((new Random()).nextInt(5000)+1000);
+						Thread.sleep((new Random()).nextInt(5000)+4000);
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}

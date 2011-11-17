@@ -21,10 +21,9 @@ public abstract class Robot implements Element {
 	protected Image image; // TODO laisser en private - idem pour WALL
 	private int life;
 	private double direction = 0.;
-	public abstract Image getImage();
-
-	public abstract void setImage(Image img);
-
+	
+	public abstract String getImagePath();
+	
 	public Robot(Vec2 position) {
 		bodyDef = new BodyDef();
 		bodyDef.type = BodyType.DYNAMIC;
@@ -44,11 +43,10 @@ public abstract class Robot implements Element {
 	@Override
 	public void draw(Graphics2D graphics) {
 		Vec2 p = this.body.getPosition();
-
 		AffineTransform affineTransform = new AffineTransform();
 		affineTransform.setToTranslation(p.x, p.y);
 		affineTransform.rotate(Math.toRadians(this.direction), ROBOT_WIDTH / 2, ROBOT_HEIGTH / 2);
-		graphics.drawImage(getImage(), affineTransform, null);
+		graphics.drawImage(ImageFactory.getImage(getImagePath()), affineTransform, null);
 	}
 
 	public void rotate(int rotation) {

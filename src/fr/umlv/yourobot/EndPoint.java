@@ -10,33 +10,39 @@ import org.jbox2d.dynamics.BodyDef;
 import org.jbox2d.dynamics.BodyType;
 import org.jbox2d.dynamics.FixtureDef;
 
-public class StartPoint implements Element {
+public class EndPoint implements Element {
 	
-	final static int STARTPOINT_WIDTH = 50;
-	final static int STARTPOINT_HEIGTH = STARTPOINT_WIDTH;
+	final static int ENDPOINT_WIDTH = 50;
+	final static int ENDPOINT_HEIGTH = ENDPOINT_WIDTH;
 	private final BodyDef bodyDef;
 	private final FixtureDef fixtureDef;
 	protected Body body;
 	private static Image image;
 	
-	public StartPoint(Vec2 position) {	
+	public EndPoint(Vec2 position) {	
 		if(image == null)
-			image = Toolkit.getDefaultToolkit().getImage("startPoint.png");
+			image = Toolkit.getDefaultToolkit().getImage("endPoint.png");
 			
-		//PolygonShape blockShape;
+		PolygonShape blockShape;
+
 		bodyDef = new BodyDef();
 		bodyDef.type = BodyType.STATIC;
 		bodyDef.position.set(position.x, position.y);
-		//blockShape = new PolygonShape();
-		//blockShape.setAsBox(STARTPOINT_WIDTH/2, STARTPOINT_HEIGTH/2);
 
-		fixtureDef = null;
+		blockShape = new PolygonShape();
+		blockShape.setAsBox(ENDPOINT_WIDTH/2, ENDPOINT_HEIGTH/2);
+
+		fixtureDef = new FixtureDef();
+		fixtureDef.shape = blockShape;
+		fixtureDef.density = 0.f;
+		fixtureDef.friction = 0.f;
+		fixtureDef.restitution = 0.f;
 	}
 	
 	@Override
 	public void draw(Graphics2D graphics) {
 		Vec2 p = this.body.getPosition();
-	    graphics.drawImage(image, (int)p.x , (int)p.y, STARTPOINT_WIDTH, STARTPOINT_HEIGTH, null);
+	    graphics.drawImage(image, (int)p.x , (int)p.y, ENDPOINT_WIDTH, ENDPOINT_HEIGTH, null);
 	}
 
 	@Override

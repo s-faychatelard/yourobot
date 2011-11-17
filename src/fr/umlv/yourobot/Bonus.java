@@ -1,9 +1,6 @@
 package fr.umlv.yourobot;
 
 import java.awt.Graphics2D;
-import java.awt.Image;
-import java.awt.image.BufferedImage;
-
 import org.jbox2d.collision.shapes.PolygonShape;
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.Body;
@@ -17,7 +14,6 @@ public abstract class Bonus implements Element {
 	private final BodyDef bodyDef;
 	private final FixtureDef fixtureDef;
 	protected Body body;
-	private BufferedImage image;
 
 	public  Bonus(Vec2 position) {	
 			
@@ -58,13 +54,12 @@ public abstract class Bonus implements Element {
 		return this.fixtureDef;
 	}
 	
-	public abstract Image getImage();
-	public abstract void setImage(Image img);
+	public abstract String getImagePath();
 	
 	@Override
 	public void draw(Graphics2D graphics) {
 		Vec2 p = this.body.getPosition();
-	    graphics.drawImage(getImage(), (int)p.x , (int)p.y, BONUS_WIDTH, BONUS_HEIGTH, null);
+	    graphics.drawImage(ImageFactory.getImage(getImagePath()), (int)p.x , (int)p.y, BONUS_WIDTH, BONUS_HEIGTH, null);
 	}
 	
 	@Override

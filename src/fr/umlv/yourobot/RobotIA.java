@@ -1,7 +1,5 @@
 package fr.umlv.yourobot;
 
-import java.awt.Image;
-import java.awt.Toolkit;
 import java.util.Objects;
 import java.util.Random;
 import java.util.concurrent.ArrayBlockingQueue;
@@ -12,6 +10,7 @@ public class RobotIA extends Robot {
 	//Need to be concurrent safe because RobotDetection thread have an access to it
 	private ArrayBlockingQueue<RobotPlayer> robotsDetection;
 	private Vec2 enemyPosition;
+	private String imagePath = "robot.png";
 
 	public RobotIA(Vec2 position) {
 		super(position);
@@ -19,16 +18,8 @@ public class RobotIA extends Robot {
 	}
 	
 	@Override
-	public Image getImage() {
-		if(image==null)
-			image = Toolkit.getDefaultToolkit().getImage("robot.png");
-	
-		return this.image;
-	}
-	
-	@Override
-	public void setImage(Image img) {
-		this.image = img;
+	public String getImagePath() {
+		return this.imagePath;
 	}
 	
 	public void start() {

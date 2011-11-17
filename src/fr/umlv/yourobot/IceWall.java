@@ -1,13 +1,12 @@
 package fr.umlv.yourobot;
 
-import java.awt.Image;
-import java.awt.Toolkit;
 import org.jbox2d.common.Vec2;
 
 public class IceWall extends Wall {
 	
-	private Image image;
+	private final String imagePath = "IceWall.jpg";
 
+	
 	public IceWall(Vec2 position) {
 		super(position);
 	}
@@ -32,17 +31,9 @@ public class IceWall extends Wall {
 		setLife(life);
 		return life;
 	}
-	
-	@Override
-	public Image getImage() {
-		if (image == null)
-			setImage(Toolkit.getDefaultToolkit().getImage("iceWall.jpg"));
 
-		return this.image;
-	}
-	
 	@Override
-	public void setImage(Image img) {
-		this.image = img;
+	String getImagePath() {
+		return this.imagePath;
 	}
 }

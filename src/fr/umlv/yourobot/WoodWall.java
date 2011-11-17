@@ -1,12 +1,10 @@
 package fr.umlv.yourobot;
 
-import java.awt.Image;
-import java.awt.Toolkit;
 import org.jbox2d.common.Vec2;
 
 public class WoodWall extends Wall {
 	
-	private Image image;
+	private final String imagePath = "woodWall.jpg";
 
 	public WoodWall(Vec2 position) {
 		super(position);
@@ -34,15 +32,7 @@ public class WoodWall extends Wall {
 	}
 	
 	@Override
-	public Image getImage() {
-		if (image == null)
-			setImage(Toolkit.getDefaultToolkit().getImage("woodWall.jpg"));
-
-		return this.image;
-	}
-	
-	@Override
-	public void setImage(Image img) {
-		this.image = img;
+	String getImagePath() {
+		return this.imagePath;
 	}
 }
