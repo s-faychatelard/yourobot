@@ -58,16 +58,4 @@ public class StartPoint implements Element {
 	public FixtureDef getFixtureDef() {
 		return fixtureDef;
 	}
-
-	@Override
-	public void setLife(int life) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public int getLife() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
 }
