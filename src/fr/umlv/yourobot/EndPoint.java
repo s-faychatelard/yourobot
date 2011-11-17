@@ -3,7 +3,8 @@ package fr.umlv.yourobot;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Toolkit;
-import org.jbox2d.collision.shapes.PolygonShape;
+
+import org.jbox2d.collision.shapes.CircleShape;
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.Body;
 import org.jbox2d.dynamics.BodyDef;
@@ -12,8 +13,7 @@ import org.jbox2d.dynamics.FixtureDef;
 
 public class EndPoint implements Element {
 	
-	final static int ENDPOINT_WIDTH = 50;
-	final static int ENDPOINT_HEIGTH = ENDPOINT_WIDTH;
+	final static int ENDPOINT_RADIUS = 40/2;
 	private final BodyDef bodyDef;
 	private final FixtureDef fixtureDef;
 	protected Body body;
@@ -23,14 +23,15 @@ public class EndPoint implements Element {
 		if(image == null)
 			image = Toolkit.getDefaultToolkit().getImage("endPoint.png");
 			
-		PolygonShape blockShape;
+		CircleShape blockShape;
 
 		bodyDef = new BodyDef();
 		bodyDef.type = BodyType.STATIC;
 		bodyDef.position.set(position.x, position.y);
 
-		blockShape = new PolygonShape();
-		blockShape.setAsBox(ENDPOINT_WIDTH/2, ENDPOINT_HEIGTH/2);
+		blockShape = new CircleShape();
+		blockShape.m_radius = ENDPOINT_RADIUS;
+		//blockShape.setAsBox(ENDPOINT_WIDTH/2, ENDPOINT_HEIGTH/2);
 
 		fixtureDef = new FixtureDef();
 		fixtureDef.shape = blockShape;
@@ -42,7 +43,7 @@ public class EndPoint implements Element {
 	@Override
 	public void draw(Graphics2D graphics) {
 		Vec2 p = this.body.getPosition();
-	    graphics.drawImage(image, (int)p.x , (int)p.y, ENDPOINT_WIDTH, ENDPOINT_HEIGTH, null);
+	    graphics.drawImage(image, (int)p.x , (int)p.y, ENDPOINT_RADIUS*2, ENDPOINT_RADIUS*2, null);
 	}
 
 	@Override

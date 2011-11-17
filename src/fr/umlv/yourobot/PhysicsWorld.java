@@ -12,6 +12,8 @@ import org.jbox2d.dynamics.BodyDef;
 import org.jbox2d.dynamics.BodyType;
 import org.jbox2d.dynamics.FixtureDef;
 import org.jbox2d.dynamics.World;
+import org.jbox2d.dynamics.joints.Joint;
+import org.jbox2d.dynamics.joints.JointDef;
 
 
 public class PhysicsWorld {
@@ -41,6 +43,18 @@ public class PhysicsWorld {
 
 		generateWorldBounds();
 		generateWalls(0);
+		
+		BodyDef bodyDef = new BodyDef();
+		bodyDef.type = BodyType.STATIC;
+		bodyDef.position.set(0, 0);
+		PolygonShape blockShape = new PolygonShape();
+		blockShape.setAsBox(Main.WIDTH/2, Main.HEIGHT/2);
+		FixtureDef fixtureDef = new FixtureDef();
+		fixtureDef.shape = blockShape;
+		fixtureDef.density = .5f;
+		fixtureDef.friction = 1.f;
+		fixtureDef.restitution = 0.f;
+		world.createBody(bodyDef);
 
 		bonusManager();
 	}
@@ -220,6 +234,14 @@ public class PhysicsWorld {
 
 	public void raycast(RayCastCallbackRobotIA raycastCallback, Vec2 point1, Vec2 point2) {
 		world.raycast(raycastCallback, point1, point2);
+	}
+	
+	public static Joint addJoint(JointDef joint) {
+		return world.createJoint(joint);
+	}
+	
+	public static void deleteJoint(Joint joint) {
+		world.destroyJoint(joint);
 	}
 
 	public void updateWorld() {

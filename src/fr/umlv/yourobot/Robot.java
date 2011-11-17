@@ -21,9 +21,9 @@ public abstract class Robot implements Element {
 	protected Image image; // TODO laisser en private - idem pour WALL
 	private int life;
 	private double direction = 0.;
-	
+
 	public abstract String getImagePath();
-	
+
 	public Robot(Vec2 position) {
 		bodyDef = new BodyDef();
 		bodyDef.type = BodyType.DYNAMIC;
@@ -36,7 +36,7 @@ public abstract class Robot implements Element {
 		fixtureDef.density = 0.f;
 		fixtureDef.friction = 1.f;
 		fixtureDef.restitution = 0.f;
-		
+
 		life = 100;
 	}
 
@@ -48,16 +48,26 @@ public abstract class Robot implements Element {
 		affineTransform.rotate(Math.toRadians(this.direction), ROBOT_WIDTH / 2, ROBOT_HEIGTH / 2);
 		graphics.drawImage(ImageFactory.getImage(getImagePath()), affineTransform, null);
 	}
+	
+	public void impulse() {
+		Vec2 vec = new Vec2();
+		vec.x = (float) Math.cos(Math.toRadians(direction)) * INITIAL_SPEED;
+		vec.y = (float) Math.sin(Math.toRadians(direction)) * INITIAL_SPEED;
+		this.body.applyForce(vec, this.body.getLocalCenter());
+	}
+	
+	public void brake() {
+		Vec2 vec = new Vec2();
+		vec.x = (float) Math.cos(Math.toRadians(direction)) * -INITIAL_SPEED;
+		vec.y = (float) Math.sin(Math.toRadians(direction)) * -INITIAL_SPEED;
+		this.body.applyForce(vec, this.body.getLocalCenter());
+	}
 
 	public void rotate(int rotation) {
 		if(this.life<=0) return;
 		direction = (direction + rotation)%360;
 		if(direction<0) direction = 360+direction;
-
-		Vec2 vec = new Vec2();
-		vec.x = (float) Math.cos(Math.toRadians(direction)) * INITIAL_SPEED;
-		vec.y = (float) Math.sin(Math.toRadians(direction)) * INITIAL_SPEED;
-		this.body.setLinearVelocity(vec);
+		this.body.setAngularDamping((float)Math.toRadians(direction));
 		blockShape.setAsBox(ROBOT_WIDTH/2, ROBOT_HEIGTH/2, new Vec2(ROBOT_WIDTH/2, ROBOT_HEIGTH/2), (float)direction);
 	}
 
@@ -69,7 +79,7 @@ public abstract class Robot implements Element {
 		rotate(10);
 	}
 
-public void jumpTo(Vec2 vec) {
+	public void jumpTo(Vec2 vec) {
 		if(vec == null) {
 			this.body.applyForce(new Vec2(0,0), this.getBody().getLocalCenter());
 			rotate(0);
@@ -90,7 +100,7 @@ public void jumpTo(Vec2 vec) {
 		vec.y = (float)Math.sin(Math.toRadians(direction))*INITIAL_SPEED*100;
 		this.body.setLinearVelocity(vec);
 	}
-	
+
 	public void setLife(int life) {
 		this.life = life;
 		//System.out.println("new life : " + life);
@@ -103,7 +113,7 @@ public void jumpTo(Vec2 vec) {
 	public int getLife() {
 		return this.life;
 	}
-	
+
 	@Override
 	public void setBody(Body body) {
 		this.body = body;

@@ -41,6 +41,7 @@ public class RobotIA extends Robot {
 							else {
 								rotate(val);
 							}
+							impulse();
 						}
 						try {
 							Thread.sleep(rand.nextInt(500));

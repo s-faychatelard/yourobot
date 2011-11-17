@@ -10,6 +10,18 @@ public class PhysicsCollision implements ContactListener {
 
 	@Override
 	public void beginContact(Contact contact) {
+		if((contact.getFixtureA().getBody().getUserData() instanceof EndPoint && contact.getFixtureB().getBody().getUserData() instanceof RobotIA) ||
+				(contact.getFixtureB().getBody().getUserData() instanceof EndPoint && contact.getFixtureA().getBody().getUserData() instanceof RobotIA)) {
+			//TODO passer au travers
+			System.out.println("RobotIA collide with end point");
+			return;
+		}
+		if((contact.getFixtureA().getBody().getUserData() instanceof EndPoint && contact.getFixtureB().getBody().getUserData() instanceof RobotPlayer) ||
+				(contact.getFixtureB().getBody().getUserData() instanceof EndPoint && contact.getFixtureA().getBody().getUserData() instanceof RobotPlayer)) {
+			//TODO WIN
+			System.out.println("WIN");
+			return;
+		}
 		if(contact.getFixtureA().getBody().getUserData() instanceof RobotPlayer && contact.getFixtureB().getBody().getUserData() instanceof RobotIA) {
 			RobotPlayer robotPlayer = (RobotPlayer)contact.getFixtureA().getBody().getUserData();
 			RobotIA robotIA = (RobotIA)contact.getFixtureB().getBody().getUserData();
@@ -26,7 +38,7 @@ public class PhysicsCollision implements ContactListener {
 			robotIA.rotate(180);
 			robotIA.jumpTo(null);
 		}
-		else if(contact.getFixtureB().getBody().getUserData() instanceof RobotIA) {
+		if(contact.getFixtureB().getBody().getUserData() instanceof RobotIA) {
 			RobotIA robotIA = (RobotIA)contact.getFixtureB().getBody().getUserData();
 			robotIA.rotate(180);
 			robotIA.jumpTo(null);

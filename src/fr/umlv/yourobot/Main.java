@@ -39,17 +39,17 @@ public class Main {
 				robot4.detect(robot);
 				robot4.detect(robot2);
 				robot5.detect(robot);
-				robot5.detect(robot2);
-				//Load background texture
-				
+				robot5.detect(robot2);	
 				
 				final FakeRobot fake = (FakeRobot)world.addElement(new FakeRobot(new Vec2(100, 100)));
 
-				
+				//Load background textures
 				ground = Toolkit.getDefaultToolkit().getImage("ground.jpg");
+				
+				final SnapBonus sb = new SnapBonus(new Vec2(800,600));
+				sb.snap(robot, fake);
 
 				new Thread(new Runnable() {
-
 					@Override
 					public void run() {
 						while(true) {
@@ -70,11 +70,23 @@ public class Main {
 						public void render(Graphics2D graphics) {
 							if(event != null) {
 								switch(event.getKey()) {
+								case UP:
+									robot.impulse();
+									break;
+								case DOWN:
+									robot.brake();
+									break;
 								case LEFT:
 									robot.rotateLeft();
 									break;
 								case RIGHT:
 									robot.rotateRight();
+									break;
+								case Z:
+									robot2.impulse();
+									break;
+								case S:
+									robot2.brake();
 									break;
 								case Q:
 									robot2.rotateLeft();
