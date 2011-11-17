@@ -7,7 +7,9 @@ public class RobotPlayer extends Robot {
 	private final String imagePath = "robot.png";
 
 	public RobotPlayer(Vec2 position) {
+		//Null is test by super
 		super(position);
+		getFixtureDef().filter.categoryBits = 1;
 	}
 	
 	@Override

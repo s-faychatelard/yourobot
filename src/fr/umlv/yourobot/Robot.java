@@ -3,6 +3,8 @@ package fr.umlv.yourobot;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.geom.AffineTransform;
+import java.util.Objects;
+
 import org.jbox2d.collision.shapes.PolygonShape;
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.Body;
@@ -11,9 +13,9 @@ import org.jbox2d.dynamics.BodyType;
 import org.jbox2d.dynamics.FixtureDef;
 
 public abstract class Robot implements Element {
+	public final static int INITIAL_SPEED = 50;
 	private final static int ROBOT_WIDTH = 48;
 	private final static int ROBOT_HEIGTH = 44;
-	private final static int INITIAL_SPEED = 50;
 	private PolygonShape blockShape;
 	private BodyDef bodyDef;
 	private FixtureDef fixtureDef;
@@ -21,20 +23,21 @@ public abstract class Robot implements Element {
 	protected Image image; // TODO laisser en private - idem pour WALL
 	private int life;
 	private double direction = 0.;
+	private int speed = 0;
 
 	public abstract String getImagePath();
 
 	public Robot(Vec2 position) {
 		bodyDef = new BodyDef();
 		bodyDef.type = BodyType.DYNAMIC;
-		bodyDef.position.set(position.x, position.y);
+		bodyDef.position = Objects.requireNonNull(position);
 
 		blockShape = new PolygonShape();
 		blockShape.setAsBox(ROBOT_WIDTH/2, ROBOT_HEIGTH/2);
 		fixtureDef = new FixtureDef();
 		fixtureDef.shape = blockShape;
 		fixtureDef.density = 0.f;
-		fixtureDef.friction = 1.f;
+		fixtureDef.friction = .8f;
 		fixtureDef.restitution = 0.f;
 
 		life = 100;
@@ -49,25 +52,51 @@ public abstract class Robot implements Element {
 		graphics.drawImage(ImageFactory.getImage(getImagePath()), affineTransform, null);
 	}
 	
+	public double getDirection() {
+		return this.direction;
+	}
+	
+	private void releaseSpeed() {
+		//Set type seems to reinitialize force
+		this.getBody().setType(BodyType.DYNAMIC);
+		this.body.setLinearVelocity(new Vec2(0,0));
+		this.body.setAngularVelocity(0);
+		this.body.setAwake(true);
+	}
+	
 	public void impulse() {
+		if(this.life<=0) return;
+		this.releaseSpeed();
+		speed+=500;
+		if(speed>2000) speed=2000;
+		System.out.println(speed);
 		Vec2 vec = new Vec2();
-		vec.x = (float) Math.cos(Math.toRadians(direction)) * INITIAL_SPEED;
-		vec.y = (float) Math.sin(Math.toRadians(direction)) * INITIAL_SPEED;
+		vec.x = (float) Math.cos(Math.toRadians(direction)) * speed;
+		vec.y = (float) Math.sin(Math.toRadians(direction)) * speed;
 		this.body.applyForce(vec, this.body.getLocalCenter());
 	}
 	
 	public void brake() {
+		if(this.life<=0) return;
+		this.releaseSpeed();
+		speed-=500;
+		if(speed<-2000) speed=-2000;
+		System.out.println(speed);
 		Vec2 vec = new Vec2();
-		vec.x = (float) Math.cos(Math.toRadians(direction)) * -INITIAL_SPEED;
-		vec.y = (float) Math.sin(Math.toRadians(direction)) * -INITIAL_SPEED;
+		vec.x = (float) Math.cos(Math.toRadians(direction)) * speed;
+		vec.y = (float) Math.sin(Math.toRadians(direction)) * speed;
 		this.body.applyForce(vec, this.body.getLocalCenter());
 	}
 
 	public void rotate(int rotation) {
 		if(this.life<=0) return;
+		this.releaseSpeed();
 		direction = (direction + rotation)%360;
 		if(direction<0) direction = 360+direction;
-		this.body.setAngularDamping((float)Math.toRadians(direction));
+		Vec2 vec = new Vec2();
+		vec.x = (float) Math.cos(Math.toRadians(direction)) * speed;
+		vec.y = (float) Math.sin(Math.toRadians(direction)) * speed;
+		this.body.applyForce(vec, this.body.getLocalCenter());
 		blockShape.setAsBox(ROBOT_WIDTH/2, ROBOT_HEIGTH/2, new Vec2(ROBOT_WIDTH/2, ROBOT_HEIGTH/2), (float)direction);
 	}
 
@@ -81,8 +110,7 @@ public abstract class Robot implements Element {
 
 	public void jumpTo(Vec2 vec) {
 		if(vec == null) {
-			this.body.applyForce(new Vec2(0,0), this.getBody().getLocalCenter());
-			rotate(0);
+			this.body.setLinearVelocity(new Vec2(0,0));
 			return;
 		}
 		Vec2 p1 = this.getBody().getPosition();
@@ -96,8 +124,8 @@ public abstract class Robot implements Element {
 		direction = direction - 90;
 		if(direction<0) direction = 360+direction;
 		vec = new Vec2();
-		vec.x = (float)Math.cos(Math.toRadians(direction))*INITIAL_SPEED*100;
-		vec.y = (float)Math.sin(Math.toRadians(direction))*INITIAL_SPEED*100;
+		vec.x = (float)Math.cos(Math.toRadians(direction))*INITIAL_SPEED*1000;
+		vec.y = (float)Math.sin(Math.toRadians(direction))*INITIAL_SPEED*1000;
 		this.body.setLinearVelocity(vec);
 	}
 
@@ -105,7 +133,7 @@ public abstract class Robot implements Element {
 		this.life = life;
 		//System.out.println("new life : " + life);
 		if(this.life <= 0) {
-			this.body.setLinearVelocity(new Vec2(0,0));
+			this.body.setLinearVelocity(new Vec2(-this.getBody().getLinearVelocity().x,-this.getBody().getLinearVelocity().y));
 			//System.out.println("dead");
 		}
 	}
@@ -116,7 +144,7 @@ public abstract class Robot implements Element {
 
 	@Override
 	public void setBody(Body body) {
-		this.body = body;
+		this.body = Objects.requireNonNull(body);;
 	}
 
 	@Override

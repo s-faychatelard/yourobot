@@ -8,6 +8,7 @@ public class IceWall extends Wall {
 
 	
 	public IceWall(Vec2 position) {
+		//Null is test by super
 		super(position);
 	}
 

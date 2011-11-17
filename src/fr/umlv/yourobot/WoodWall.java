@@ -7,6 +7,7 @@ public class WoodWall extends Wall {
 	private final String imagePath = "woodWall.jpg";
 
 	public WoodWall(Vec2 position) {
+		//Null is test by super
 		super(position);
 	}
 

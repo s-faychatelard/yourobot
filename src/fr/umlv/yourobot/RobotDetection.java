@@ -1,5 +1,6 @@
 package fr.umlv.yourobot;
 
+import java.util.Objects;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -14,7 +15,7 @@ public class RobotDetection implements Runnable {
 	private static Lock lock;
 
 	public RobotDetection(RobotIA robot) {
-		this.robot = robot;
+		this.robot = Objects.requireNonNull(robot);
 		if(diagonal == -1)
 			diagonal = Math.sqrt((Main.WIDTH*Main.WIDTH) + (Main.HEIGHT*Main.HEIGHT)) / 4;
 		if(callback == null)
@@ -24,6 +25,7 @@ public class RobotDetection implements Runnable {
 	}
 
 	public boolean detect(RobotPlayer robot) {
+		Objects.requireNonNull(robot);
 		p1 = new Vec2(this.robot.getBody().getPosition());
 		p2 = new Vec2(robot.getBody().getPosition().x, robot.getBody().getPosition().y);
 		int y = (int)(p2.y - p1.y);

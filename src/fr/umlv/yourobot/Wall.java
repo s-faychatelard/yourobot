@@ -1,6 +1,8 @@
 package fr.umlv.yourobot;
 
 import java.awt.Graphics2D;
+import java.util.Objects;
+
 import org.jbox2d.collision.shapes.PolygonShape;
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.Body;
@@ -22,7 +24,7 @@ public abstract class Wall implements Element {
 
 		bodyDef = new BodyDef();
 		bodyDef.type = BodyType.STATIC;
-		bodyDef.position.set(position.x, position.y);
+		bodyDef.position = Objects.requireNonNull(position);
 		blockShape = new PolygonShape();
 		blockShape.setAsBox(WALL_WIDTH/2, WALL_HEIGTH/2);
 		fixtureDef = new FixtureDef();
@@ -34,7 +36,7 @@ public abstract class Wall implements Element {
 
 	@Override
 	public void setBody(Body body) {
-		this.body = body;
+		this.body = Objects.requireNonNull(body);
 	}
 
 	@Override

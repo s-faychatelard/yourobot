@@ -3,6 +3,8 @@ package fr.umlv.yourobot;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Toolkit;
+import java.util.Objects;
+
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.Body;
 import org.jbox2d.dynamics.BodyDef;
@@ -25,7 +27,7 @@ public class StartPoint implements Element {
 		//PolygonShape blockShape;
 		bodyDef = new BodyDef();
 		bodyDef.type = BodyType.STATIC;
-		bodyDef.position.set(position.x, position.y);
+		bodyDef.position = Objects.requireNonNull(position);
 		//blockShape = new PolygonShape();
 		//blockShape.setAsBox(STARTPOINT_WIDTH/2, STARTPOINT_HEIGTH/2);
 
@@ -40,7 +42,7 @@ public class StartPoint implements Element {
 
 	@Override
 	public void setBody(Body body) {
-		this.body = body;
+		this.body = Objects.requireNonNull(body);
 	}
 
 	@Override

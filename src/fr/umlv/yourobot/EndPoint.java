@@ -3,6 +3,7 @@ package fr.umlv.yourobot;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Toolkit;
+import java.util.Objects;
 
 import org.jbox2d.collision.shapes.CircleShape;
 import org.jbox2d.common.Vec2;
@@ -19,7 +20,7 @@ public class EndPoint implements Element {
 	protected Body body;
 	private static Image image;
 	
-	public EndPoint(Vec2 position) {	
+	public EndPoint(Vec2 position) {
 		if(image == null)
 			image = Toolkit.getDefaultToolkit().getImage("endPoint.png");
 			
@@ -27,8 +28,8 @@ public class EndPoint implements Element {
 
 		bodyDef = new BodyDef();
 		bodyDef.type = BodyType.STATIC;
-		bodyDef.position.set(position.x, position.y);
-
+		bodyDef.position = Objects.requireNonNull(position);
+		
 		blockShape = new CircleShape();
 		blockShape.m_radius = ENDPOINT_RADIUS;
 		//blockShape.setAsBox(ENDPOINT_WIDTH/2, ENDPOINT_HEIGTH/2);
@@ -38,6 +39,7 @@ public class EndPoint implements Element {
 		fixtureDef.density = 0.f;
 		fixtureDef.friction = 0.f;
 		fixtureDef.restitution = 0.f;
+		getFixtureDef().filter.categoryBits = 3;
 	}
 	
 	@Override
@@ -48,7 +50,7 @@ public class EndPoint implements Element {
 
 	@Override
 	public void setBody(Body body) {
-		this.body = body;
+		this.body = Objects.requireNonNull(body);
 	}
 
 	@Override

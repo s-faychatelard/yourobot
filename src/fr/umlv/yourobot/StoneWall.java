@@ -7,6 +7,7 @@ public class StoneWall extends Wall {
 	private final String imagePath = "stoneWall.jpg";
 
 	public StoneWall(Vec2 position) {
+		//Null is test by super
 		super(position);
 	}
 

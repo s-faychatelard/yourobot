@@ -7,6 +7,7 @@ public class BomberBonus extends Bonus {
 	private final String imagePath = "bomberBonus.png";
 
 	public BomberBonus(Vec2 position) {
+		//Null is test by super
 		super(position);
 	}
 
