@@ -49,29 +49,27 @@ public class PhysicsWorld {
 
 		//Generate Player
 		Random rand = new Random();
-		int []x = new int[numberOfPlayer];
-		int []y = new int[numberOfPlayer];
+		int x,y;
 		robot = new RobotPlayer[numberOfPlayer];
 		for(int i=0;i<numberOfPlayer;i++) {
-			x[i]=rand.nextInt(100);
-			y[i]=rand.nextInt(100);
-			robot[i] = (RobotPlayer)this.addElement(new RobotPlayer(new Vec2(x[i], y[i])));
+			x=rand.nextInt(100);
+			y=rand.nextInt(100);
+			robot[i] = (RobotPlayer)this.addElement(new RobotPlayer(new Vec2(x, y)));
 			//Add it start circle
-			this.addElement(new StartPoint(new Vec2(x[i], y[i])));
+			this.addElement(new StartPoint(new Vec2(x, y)));
 		}
 		//Add the end
 		this.addElement(new EndPoint(new Vec2(Main.WIDTH-50, Main.HEIGHT-50)));
 		
 		//Generate IA TODO calculate number of IA with the difficulty level
-		int posX,posY;
-		for(int i=0;i<4;i++) {
+		/*for(int i=0;i<4;i++) {
 			posX=rand.nextInt(800);
 			posY=rand.nextInt(600);
 			RobotIA r = ((RobotIA)this.addElement(new RobotIA(new Vec2(posX, posY))));
 			r.start();
 			for(RobotPlayer rp : robot)
 				r.detect(rp);
-		}
+		}*/
 
 		bonusManager();
 	}
@@ -79,10 +77,10 @@ public class PhysicsWorld {
 	public void setKey(KeyboardKey key) {
 		switch(key) {
 		case UP:
-			robot[0].impulse();
+			robot[0].throttle();
 			break;
 		case DOWN:
-			robot[0].brake();
+			//TODO get the bonus or put the bonus
 			break;
 		case LEFT:
 			robot[0].rotateLeft();
@@ -92,11 +90,11 @@ public class PhysicsWorld {
 			break;
 		case Z:
 			if(robot.length==1) break;
-			robot[1].impulse();
+			robot[1].throttle();
 			break;
 		case S:
 			if(robot.length==1) break;
-			robot[1].brake();
+			//TODO get the bonus or put the bonus
 			break;
 		case Q:
 			if(robot.length==1) break;
