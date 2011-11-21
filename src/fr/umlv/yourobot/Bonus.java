@@ -10,8 +10,9 @@ import org.jbox2d.dynamics.BodyType;
 import org.jbox2d.dynamics.FixtureDef;
 
 public abstract class Bonus extends Element {
-	final static int BONUS_WIDTH = 50;
-	final static int BONUS_HEIGTH = BONUS_WIDTH;
+	protected final static int QUARTER_DIAGONAL = (int)Math.sqrt((Main.WIDTH*Main.WIDTH) + (Main.HEIGHT*Main.HEIGHT)) / 4;
+	private final static int BONUS_WIDTH = 40;
+	private final static int BONUS_HEIGTH = BONUS_WIDTH;
 	private boolean isTaken;
 
 	public  Bonus(Vec2 position) {	

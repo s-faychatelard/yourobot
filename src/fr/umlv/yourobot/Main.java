@@ -41,6 +41,7 @@ public class Main {
 				}).start();
 
 				//Let's start the game
+				//TODO IG
 				for(;;) {
 					final KeyboardEvent event = context.pollKeyboard();
 					context.render(new ApplicationRenderCode() {

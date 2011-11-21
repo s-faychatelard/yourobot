@@ -20,7 +20,7 @@ public abstract class Element {
 	
 	public Body getBody() {
 		//Setup volume friction
-		this.body.setLinearDamping(.5f);
+		this.body.setLinearDamping(.8f);
 		return this.body;
 	}
 	

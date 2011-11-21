@@ -20,6 +20,7 @@ import fr.umlv.zen.KeyboardKey;
 
 
 public class PhysicsWorld {
+	private static final int MAX_ELEMENT=200;
 	private static World world;
 	//LinkedBlockingDeque offer concurrent list and addFirst, addLast methods
 	private static LinkedBlockingDeque<Element> elementList;
@@ -29,10 +30,7 @@ public class PhysicsWorld {
 	static RobotPlayer []robot;
 
 
-	/**
-	 * TODO
-	 * Passer le numero du niveau en param pour gérer le niveau de difficulté. 
-	 */
+	//TODO add level difficulty
 	public PhysicsWorld(int numberOfPlayer) {
 		if(numberOfPlayer<=0 || numberOfPlayer>2) throw new IllegalArgumentException("Number of player need to at least 1 and not more than 2");
 		
@@ -45,10 +43,10 @@ public class PhysicsWorld {
 		world.setContinuousPhysics(true);
 		world.setContactListener(new PhysicsCollision());
 		if(elementList == null) {
-			elementList = new LinkedBlockingDeque<>(100); /** TODO*/
+			elementList = new LinkedBlockingDeque<>(MAX_ELEMENT);
 		}
 		if(robots==null) {
-			robots = new LinkedBlockingDeque<>(100); /** TODO*/
+			robots = new LinkedBlockingDeque<>(MAX_ELEMENT);
 		}
 
 		//Need to create robot before IA to add detection for each RobotPlayer TODO change static position when generate world
@@ -72,12 +70,12 @@ public class PhysicsWorld {
 		this.addElement(new EndPoint(new Vec2(Main.WIDTH-50, Main.HEIGHT-50)));
 
 		//Generate IA TODO calculate number of IA with the difficulty level
-		for(int i=0;i<4;i++) {
+		/*for(int i=0;i<4;i++) {
 			x=rand.nextInt(Main.WIDTH);
 			y=rand.nextInt(Main.HEIGHT);
 			RobotIA r = ((RobotIA)this.addElement(new RobotIA(new Vec2(x, y))));
 			r.start();
-		}
+		}*/
 
 		bonusManager();
 	}
@@ -182,6 +180,7 @@ public class PhysicsWorld {
 		Thread t = new Thread(new Runnable() {
 			@Override
 			public void run() {
+				Random rand = new Random();
 				while(true){
 					try {
 						Thread.sleep((new Random()).nextInt(1000)+1000);
@@ -199,11 +198,22 @@ public class PhysicsWorld {
 								continue;
 							}
 							Vec2 v = new Vec2((float)((i+r1)%matrix.length) * Wall.WALL_WIDTH, (float)((j+r2)%matrix[0].length) * Wall.WALL_HEIGTH);
-							final Bonus b = new FakeRobotBonus(v);
-							/** TODO : pb de concurrence **/
+							final Bonus b;
+							int r = rand.nextInt(3);
+							switch(r) {
+							case 0 :
+								b = new BomberBonus(v);
+								break;
+							case 1 :
+								b = new SnapBonus(v);
+								break;	
+							default :
+								b = new FakeRobotBonus(v);
+								break;
+							}
 							addElement(b);
 							matrix[(i+r1)%matrix.length][(j+r2)%matrix[0].length] = true;
-							i = matrix.length; /**TODO : expliquer en quoi ça permet de sortir des 2 boucles**/
+							i = matrix.length; // expliquer en quoi a permet de sortir des 2 boucles
 							break;
 
 						}
@@ -302,6 +312,7 @@ public class PhysicsWorld {
 	}
 
 	public static void addRobotToDetectableList(Robot robot) {
+		//Cannot call addElement because we are in a static method
 		//createBody is already auto lock
 		Body elementBody = null;
 		elementBody = world.createBody(robot.getBodyDef());
@@ -318,9 +329,24 @@ public class PhysicsWorld {
 	}
 
 	public static void addLeurre(FakeRobot fr) {
-		//addElement(fr);
 		//Is insert in top of the queue so he is the first robot to be detect
 		addRobotToDetectableList(fr);
+	}
+	
+	public static void removeBody(Element element) {
+		world.destroyBody(element.getBody());
+		while (!lock.tryLock()) {
+			try {
+				Thread.sleep(10);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+		try {
+			elementList.remove(element);
+		} finally {
+			lock.unlock();
+		}
 	}
 
 	public static void removeLeurre(FakeRobot fr) {
@@ -353,14 +379,12 @@ public class PhysicsWorld {
 
 	public static Joint addJoint(JointDef joint) {
 		Objects.requireNonNull(joint);
-		System.out.println("Create joint");
 		return world.createJoint(joint);
 	}
 
 	public static void deleteJoint(Joint joint) {
 		Objects.requireNonNull(joint);
 		world.destroyJoint(joint);
-		System.out.println("Delete joint");
 	}
 
 	public void updateWorld() {

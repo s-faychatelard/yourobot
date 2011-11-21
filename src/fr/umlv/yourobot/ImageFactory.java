@@ -18,7 +18,7 @@ public class ImageFactory {
 		Image image = imagePool.get(path);
 		
 		if (image == null) {
-			/** TODO : manage case if image does not exist */
+			//TODO manage case if image does not exist
 			image = Toolkit.getDefaultToolkit().getImage(path);
 			imagePool.put(path, image);
 		}

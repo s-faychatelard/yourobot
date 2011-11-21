@@ -4,7 +4,7 @@ import org.jbox2d.common.Vec2;
 
 public class FakeRobotBonus extends Bonus {
 	
-	private final String imagePath = "bomberBonus.png";
+	private final String imagePath = "fakeRobotBonus.png";
 
 	public FakeRobotBonus(Vec2 position) {
 		//Null is test by super
@@ -21,6 +21,7 @@ public class FakeRobotBonus extends Bonus {
 		new Thread(new Runnable() {	
 			@Override
 			public void run() {
+				System.out.println("LEURRE");
 				FakeRobot fr = new FakeRobot(new Vec2(robot.getBody().getPosition().x, robot.getBody().getPosition().y));
 				try {
 					Thread.sleep(1000);

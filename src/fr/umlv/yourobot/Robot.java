@@ -26,6 +26,7 @@ public abstract class Robot extends Element {
 		bodyDef = new BodyDef();
 		bodyDef.type = BodyType.DYNAMIC;
 		bodyDef.position = Objects.requireNonNull(position);
+		bodyDef.linearDamping = .5f;
 
 		blockShape = new CircleShape();
 		blockShape.m_radius = ROBOT_SIZE/2;
@@ -54,6 +55,7 @@ public abstract class Robot extends Element {
 		else {
 			graphics.setColor(Color.WHITE);
 			graphics.fillOval((int)this.body.getPosition().x, (int)this.body.getPosition().y, (int)ROBOT_SIZE, (int)ROBOT_SIZE);
+			graphics.drawImage(ImageFactory.getImage(getImagePath()), affineTransform, null);
 		}
 	}
 	
@@ -108,7 +110,7 @@ public abstract class Robot extends Element {
 		this.life = life;
 		if(this.life <= 0) {
 			this.body.setLinearVelocity(new Vec2(-this.getBody().getLinearVelocity().x,-this.getBody().getLinearVelocity().y));
-			//System.out.println("dead");
+			//TODO dead
 		}
 	}
 

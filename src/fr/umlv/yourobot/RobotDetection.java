@@ -26,6 +26,7 @@ public class RobotDetection implements Runnable {
 
 	public boolean detect(Robot robot) {
 		Objects.requireNonNull(robot);
+		if(robot.getLife()<=0) return false;
 		p1 = new Vec2(this.robot.getBody().getPosition());
 		p2 = new Vec2(robot.getBody().getPosition().x, robot.getBody().getPosition().y);
 		int y = (int)(p2.y - p1.y);
