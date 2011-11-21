@@ -9,7 +9,7 @@ import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.contacts.Contact;
 
 public class PhysicsCollision implements ContactListener {
-	
+
 	private final static Random rand = new Random();
 
 	@Override
@@ -19,17 +19,35 @@ public class PhysicsCollision implements ContactListener {
 				(contact.getFixtureB().getBody().getUserData() instanceof EndPoint && contact.getFixtureA().getBody().getUserData() instanceof RobotIA)) {
 			return;
 		}
+		//End RobotIA ignore EndPoint
+		
 		//RobotIA ignore Bonus
 		if((contact.getFixtureA().getBody().getUserData() instanceof Bonus && contact.getFixtureB().getBody().getUserData() instanceof RobotIA) ||
 				(contact.getFixtureB().getBody().getUserData() instanceof Bonus && contact.getFixtureA().getBody().getUserData() instanceof RobotIA)) {
 			return;
 		}
+		//End RobotIA ignore Bonus
+		
+		//RobotPlayer take Bonus
+		if((contact.getFixtureA().getBody().getUserData() instanceof Bonus && contact.getFixtureB().getBody().getUserData() instanceof RobotPlayer)) {
+			RobotPlayer rp = (RobotPlayer) contact.getFixtureB().getBody().getUserData();
+			rp.takeBonus((Bonus)contact.getFixtureA().getBody().getUserData());
+		}
+		if((contact.getFixtureB().getBody().getUserData() instanceof Bonus && contact.getFixtureA().getBody().getUserData() instanceof RobotPlayer)) {
+			RobotPlayer rp = (RobotPlayer) contact.getFixtureA().getBody().getUserData();
+			rp.takeBonus((Bonus)contact.getFixtureB().getBody().getUserData());
+		}
+		//RobotPlayer take Bonus
+
+		//WIN 
 		if((contact.getFixtureA().getBody().getUserData() instanceof EndPoint && contact.getFixtureB().getBody().getUserData() instanceof RobotPlayer) ||
 				(contact.getFixtureB().getBody().getUserData() instanceof EndPoint && contact.getFixtureA().getBody().getUserData() instanceof RobotPlayer)) {
 			//TODO WIN
 			System.out.println("WIN");
 			return;
 		}
+		//End WIN
+
 		if(contact.getFixtureA().getBody().getUserData() instanceof RobotPlayer && contact.getFixtureB().getBody().getUserData() instanceof RobotIA) {
 			RobotPlayer robotPlayer = (RobotPlayer)contact.getFixtureA().getBody().getUserData();
 			RobotIA robotIA = (RobotIA)contact.getFixtureB().getBody().getUserData();
@@ -61,7 +79,7 @@ public class PhysicsCollision implements ContactListener {
 
 	@Override
 	public void endContact(Contact contact) { }
-	
+
 	@Override
 	public void preSolve(Contact contact, Manifold oldManifold) {
 		if((contact.getFixtureA().getBody().getUserData() instanceof EndPoint && contact.getFixtureB().getBody().getUserData() instanceof RobotIA) ||

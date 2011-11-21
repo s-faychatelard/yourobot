@@ -1,10 +1,12 @@
 package fr.umlv.yourobot;
 
 import org.jbox2d.common.Vec2;
+import org.jbox2d.dynamics.BodyType;
 
 public class BomberBonus extends Bonus {
 	
 	private final String imagePath = "bomberBonus.png";
+	private final static int QUARTER_DIAGONAL = (int)Math.sqrt((Main.WIDTH*Main.WIDTH) + (Main.HEIGHT*Main.HEIGHT)) / 4;
 
 	public BomberBonus(Vec2 position) {
 		//Null is test by super
@@ -14,5 +16,45 @@ public class BomberBonus extends Bonus {
 	@Override
 	public String getImagePath() {
 		return imagePath;
+	}
+
+	@Override
+	public void execute(RobotPlayer robot) {
+		System.out.println("BOUM");
+		return;
+		//TODO queryCallback
+		/*final Element element=null;
+		if(!(element instanceof Wall)) return;
+		//Get the distance from the robot to the element
+		Vec2 pos = new Vec2(robot.getBody().getPosition());
+		int x = (int)robot.getBody().getPosition().x - (int)element.getBody().getPosition().x;
+		int y = (int)robot.getBody().getPosition().y - (int)element.getBody().getPosition().y;
+		double distance = Math.sqrt(x*x + y*y);
+		if(distance>QUARTER_DIAGONAL) return;
+		
+		System.out.println("BOUM");
+		//Calculate the coefficiant force (more if the element is near the robot)
+		double coeffForce = QUARTER_DIAGONAL/distance;
+
+		Vec2 force = pos.sub(element.getBody().getPosition()).negate();
+		//TODO change coeffForce for wall type
+		double coeffWallForce = 10000*coeffForce;
+		
+		element.getBody().setType(BodyType.DYNAMIC);	
+ 		element.getBody().setLinearDamping(.8f);
+ 		element.getBody().setAwake(true);
+		element.getBody().applyForce(new Vec2((int)(force.x*coeffWallForce),(int)(force.y*coeffWallForce)), element.getBody().getPosition());
+		//Wait 2 seconds before set STATIC for wall
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				try {
+					Thread.sleep(2500);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+				element.getBody().setType(BodyType.STATIC);
+			}
+		}).start();*/
 	}
 }

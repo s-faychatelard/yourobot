@@ -21,7 +21,7 @@ public class Main {
 			@Override
 			public void run(final ApplicationContext context) {
 				//Create world (walls, robots, players, start, finish)
-				final PhysicsWorld world = new PhysicsWorld(1);
+				final PhysicsWorld world = new PhysicsWorld(2);
 				//Load background textures
 				ground = Toolkit.getDefaultToolkit().getImage("ground.jpg");
 

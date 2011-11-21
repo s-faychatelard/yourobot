@@ -10,7 +10,7 @@ public class FakeRobot extends Robot {
 		//Null is test by super
 		super(position);
 	}
-
+	
 	@Override
 	public String getImagePath() {
 		return imagePath;

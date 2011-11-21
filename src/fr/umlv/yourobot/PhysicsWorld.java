@@ -23,9 +23,9 @@ public class PhysicsWorld {
 	private static World world;
 	//LinkedBlockingDeque offer concurrent list and addFirst, addLast methods
 	private static LinkedBlockingDeque<Element> elementList;
+	private static LinkedBlockingDeque<Robot> robots;
 	boolean matrix[][];
-	private Lock lock;
-
+	private static Lock lock;
 	static RobotPlayer []robot;
 
 
@@ -35,14 +35,22 @@ public class PhysicsWorld {
 	 */
 	public PhysicsWorld(int numberOfPlayer) {
 		if(numberOfPlayer<=0 || numberOfPlayer>2) throw new IllegalArgumentException("Number of player need to at least 1 and not more than 2");
-		lock = new ReentrantLock();
+		
+		if(lock==null) {
+			lock = new ReentrantLock();
+		}
 
 		//world must be create before adding element
 		world = new World(new Vec2(0,0), true);
 		world.setContinuousPhysics(true);
 		world.setContactListener(new PhysicsCollision());
-		elementList = new LinkedBlockingDeque<>(1000); /** TODO*/
-		
+		if(elementList == null) {
+			elementList = new LinkedBlockingDeque<>(100); /** TODO*/
+		}
+		if(robots==null) {
+			robots = new LinkedBlockingDeque<>(100); /** TODO*/
+		}
+
 		//Need to create robot before IA to add detection for each RobotPlayer TODO change static position when generate world
 		generateWorldBounds();
 		generateWalls(5);
@@ -52,24 +60,24 @@ public class PhysicsWorld {
 		int x,y;
 		robot = new RobotPlayer[numberOfPlayer];
 		for(int i=0;i<numberOfPlayer;i++) {
-			x=rand.nextInt(100);
-			y=rand.nextInt(100);
+			//Try to start in the top left
+			x=rand.nextInt(150);
+			y=rand.nextInt(150);
 			robot[i] = (RobotPlayer)this.addElement(new RobotPlayer(new Vec2(x, y)));
+			robots.add(robot[i]);
 			//Add it start circle
 			this.addElement(new StartPoint(new Vec2(x, y)));
 		}
 		//Add the end
 		this.addElement(new EndPoint(new Vec2(Main.WIDTH-50, Main.HEIGHT-50)));
-		
+
 		//Generate IA TODO calculate number of IA with the difficulty level
-		/*for(int i=0;i<4;i++) {
-			posX=rand.nextInt(800);
-			posY=rand.nextInt(600);
-			RobotIA r = ((RobotIA)this.addElement(new RobotIA(new Vec2(posX, posY))));
+		for(int i=0;i<4;i++) {
+			x=rand.nextInt(Main.WIDTH);
+			y=rand.nextInt(Main.HEIGHT);
+			RobotIA r = ((RobotIA)this.addElement(new RobotIA(new Vec2(x, y))));
 			r.start();
-			for(RobotPlayer rp : robot)
-				r.detect(rp);
-		}*/
+		}
 
 		bonusManager();
 	}
@@ -79,8 +87,8 @@ public class PhysicsWorld {
 		case UP:
 			robot[0].throttle();
 			break;
-		case DOWN:
-			//TODO get the bonus or put the bonus
+		case M:
+			robot[0].useBonus();
 			break;
 		case LEFT:
 			robot[0].rotateLeft();
@@ -92,9 +100,9 @@ public class PhysicsWorld {
 			if(robot.length==1) break;
 			robot[1].throttle();
 			break;
-		case S:
+		case A:
 			if(robot.length==1) break;
-			//TODO get the bonus or put the bonus
+			robot[1].useBonus();
 			break;
 		case Q:
 			if(robot.length==1) break;
@@ -191,7 +199,7 @@ public class PhysicsWorld {
 								continue;
 							}
 							Vec2 v = new Vec2((float)((i+r1)%matrix.length) * Wall.WALL_WIDTH, (float)((j+r2)%matrix[0].length) * Wall.WALL_HEIGTH);
-							final Bonus b = new SnapBonus(v);
+							final Bonus b = new FakeRobotBonus(v);
 							/** TODO : pb de concurrence **/
 							addElement(b);
 							matrix[(i+r1)%matrix.length][(j+r2)%matrix[0].length] = true;
@@ -249,12 +257,6 @@ public class PhysicsWorld {
 	}
 
 	public static LinkedBlockingDeque<Element> getAllElement() {
-		return elementList;
-	}
-
-	public Element addElement(Element element) {
-		Objects.requireNonNull(element);
-		Body elementBody = null;
 		while (!lock.tryLock()) {
 			try {
 				Thread.sleep(50);
@@ -263,6 +265,23 @@ public class PhysicsWorld {
 			}
 		}
 
+		try {
+			return elementList;
+		} finally {
+			lock.unlock();
+		}
+	}
+
+	public Element addElement(Element element) {
+		Objects.requireNonNull(element);
+		Body elementBody = null;
+		while (!lock.tryLock()) {
+			try {
+				Thread.sleep(10);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
 		try {
 			//createBody is already auto lock
 			elementBody = world.createBody(element.getBodyDef());
@@ -282,6 +301,49 @@ public class PhysicsWorld {
 		return element;
 	}
 
+	public static void addRobotToDetectableList(Robot robot) {
+		//createBody is already auto lock
+		Body elementBody = null;
+		elementBody = world.createBody(robot.getBodyDef());
+		if(robot.getFixtureDef() != null)
+			elementBody.createFixture(robot.getFixtureDef());
+		elementBody.setType(robot.getBodyDef().type);		
+		robot.setBody(elementBody);
+		elementBody.setUserData(robot);
+		if(robot.getClass().getSuperclass() == Robot.class || robot.getClass().getSuperclass() == Wall.class)
+			elementList.addLast(robot);
+		else
+			elementList.addFirst(robot);
+		robots.addFirst(robot);
+	}
+
+	public static void addLeurre(FakeRobot fr) {
+		//addElement(fr);
+		//Is insert in top of the queue so he is the first robot to be detect
+		addRobotToDetectableList(fr);
+	}
+
+	public static void removeLeurre(FakeRobot fr) {
+		world.destroyBody(fr.getBody());
+		robots.remove(fr);
+		while (!lock.tryLock()) {
+			try {
+				Thread.sleep(10);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+		try {
+			elementList.remove(fr);
+		} finally {
+			lock.unlock();
+		}
+	}
+
+	public static LinkedBlockingDeque<Robot> getDetectableRobot() {
+		return robots;
+	}
+
 	public void raycast(RayCastCallbackRobotIA raycastCallback, Vec2 point1, Vec2 point2) {
 		Objects.requireNonNull(raycastCallback);
 		Objects.requireNonNull(point1);
@@ -291,12 +353,14 @@ public class PhysicsWorld {
 
 	public static Joint addJoint(JointDef joint) {
 		Objects.requireNonNull(joint);
+		System.out.println("Create joint");
 		return world.createJoint(joint);
 	}
 
 	public static void deleteJoint(Joint joint) {
 		Objects.requireNonNull(joint);
 		world.destroyJoint(joint);
+		System.out.println("Delete joint");
 	}
 
 	public void updateWorld() {

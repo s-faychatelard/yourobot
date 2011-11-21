@@ -5,17 +5,13 @@ import java.util.Objects;
 
 import org.jbox2d.collision.shapes.PolygonShape;
 import org.jbox2d.common.Vec2;
-import org.jbox2d.dynamics.Body;
 import org.jbox2d.dynamics.BodyDef;
 import org.jbox2d.dynamics.BodyType;
 import org.jbox2d.dynamics.FixtureDef;
 
-public abstract class Wall implements Element {
+public abstract class Wall extends Element {
 	final static int WALL_WIDTH = 50;
 	final static int WALL_HEIGTH = WALL_WIDTH;
-	private BodyDef bodyDef;
-	private FixtureDef fixtureDef;
-	protected Body body;
 	private int life = 100;
 
 
@@ -32,26 +28,6 @@ public abstract class Wall implements Element {
 		fixtureDef.density = 0.f;
 		fixtureDef.friction = .8f;
 		fixtureDef.restitution = 0.f;
-	}
-
-	@Override
-	public void setBody(Body body) {
-		this.body = Objects.requireNonNull(body);
-	}
-
-	@Override
-	public Body getBody() {
-		return this.body;
-	}
-
-	@Override
-	public BodyDef getBodyDef() {
-		return this.bodyDef;
-	}
-
-	@Override
-	public FixtureDef getFixtureDef() {
-		return this.fixtureDef;
 	}
 	
 	public abstract int attackWithIce();

@@ -3,8 +3,9 @@ package fr.umlv.yourobot;
 import java.util.Objects;
 
 import org.jbox2d.common.Vec2;
+import org.jbox2d.dynamics.BodyType;
+import org.jbox2d.dynamics.joints.DistanceJointDef;
 import org.jbox2d.dynamics.joints.Joint;
-import org.jbox2d.dynamics.joints.WeldJointDef;
 
 public class SnapBonus extends Bonus {
 	
@@ -15,30 +16,35 @@ public class SnapBonus extends Bonus {
 		super(position);
 	}
 	
-	void snap(final RobotPlayer robot, final Element element) {
+	@Override
+	public String getImagePath() {
+		return imagePath;
+	}
+
+	@Override
+	public void execute(final RobotPlayer robot) {
+		System.out.println("SNAP");
+		return;
+		//TODO queryCallback
+		/*final Element element=null;
 		Objects.requireNonNull(robot);
 		Objects.requireNonNull(element);
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
-				WeldJointDef wj = new WeldJointDef();
-				Vec2 p1 = robot.getBody().getPosition();
-				Vec2 p2 = element.getBody().getPosition();
-				Vec2 p = new Vec2(p1.x - p2.x, p1.y - p2.y);
-				wj.initialize(robot.getBody(), element.getBody(), p);
-				Joint j = PhysicsWorld.addJoint(wj);
+				DistanceJointDef djd = new DistanceJointDef();
+				BodyType oldType = element.getBody().getType();
+				element.getBody().setType(BodyType.DYNAMIC);
+				djd.initialize(robot.getBody(), element.getBody(), new Vec2(100,100), new Vec2(100,100));
+				Joint j = PhysicsWorld.addJoint(djd);
 				try {
 					Thread.sleep(6000);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
 				PhysicsWorld.deleteJoint(j);
+				element.getBody().setType(oldType);
 			}
-		}).start();
-	}
-	
-	@Override
-	public String getImagePath() {
-		return imagePath;
+		}).start();*/
 	}
 }

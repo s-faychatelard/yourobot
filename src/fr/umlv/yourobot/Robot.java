@@ -1,5 +1,6 @@
 package fr.umlv.yourobot;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.geom.AffineTransform;
@@ -7,18 +8,14 @@ import java.util.Objects;
 
 import org.jbox2d.collision.shapes.CircleShape;
 import org.jbox2d.common.Vec2;
-import org.jbox2d.dynamics.Body;
 import org.jbox2d.dynamics.BodyDef;
 import org.jbox2d.dynamics.BodyType;
 import org.jbox2d.dynamics.FixtureDef;
 
-public abstract class Robot implements Element {
+public abstract class Robot extends Element {
 	public final static int INITIAL_SPEED = 5;
-	private final static int ROBOT_SIZE = 50;
+	private final static int ROBOT_SIZE = 40;
 	private CircleShape blockShape;
-	private BodyDef bodyDef;
-	private FixtureDef fixtureDef;
-	private Body body;
 	protected Image image; // TODO laisser en private - idem pour WALL
 	private int life;
 	private double direction = 0.;
@@ -47,8 +44,17 @@ public abstract class Robot implements Element {
 		AffineTransform affineTransform = new AffineTransform();
 		affineTransform.setToTranslation(p.x, p.y);
 		affineTransform.rotate(Math.toRadians(this.direction), ROBOT_SIZE/2, ROBOT_SIZE/2);
-		graphics.fillOval((int)this.body.getPosition().x, (int)this.body.getPosition().y, (int)ROBOT_SIZE, (int)ROBOT_SIZE);
-		//graphics.drawImage(ImageFactory.getImage(getImagePath()), affineTransform, null);
+		if(this instanceof FakeRobot) {
+			graphics.drawImage(ImageFactory.getImage(getImagePath()), affineTransform, null);
+		}
+		else if(this instanceof RobotIA) {
+			graphics.setColor(Color.BLACK);
+			graphics.fillOval((int)this.body.getPosition().x, (int)this.body.getPosition().y, (int)ROBOT_SIZE, (int)ROBOT_SIZE);
+		}
+		else {
+			graphics.setColor(Color.WHITE);
+			graphics.fillOval((int)this.body.getPosition().x, (int)this.body.getPosition().y, (int)ROBOT_SIZE, (int)ROBOT_SIZE);
+		}
 	}
 	
 	public double getDirection() {
@@ -108,27 +114,5 @@ public abstract class Robot implements Element {
 
 	public int getLife() {
 		return this.life;
-	}
-
-	@Override
-	public void setBody(Body body) {
-		this.body = Objects.requireNonNull(body);
-		//Setup volume friction
-		this.body.setLinearDamping(.5f);
-	}
-
-	@Override
-	public Body getBody() {
-		return this.body;
-	}
-
-	@Override
-	public BodyDef getBodyDef() {
-		return this.bodyDef;
-	}
-
-	@Override
-	public FixtureDef getFixtureDef() {
-		return this.fixtureDef;
 	}
 }

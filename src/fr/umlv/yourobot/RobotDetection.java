@@ -24,7 +24,7 @@ public class RobotDetection implements Runnable {
 			lock = new ReentrantLock();
 	}
 
-	public boolean detect(RobotPlayer robot) {
+	public boolean detect(Robot robot) {
 		Objects.requireNonNull(robot);
 		p1 = new Vec2(this.robot.getBody().getPosition());
 		p2 = new Vec2(robot.getBody().getPosition().x, robot.getBody().getPosition().y);
@@ -39,16 +39,17 @@ public class RobotDetection implements Runnable {
 	public void run() {
 		while(true) {
 			Vec2 res = null;
-			for(RobotPlayer rp : this.robot.getRobotsDetected()) {
-				if(detect(rp)) {
+			for(Robot robot : PhysicsWorld.getDetectableRobot()) {
+				if(detect(robot)) {
+					//Not necessary to wait the lock, try again later
 					if (lock.tryLock()) {
 						try {
 							Vec2 vec1 = this.robot.getBody().getPosition();
-							Vec2 vec2 = rp.getBody().getPosition();
+							Vec2 vec2 = robot.getBody().getPosition();
 							callback.init();
 							this.robot.getBody().getWorld().raycast(callback, vec1, vec2);
 							if(callback.count<=1) {
-								res = rp.getBody().getPosition();
+								res = robot.getBody().getPosition();
 								break;
 							}
 						} finally {

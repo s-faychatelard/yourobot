@@ -6,18 +6,13 @@ import java.awt.Toolkit;
 import java.util.Objects;
 
 import org.jbox2d.common.Vec2;
-import org.jbox2d.dynamics.Body;
 import org.jbox2d.dynamics.BodyDef;
 import org.jbox2d.dynamics.BodyType;
-import org.jbox2d.dynamics.FixtureDef;
 
-public class StartPoint implements Element {
+public class StartPoint extends Element {
 	
 	final static int STARTPOINT_WIDTH = 50;
 	final static int STARTPOINT_HEIGTH = STARTPOINT_WIDTH;
-	private final BodyDef bodyDef;
-	private final FixtureDef fixtureDef;
-	protected Body body;
 	private static Image image;
 	
 	public StartPoint(Vec2 position) {	
@@ -38,25 +33,5 @@ public class StartPoint implements Element {
 	public void draw(Graphics2D graphics) {
 		Vec2 p = this.body.getPosition();
 	    graphics.drawImage(image, (int)p.x , (int)p.y, STARTPOINT_WIDTH, STARTPOINT_HEIGTH, null);
-	}
-
-	@Override
-	public void setBody(Body body) {
-		this.body = Objects.requireNonNull(body);
-	}
-
-	@Override
-	public Body getBody() {
-		return body;
-	}
-
-	@Override
-	public BodyDef getBodyDef() {
-		return bodyDef;
-	}
-
-	@Override
-	public FixtureDef getFixtureDef() {
-		return fixtureDef;
 	}
 }

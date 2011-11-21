@@ -1,15 +1,10 @@
 package fr.umlv.yourobot;
 
-import java.util.Objects;
 import java.util.Random;
-import java.util.concurrent.LinkedBlockingDeque;
 
 import org.jbox2d.common.Vec2;
 
 public class RobotIA extends Robot {
-	//LinkedBlockingDeque offer concurrent list and addFirst, addLast methods
-	//Need to be concurrent safe because RobotDetection thread have an access to it
-	private LinkedBlockingDeque<RobotPlayer> robotsDetection;
 	private Vec2 enemyPosition;
 	private String imagePath = "robot.png";
 
@@ -17,7 +12,6 @@ public class RobotIA extends Robot {
 		//Null is test by super
 		super(position);
 		getFixtureDef().filter.categoryBits = 2;
-		robotsDetection = new LinkedBlockingDeque<>(5);
 	}
 
 	@Override
@@ -78,19 +72,4 @@ public class RobotIA extends Robot {
 		//point can be null
 		this.enemyPosition = point;
 	}
-
-	public LinkedBlockingDeque<RobotPlayer> getRobotsDetected() {
-		//If a robot deaded, remove it from the detection list
-		for(RobotPlayer rp : this.robotsDetection)
-			if(rp.getLife()<=0) this.robotsDetection.remove(rp);
-		return this.robotsDetection;
-	}
-
-	public void detect(RobotPlayer robot) {
-		robotsDetection.add(Objects.requireNonNull(robot));
-	}
-	
-	/*public void detectLeurre() {
-		robotsDetection.addFirst(e);
-	}*/
 }
