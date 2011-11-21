@@ -2,7 +2,6 @@ package fr.umlv.yourobot;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
-import java.awt.Image;
 import java.awt.geom.AffineTransform;
 import java.util.Objects;
 
@@ -16,7 +15,6 @@ public abstract class Robot extends Element {
 	public final static int INITIAL_SPEED = 5;
 	private final static int ROBOT_SIZE = 40;
 	private CircleShape blockShape;
-	protected Image image; // TODO laisser en private - idem pour WALL
 	private int life;
 	private double direction = 0.;
 

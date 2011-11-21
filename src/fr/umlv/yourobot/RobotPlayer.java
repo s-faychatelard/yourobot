@@ -26,11 +26,13 @@ public class RobotPlayer extends Robot {
 	}
 	
 	public void useBonus() {
+		//TODO Concurrency
 		if(this.getLife()<=0) return;
 		synchronized (lock) {
 			if(bonus.size()<=0) return;
 			Bonus b = bonus.poll();
 			b.execute(this);
+			System.out.println(bonus.size());
 		}
 	}
 	
