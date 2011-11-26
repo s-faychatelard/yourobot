@@ -66,7 +66,7 @@ public class SnapBonus extends Bonus {
 		LinkedList<Element> elements = World.getAllElement();
 		snapElements = new LinkedList<>();
 		for(final Element element : elements) {
-			if(element instanceof EndPoint || element instanceof StartPoint || element instanceof RobotIA || element instanceof Bonus || element instanceof FakeRobot) continue;
+			if(element instanceof EndPoint || element instanceof StartPoint || element instanceof RobotAI || element instanceof Bonus || element instanceof RobotFake) continue;
 			//Get the distance from the robot to the element
 			int x = (int)robot.getBody().getPosition().x - (int)element.getBody().getPosition().x;
 			int y = (int)robot.getBody().getPosition().y - (int)element.getBody().getPosition().y;

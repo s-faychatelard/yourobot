@@ -33,11 +33,11 @@ import fr.umlv.yourobot.Main;
 import fr.umlv.yourobot.elements.BomberBonus;
 import fr.umlv.yourobot.elements.Element;
 import fr.umlv.yourobot.elements.EndPoint;
-import fr.umlv.yourobot.elements.FakeRobot;
-import fr.umlv.yourobot.elements.FakeRobotBonus;
+import fr.umlv.yourobot.elements.RobotFake;
+import fr.umlv.yourobot.elements.RobotFakeBonus;
 import fr.umlv.yourobot.elements.IceWall;
 import fr.umlv.yourobot.elements.Robot;
-import fr.umlv.yourobot.elements.RobotIA;
+import fr.umlv.yourobot.elements.RobotAI;
 import fr.umlv.yourobot.elements.RobotPlayer;
 import fr.umlv.yourobot.elements.SnapBonus;
 import fr.umlv.yourobot.elements.StartPoint;
@@ -47,7 +47,7 @@ import fr.umlv.yourobot.elements.WoodWall;
 import fr.umlv.zen.KeyboardKey;
 
 public class World {
-	private static final int CELL_SIZE = Wall.WALL_SIZE;
+	private static final int CELL_SIZE = Wall.SIZE;
 	
 	// Size (number of cells) of the top left and right bottom corners without walls/bonuses/AIs
 	private static final int SAFE_AREA_SIZE = 3;
@@ -56,7 +56,7 @@ public class World {
 	private static final LinkedList<Element> elementsList = new LinkedList<>();
 	private static final LinkedList<Robot> detectabelRobots = new LinkedList<>();
 	private static RobotPlayer []robotsPlayer;
-	private final ArrayList<RobotIA> robotsIA = new ArrayList<>();
+	private final ArrayList<RobotAI> robotsIA = new ArrayList<>();
 	private boolean matrix[][];
 
 	public World(int numberOfPlayers, int level) {
@@ -102,7 +102,7 @@ public class World {
 				k++;
 			}
 			matrix[(x+j)%matrix.length][(y+k)%matrix[0].length] = true;
-			RobotIA r = ((RobotIA)this.addElement(new RobotIA(new Vec2(((x+j)%matrix.length)*CELL_SIZE, ((y+k)%matrix[0].length)*CELL_SIZE))));
+			RobotAI r = ((RobotAI)this.addElement(new RobotAI(new Vec2(((x+j)%matrix.length)*CELL_SIZE, ((y+k)%matrix[0].length)*CELL_SIZE))));
 			robotsIA.add(r);
 		}
 	}
@@ -160,7 +160,7 @@ public class World {
 	}
 
 	public void updateWorld() {
-		for(RobotIA ia : robotsIA)
+		for(RobotAI ia : robotsIA)
 			ia.update();
 		for(RobotPlayer rp : robotsPlayer)
 			rp.update();
@@ -203,7 +203,7 @@ public class World {
 		return element;
 	}
 
-	public static void addLeurre(FakeRobot fr) {
+	public static void addRobotFake(RobotFake fr) {
 		Objects.requireNonNull(fr);
 		//Is insert in top of the queue so he is the first robot to be detect
 		//Cannot call addElement because we are in a static method
@@ -222,7 +222,7 @@ public class World {
 		elementsList.remove(element);
 	}
 
-	public static void removeLeurre(FakeRobot fr) {
+	public static void removeLeurre(RobotFake fr) {
 		world.destroyBody(fr.getBody());
 		detectabelRobots.remove(fr);
 		elementsList.remove(fr);
@@ -232,7 +232,7 @@ public class World {
 		return detectabelRobots;
 	}
 
-	public void raycast(RayCastCallbackRobotIA raycastCallback, Vec2 point1, Vec2 point2) {
+	public void raycast(RayCastCallbackRobotAI raycastCallback, Vec2 point1, Vec2 point2) {
 		Objects.requireNonNull(raycastCallback);
 		Objects.requireNonNull(point1);
 		Objects.requireNonNull(point2);
@@ -344,7 +344,7 @@ public class World {
 						int r = rand.nextInt(3);
 						switch(r) {
 						case 0 :
-							this.addElement(new FakeRobotBonus(v));
+							this.addElement(new RobotFakeBonus(v));
 							break;
 						case 1 :
 							this.addElement(new BomberBonus(v));

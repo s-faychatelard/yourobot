@@ -23,15 +23,15 @@ import org.jbox2d.common.Vec2;
 
 import fr.umlv.yourobot.physics.World;
 
-public class FakeRobotBonus extends Bonus {
+public class RobotFakeBonus extends Bonus {
 	
 	private static final String imagePath = "fakeRobotBonus.png";
 	private final int executionTime;
 	private Date date;
 	private long startTime;
-	private FakeRobot currentRobot;
+	private RobotFake currentRobot;
 
-	public FakeRobotBonus(Vec2 position) {
+	public RobotFakeBonus(Vec2 position) {
 		//Null is test by super
 		super(position);
 		Random rand = new Random();
@@ -53,8 +53,8 @@ public class FakeRobotBonus extends Bonus {
 		Objects.requireNonNull(robot);
 		date = new Date();
 		startTime = date.getTime();
-		currentRobot = new FakeRobot(new Vec2(robot.getBody().getPosition().x+25, robot.getBody().getPosition().y+25));
-		World.addLeurre(currentRobot);
+		currentRobot = new RobotFake(new Vec2(robot.getBody().getPosition().x+25, robot.getBody().getPosition().y+25));
+		World.addRobotFake(currentRobot);
 	}
 	
 	@Override

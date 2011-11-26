@@ -23,18 +23,18 @@ import java.util.Random;
 import org.jbox2d.common.Vec2;
 
 import fr.umlv.yourobot.Main;
-import fr.umlv.yourobot.physics.RayCastCallbackRobotIA;
+import fr.umlv.yourobot.physics.RayCastCallbackRobotAI;
 import fr.umlv.yourobot.physics.World;
 
-public class RobotIA extends Robot {
+public class RobotAI extends Robot {
 	private static final int TIME_DETECT = 3000;
 	private Date date;
 	private long lastDetectionTime=-1;
 	private String imagePath = "robot.png";
-	private final static RayCastCallbackRobotIA callback = new RayCastCallbackRobotIA();
+	private final static RayCastCallbackRobotAI callback = new RayCastCallbackRobotAI();
 	private final static double diagonal= Math.sqrt((Main.WIDTH*Main.WIDTH) + (Main.HEIGHT*Main.HEIGHT)) / 4;
 
-	public RobotIA(Vec2 position) {
+	public RobotAI(Vec2 position) {
 		//Null is test by super
 		super(position);
 	}

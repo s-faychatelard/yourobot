@@ -31,12 +31,12 @@ import fr.umlv.yourobot.physics.World;
 import fr.umlv.yourobot.utils.ImageFactory;
 
 public abstract class Robot extends Element {
-	final static int INITIAL_SPEED = 100;
-	private final static int ROBOT_SIZE = 40;
+	private static final int SIZE_OF_TAIL = 5;
+	private final static int SIZE = 40;
+	protected final static int INITIAL_SPEED = 100; //used by RobotAI
 	private CircleShape blockShape;
 	private int life;
 	private double direction = 0.;
-	private static final int SIZE_OF_TAIL = 5;
 	private final LinkedList<Vec2> tail;
 	
 	public abstract String getImagePath();
@@ -48,7 +48,7 @@ public abstract class Robot extends Element {
 		bodyDef.linearDamping = .5f;
 
 		blockShape = new CircleShape();
-		blockShape.m_radius = ROBOT_SIZE/2;
+		blockShape.m_radius = SIZE/2;
 		fixtureDef = new FixtureDef();
 		fixtureDef.shape = blockShape;
 		fixtureDef.density = 0.f;
@@ -66,20 +66,20 @@ public abstract class Robot extends Element {
 		Vec2 p = this.body.getPosition();
 		AffineTransform affineTransform = new AffineTransform();
 		affineTransform.setToTranslation(p.x, p.y);
-		affineTransform.rotate(Math.toRadians(this.direction), ROBOT_SIZE/2, ROBOT_SIZE/2);
-		if(this instanceof FakeRobot) {
+		affineTransform.rotate(Math.toRadians(this.direction), SIZE/2, SIZE/2);
+		if(this instanceof RobotFake) {
 			graphics.drawImage(ImageFactory.getImage(getImagePath()), affineTransform, null);
 		}
-		else if(this instanceof RobotIA) {
+		else if(this instanceof RobotAI) {
 			graphics.setColor(Color.BLACK);
-			graphics.fillOval((int)this.body.getPosition().x, (int)this.body.getPosition().y, (int)ROBOT_SIZE, (int)ROBOT_SIZE);
+			graphics.fillOval((int)this.body.getPosition().x, (int)this.body.getPosition().y, (int)SIZE, (int)SIZE);
 		}
 		else {
 			graphics.setColor(Color.WHITE);
 			int x = (int)this.body.getPosition().x;
 			int y = (int)this.body.getPosition().y;
 
-			graphics.fillOval(x, y, (int)ROBOT_SIZE, (int)ROBOT_SIZE);
+			graphics.fillOval(x, y, (int)SIZE, (int)SIZE);
 			graphics.drawImage(ImageFactory.getImage(getImagePath()), affineTransform, null);
 			graphics.setColor(Color.GRAY);
 			graphics.drawRect(x + 10, y - 10, 26, 4);

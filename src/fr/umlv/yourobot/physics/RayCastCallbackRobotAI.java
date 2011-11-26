@@ -13,22 +13,25 @@
  * @author Sylvain Fay-Chatelard <sfaychat@etudiant.univ-mlv.fr>
  * @version 1.0
  */
-package fr.umlv.yourobot.elements;
+package fr.umlv.yourobot.physics;
 
+import org.jbox2d.callbacks.RayCastCallback;
 import org.jbox2d.common.Vec2;
+import org.jbox2d.dynamics.Fixture;
 
-public class WallFactory {
-	
-	public static IceWall getIceWall(Vec2 p) {
-		return new IceWall(p);
-	}
-	
-	public static WoodWall getWoodWall(Vec2 p) {
-		return new WoodWall(p);
-	}
-	
-	public static StoneWall getStoneWall(Vec2 p) {
-		return new StoneWall(p);
+public class RayCastCallbackRobotAI implements RayCastCallback {
+	private int count;
+
+	public void init() {
+		count=0;
 	}
 
-}
+	public float reportFixture(Fixture fixture, Vec2 point, Vec2 normal, float fraction) {
+		count++;
+		return 1f;
+	}
+	
+	public int getCount() {
+		return this.count;
+	}
+};
