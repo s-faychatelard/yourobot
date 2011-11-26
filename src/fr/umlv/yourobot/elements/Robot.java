@@ -18,6 +18,7 @@ package fr.umlv.yourobot.elements;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
+import java.util.LinkedList;
 import java.util.Objects;
 
 import org.jbox2d.collision.shapes.CircleShape;
@@ -35,7 +36,9 @@ public abstract class Robot extends Element {
 	private CircleShape blockShape;
 	private int life;
 	private double direction = 0.;
-
+	private static final int SIZE_OF_TAIL = 5;
+	private final LinkedList<Vec2> tail;
+	
 	public abstract String getImagePath();
 
 	public Robot(Vec2 position) {
@@ -53,10 +56,13 @@ public abstract class Robot extends Element {
 		fixtureDef.restitution = 0.f;
 		
 		life = 100;
+		
+		tail = new LinkedList<>();
 	}
 
 	@Override
 	public void draw(Graphics2D graphics) {
+		generateTail(graphics);
 		Vec2 p = this.body.getPosition();
 		AffineTransform affineTransform = new AffineTransform();
 		affineTransform.setToTranslation(p.x, p.y);
@@ -84,7 +90,14 @@ public abstract class Robot extends Element {
 			graphics.fillRect(x + 10+1, y - 10+1, (int)(this.getLife() / 4), 3);
 		}
 	}
-	
+
+	private void generateTail(Graphics2D graphics) {
+		Vec2 firstPosition = tail.peekFirst();
+		//if()
+		if(tail.size()==SIZE_OF_TAIL) tail.removeFirst();
+		
+	}
+
 	protected double getDirection() {
 		return this.direction;
 	}
