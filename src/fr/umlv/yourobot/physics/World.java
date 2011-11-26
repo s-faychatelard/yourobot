@@ -41,7 +41,7 @@ public class World {
 	private static final LinkedList<Element> elementsList = new LinkedList<>();
 	private static final LinkedList<Robot> detectabelRobots = new LinkedList<>();
 	private static RobotPlayer []robotsPlayer;
-	private final ArrayList<RobotIA> robotIA = new ArrayList<>();
+	private final ArrayList<RobotIA> robotsIA = new ArrayList<>();
 	private boolean matrix[][];
 
 	public World(int numberOfPlayers, int level) {
@@ -88,7 +88,7 @@ public class World {
 			}
 			matrix[(x+j)%matrix.length][(y+k)%matrix[0].length] = true;
 			RobotIA r = ((RobotIA)this.addElement(new RobotIA(new Vec2(((x+j)%matrix.length)*CELL_SIZE, ((y+k)%matrix[0].length)*CELL_SIZE))));
-			robotIA.add(r);
+			robotsIA.add(r);
 		}
 	}
 
@@ -145,8 +145,10 @@ public class World {
 	}
 
 	public void updateWorld() {
-		for(RobotIA ia : robotIA)
+		for(RobotIA ia : robotsIA)
 			ia.update();
+		for(RobotPlayer rp : robotsPlayer)
+			rp.update();
 		world.step(1/30f, 15, 8);
 	}
 

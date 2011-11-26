@@ -1,6 +1,8 @@
 package fr.umlv.yourobot.elements;
 
+import java.util.Date;
 import java.util.LinkedList;
+import java.util.Objects;
 import java.util.Random;
 
 import org.jbox2d.common.Vec2;
@@ -10,12 +12,21 @@ import fr.umlv.yourobot.physics.World;
 
 public class BomberBonus extends Bonus {
 	private static final String imagePath = "bomberBonus.png";
+	private static final int executionTime = 2500;
+	private Date date;
+	private long startTime;
 	private final WallType wallType;
+	private LinkedList<BomberElement> bomberElements;
 
 	private enum WallType {
 		ICE,
 		WOOD,
 		STONE
+	}
+	
+	private static class BomberElement {
+		Element element;
+		BodyType oldBodyType;
 	}
 
 	public BomberBonus(Vec2 position) {
@@ -39,10 +50,19 @@ public class BomberBonus extends Bonus {
 	public String getImagePath() {
 		return imagePath;
 	}
+	
+	@Override
+	public int getExecutionTime() {
+		return -1;
+	}
 
 	@Override
 	public void execute(RobotPlayer robot) {
+		Objects.requireNonNull(robot);
 		LinkedList<Element> elements = World.getAllElement();
+		bomberElements = new LinkedList<>();
+		date = new Date();
+		startTime = date.getTime();
 		for(Element element : elements) {
 			if((element instanceof RobotPlayer) || (element instanceof StartPoint) || (element instanceof EndPoint)) continue;
 			//Get the distance from the robot to the element
@@ -65,26 +85,27 @@ public class BomberBonus extends Bonus {
 				wallCoeff=10000;
 			double coeffWallForce = wallCoeff*coeffForce;
 
-			final BodyType oldType = element.getBody().getType();
+			BomberElement bomberElement = new BomberElement();
+			bomberElement.element = element;
+			bomberElement.oldBodyType = element.getBody().getType();
 			element.getBody().setType(BodyType.DYNAMIC);	
 			element.getBody().setLinearDamping(.8f);
 			element.getBody().setAwake(true);
 			element.getBody().applyForce(new Vec2((int)(force.x*coeffWallForce),(int)(force.y*coeffWallForce)), element.getBody().getPosition());
-
-			//Wait 2 seconds before set STATIC for wall
-			final Element e = element;
-			new Thread(new Runnable() {
-				private Element element=e;
-				@Override
-				public void run() {
-					try {
-						Thread.sleep(2500);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-					element.getBody().setType(oldType);
-				}
-			}).start();
+			bomberElements.add(bomberElement);
 		}
+	}
+	
+	@Override
+	public Bonus update() {
+		date = new Date();
+		long time = date.getTime();
+		System.out.println(time + " " + startTime + " " + executionTime);
+		if(time<startTime+executionTime) return this;
+		for(BomberElement bomberElement : bomberElements)
+			bomberElement.element.getBody().setType(bomberElement.oldBodyType);
+		bomberElements.clear();
+		System.out.println("NULL");
+		return null;
 	}
 }
