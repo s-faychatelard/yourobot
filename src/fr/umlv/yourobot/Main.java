@@ -55,7 +55,12 @@ public class Main {
 					case QUIT:
 						return;
 					case MENU:
-						System.out.println("MENU");
+						context.render(new ApplicationRenderCode() {
+							@Override
+							public void render(Graphics2D graphics) {
+								graphics.fillRect(0, 0, Main.WIDTH, Main.HEIGHT);
+							}
+						});
 						if(event != null && event.getKey() == KeyboardKey.P) {
 							generateWorld(level);
 						}

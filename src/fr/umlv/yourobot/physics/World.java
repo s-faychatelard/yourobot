@@ -271,45 +271,49 @@ public class World {
 	private void generateWallsAndBonuses(int difficulty, boolean matrix[][]){
 		if(difficulty<0) throw new IllegalArgumentException("difficulty cannot be lower than 0");
 
+		difficulty = 40;
 		int numberOfWalls = Main.WIDTH * Main.HEIGHT / (Wall.WALL_SIZE * Wall.WALL_SIZE) / 20;
-		numberOfWalls = Math.round (numberOfWalls * (1 + (difficulty/5)));
+		numberOfWalls = 100; //= Math.round (numberOfWalls * (1 + (difficulty/5)));
 		
-		int numberOfBonus = Main.WIDTH * Main.HEIGHT / (Wall.WALL_SIZE * Wall.WALL_SIZE) / 40;
+		int numberOfBonus = Main.WIDTH * Main.HEIGHT / (Wall.WALL_SIZE * Wall.WALL_SIZE) / 30;
 		numberOfBonus = Math.round (numberOfBonus * (1 + (difficulty/5)));
 
 		Random rand = new Random();
-		for (int i=0; i < matrix.length - 1; i++) {
-			for (int j=0; j< matrix[0].length - 1; j++) {
-				if(rand.nextInt(matrix[0].length * matrix.length) < numberOfWalls) {
-					Vec2 v = new Vec2((i * Wall.WALL_SIZE), (j * Wall.WALL_SIZE));
-					int r = rand.nextInt(2);
-					switch(r) {
-					case 0 :
-						this.addElement(new IceWall(v));
-						break;
-					case 1 :
-						this.addElement(new WoodWall(v));
-						break;	
-					default :
-						this.addElement(new StoneWall(v));
-						break;
+		for (int i=0; i < matrix.length; i++) {
+			for (int j=0; j< matrix[0].length; j++) {
+				
+				if (!(i<3 && j<3) && !(i > matrix.length - 4 && j > matrix.length - 4)) { // reserve top left and bottom right corners
+					if(rand.nextInt(matrix[0].length * matrix.length) < numberOfWalls) {
+						Vec2 v = new Vec2((i * Wall.WALL_SIZE), (j * Wall.WALL_SIZE));
+						int r = rand.nextInt(2);
+						switch(r) {
+						case 0 :
+							this.addElement(new IceWall(v));
+							break;
+						case 1 :
+							this.addElement(new WoodWall(v));
+							break;	
+						default :
+							this.addElement(new StoneWall(v));
+							break;
+						}
+						matrix[i][j] = true;					
+					} else if(rand.nextInt(matrix[0].length * matrix.length) < numberOfBonus) {
+						Vec2 v = new Vec2((i * Wall.WALL_SIZE), (j * Wall.WALL_SIZE));
+						int r = rand.nextInt(2);
+						switch(r) {
+						case 0 :
+							this.addElement(new FakeRobotBonus(v));
+							break;
+						case 1 :
+							this.addElement(new BomberBonus(v));
+							break;	
+						default :
+							this.addElement(new SnapBonus(v));
+							break;
+						}
+						matrix[i][j] = true;					
 					}
-					matrix[i][j] = true;					
-				} else if(rand.nextInt(matrix[0].length * matrix.length) < numberOfBonus) {
-					Vec2 v = new Vec2((i * Wall.WALL_SIZE), (j * Wall.WALL_SIZE));
-					int r = rand.nextInt(2);
-					switch(r) {
-					case 0 :
-						this.addElement(new FakeRobotBonus(v));
-						break;
-					case 1 :
-						this.addElement(new BomberBonus(v));
-						break;	
-					default :
-						this.addElement(new SnapBonus(v));
-						break;
-					}
-					matrix[i][j] = true;					
 				}
 			}
 		}
