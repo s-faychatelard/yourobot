@@ -1,6 +1,6 @@
 package fr.umlv.yourobot.elements;
 
-import java.util.concurrent.LinkedBlockingQueue;
+import java.util.LinkedList;
 
 import org.jbox2d.common.Vec2;
 
@@ -9,12 +9,13 @@ import fr.umlv.yourobot.physics.World;
 public class RobotPlayer extends Robot {
 
 	private static final String imagePath = "robot.png";
-	private final LinkedBlockingQueue<Bonus> bonus;
+	private final LinkedList<Bonus> bonus;
+	private Bonus currentExecuteBonus=null;
 
 	public RobotPlayer(Vec2 position) {
 		//Null is test by super
 		super(position);
-		bonus = new LinkedBlockingQueue<>(50);
+		bonus = new LinkedList<>();
 	}
 
 	public void takeBonus(Bonus bonus) {
@@ -35,5 +36,10 @@ public class RobotPlayer extends Robot {
 	@Override
 	public String getImagePath() {
 		return imagePath;
+	}
+
+	public void update() {
+		if(currentExecuteBonus==null) return;
+		currentExecuteBonus = currentExecuteBonus.update();
 	}
 }

@@ -1,6 +1,7 @@
 package fr.umlv.yourobot.elements;
 
 import java.util.LinkedList;
+import java.util.Objects;
 import java.util.Random;
 
 import org.jbox2d.common.Vec2;
@@ -10,12 +11,19 @@ import fr.umlv.yourobot.physics.World;
 
 public class BomberBonus extends Bonus {
 	private static final String imagePath = "bomberBonus.png";
+	private Vec2 lastPosition;
 	private final WallType wallType;
+	private LinkedList<BomberElement> elements;
 
 	private enum WallType {
 		ICE,
 		WOOD,
 		STONE
+	}
+	
+	private static class BomberElement {
+		Element element;
+		BodyType oldBodyType;
 	}
 
 	public BomberBonus(Vec2 position) {
@@ -39,9 +47,15 @@ public class BomberBonus extends Bonus {
 	public String getImagePath() {
 		return imagePath;
 	}
+	
+	@Override
+	public int getExecutionTime() {
+		return -1;
+	}
 
 	@Override
 	public void execute(RobotPlayer robot) {
+		Objects.requireNonNull(robot);
 		LinkedList<Element> elements = World.getAllElement();
 		for(Element element : elements) {
 			if((element instanceof RobotPlayer) || (element instanceof StartPoint) || (element instanceof EndPoint)) continue;
@@ -65,26 +79,26 @@ public class BomberBonus extends Bonus {
 				wallCoeff=10000;
 			double coeffWallForce = wallCoeff*coeffForce;
 
-			final BodyType oldType = element.getBody().getType();
+			BomberElement bomberElement = new BomberElement();
+			bomberElement.element = element;
+			bomberElement.oldBodyType = element.getBody().getType();
+			lastPosition = element.getBody().getPosition();
 			element.getBody().setType(BodyType.DYNAMIC);	
 			element.getBody().setLinearDamping(.8f);
 			element.getBody().setAwake(true);
 			element.getBody().applyForce(new Vec2((int)(force.x*coeffWallForce),(int)(force.y*coeffWallForce)), element.getBody().getPosition());
-
-			//Wait 2 seconds before set STATIC for wall
-			final Element e = element;
-			new Thread(new Runnable() {
-				private Element element=e;
-				@Override
-				public void run() {
-					try {
-						Thread.sleep(2500);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-					element.getBody().setType(oldType);
-				}
-			}).start();
 		}
+	}
+	
+	@Override
+	public Bonus update() {
+		for(BomberElement bomberElement : elements) {
+			if(bomberElement.element.getBody().getPosition().x == lastPosition.x && bomberElement.element.getBody().getPosition().y == lastPosition.y) {
+				bomberElement.element.getBody().setType(bomberElement.oldBodyType);
+				elements.remove(bomberElement);
+			}
+		}
+		if(elements.size()>0) return this;
+		return null;
 	}
 }
