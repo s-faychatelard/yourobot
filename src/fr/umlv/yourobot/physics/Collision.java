@@ -8,6 +8,7 @@ import org.jbox2d.collision.Manifold;
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.contacts.Contact;
 
+import fr.umlv.yourobot.Main;
 import fr.umlv.yourobot.elements.Bonus;
 import fr.umlv.yourobot.elements.EndPoint;
 import fr.umlv.yourobot.elements.RobotIA;
@@ -44,7 +45,7 @@ public class Collision implements ContactListener {
 		if((contact.getFixtureA().getBody().getUserData() instanceof EndPoint && contact.getFixtureB().getBody().getUserData() instanceof RobotPlayer) ||
 				(contact.getFixtureB().getBody().getUserData() instanceof EndPoint && contact.getFixtureA().getBody().getUserData() instanceof RobotPlayer)) {
 			//TODO WIN
-			System.out.println("WIN");
+			Main.Win();
 			return;
 		}
 		//End WIN
@@ -69,7 +70,6 @@ public class Collision implements ContactListener {
 				robotIA.rotate(rand.nextInt(180));
 			else
 				robotIA.rotate(-rand.nextInt(180));
-			robotIA.jumpTo(null);
 		}
 		if(contact.getFixtureB().getBody().getUserData() instanceof RobotIA) {
 			RobotIA robotIA = (RobotIA)contact.getFixtureB().getBody().getUserData();
@@ -77,7 +77,6 @@ public class Collision implements ContactListener {
 				robotIA.rotate(rand.nextInt(180));
 			else
 				robotIA.rotate(-rand.nextInt(180));
-			robotIA.jumpTo(null);
 		}
 		//End RobotIA collide something turn it
 	}

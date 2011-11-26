@@ -4,7 +4,7 @@ import org.jbox2d.common.Vec2;
 
 public class WoodWall extends Wall {
 	
-	private final String imagePath = "woodWall.jpg";
+	private static final String imagePath = "woodWall.jpg";
 
 	public WoodWall(Vec2 position) {
 		//Null is test by super
@@ -34,6 +34,6 @@ public class WoodWall extends Wall {
 	
 	@Override
 	String getImagePath() {
-		return this.imagePath;
+		return imagePath;
 	}
 }

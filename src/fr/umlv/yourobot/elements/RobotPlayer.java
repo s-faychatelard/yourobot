@@ -17,7 +17,6 @@ public class RobotPlayer extends Robot {
 	public RobotPlayer(Vec2 position) {
 		//Null is test by super
 		super(position);
-		getFixtureDef().filter.categoryBits = 1;
 		bonus = new LinkedBlockingQueue<>(50);
 	}
 

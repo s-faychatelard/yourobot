@@ -13,9 +13,8 @@ import fr.umlv.yourobot.Main;
 import fr.umlv.yourobot.utils.ImageFactory;
 
 public abstract class Bonus extends Element {
-	protected final static int QUARTER_DIAGONAL = (int)Math.sqrt((Main.WIDTH*Main.WIDTH) + (Main.HEIGHT*Main.HEIGHT)) / 4;
-	private final static int BONUS_WIDTH = 40;
-	private final static int BONUS_HEIGTH = BONUS_WIDTH;
+	final static int QUARTER_DIAGONAL = (int)Math.sqrt((Main.WIDTH*Main.WIDTH) + (Main.HEIGHT*Main.HEIGHT)) / 4;
+	private final static int BONUS_SIZE = 40;
 	private boolean isTaken;
 
 	public  Bonus(Vec2 position) {	
@@ -27,7 +26,7 @@ public abstract class Bonus extends Element {
 			bodyDef.position = Objects.requireNonNull(position);
 
 			blockShape = new PolygonShape();
-			blockShape.setAsBox(BONUS_WIDTH/2, BONUS_HEIGTH/2);
+			blockShape.setAsBox(BONUS_SIZE/2, BONUS_SIZE/2);
 
 			fixtureDef = new FixtureDef();
 			fixtureDef.shape = blockShape;
@@ -49,6 +48,6 @@ public abstract class Bonus extends Element {
 	public void draw(Graphics2D graphics) {
 		if(isTaken) return;
 		Vec2 p = this.body.getPosition();
-	    graphics.drawImage(ImageFactory.getImage(getImagePath()), (int)p.x , (int)p.y, BONUS_WIDTH, BONUS_HEIGTH, null);
+	    graphics.drawImage(ImageFactory.getImage(getImagePath()), (int)p.x , (int)p.y, BONUS_SIZE, BONUS_SIZE, null);
 	}
 }

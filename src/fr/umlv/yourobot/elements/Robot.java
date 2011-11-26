@@ -14,7 +14,7 @@ import org.jbox2d.dynamics.FixtureDef;
 import fr.umlv.yourobot.utils.ImageFactory;
 
 public abstract class Robot extends Element {
-	final static int INITIAL_SPEED = 5;
+	final static int INITIAL_SPEED = 50;
 	private final static int ROBOT_SIZE = 40;
 	private CircleShape blockShape;
 	private int life;
@@ -85,11 +85,8 @@ public abstract class Robot extends Element {
 		rotate(10);
 	}
 
-	public void jumpTo(Vec2 vec) {
-		if(vec == null) {
-			this.body.setLinearVelocity(new Vec2(0,0));
-			return;
-		}
+	public void jumpToDetectedRobot(Vec2 vec) {
+		Objects.requireNonNull(vec);
 		Vec2 p1 = this.getBody().getPosition();
 		Vec2 p2 = vec;
 		int x = (int)(p2.x - p1.x);
@@ -101,8 +98,8 @@ public abstract class Robot extends Element {
 		direction = direction - 90;
 		if(direction<0) direction = 360+direction;
 		vec = new Vec2();
-		vec.x = (float)Math.cos(Math.toRadians(direction))*INITIAL_SPEED*5000;
-		vec.y = (float)Math.sin(Math.toRadians(direction))*INITIAL_SPEED*5000;
+		vec.x = (float)Math.cos(Math.toRadians(direction))*INITIAL_SPEED*500;
+		vec.y = (float)Math.sin(Math.toRadians(direction))*INITIAL_SPEED*500;
 		this.body.setLinearVelocity(vec);
 	}
 
