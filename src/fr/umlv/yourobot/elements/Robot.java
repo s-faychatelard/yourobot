@@ -92,10 +92,26 @@ public abstract class Robot extends Element {
 	}
 
 	private void generateTail(Graphics2D graphics) {
-		Vec2 firstPosition = tail.peekFirst();
-		//if()
-		if(tail.size()==SIZE_OF_TAIL) tail.removeFirst();
+		if(this instanceof RobotIA) return;
+		Vec2 lastPosition = tail.peekFirst();
+		if(lastPosition == null) {
+			tail.addLast(this.getBody().getPosition().clone());
+			return;
+		}
+		int x = (int)this.getBody().getPosition().x - (int)lastPosition.x;
+		int y = (int)this.getBody().getPosition().y - (int)lastPosition.y;
+		double distance = Math.sqrt(x*x + y*y);
+		System.out.println(distance);
+		if(distance<50) return;
 		
+		if(tail.size()==SIZE_OF_TAIL) tail.removeFirst();
+		tail.addLast(this.getBody().getPosition());
+		int radius = 25;
+		for(Vec2 pos : tail) {
+			System.out.println("plop");
+			graphics.fillOval((int)pos.x, (int)pos.y, radius, radius);
+			radius-=5;
+		}
 	}
 
 	protected double getDirection() {
