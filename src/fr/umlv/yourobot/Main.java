@@ -67,10 +67,7 @@ public class Main {
 								graphics.setColor(Color.WHITE);
 								graphics.setFont(new Font("Roman", Font.ROMAN_BASELINE | Font.BOLD, 72));
 								graphics.drawString("PAUSE", Main.WIDTH/2-125, Main.HEIGHT/2);
-								try {
-									//150ms is not visible by human
-									Thread.sleep(150);
-								} catch (InterruptedException e) { }
+								sleep();
 							}
 						});
 						break;
@@ -91,10 +88,7 @@ public class Main {
 								graphics.setColor(Color.WHITE);
 								graphics.setFont(new Font("Roman", Font.ROMAN_BASELINE | Font.BOLD, 72));
 								graphics.drawString("You WIN", Main.WIDTH/2-125, Main.HEIGHT/2);
-								try {
-									//150ms is not visible by human
-									Thread.sleep(150);
-								} catch (InterruptedException e) { }
+								sleep();
 							}
 						});
 						if(event != null && event.getKey() == KeyboardKey.C) {
@@ -115,10 +109,7 @@ public class Main {
 								graphics.setColor(Color.WHITE);
 								graphics.setFont(new Font("Roman", Font.ROMAN_BASELINE | Font.BOLD, 72));
 								graphics.drawString("GAME OVER", Main.WIDTH/2-125, Main.HEIGHT/2);
-								try {
-									//150ms is not visible by human
-									Thread.sleep(150);
-								} catch (InterruptedException e) { }
+								sleep();
 							}
 						});
 						if(event != null && event.getKey() == KeyboardKey.R) {
@@ -175,17 +166,13 @@ public class Main {
 	
 	/**
 	 * Make sleep the current thread for 150ms
-	 * Calling it into render method call allow to avoid useless CPU utilisation
+	 * Calling it into render method call allow to avoid useless CPU utilization
 	 */
 	private static void sleep() {
+		//150ms is not visible by human eyes except Chuck Norris eye's
 		try {Thread.sleep(150);} catch (InterruptedException e) {}
 	}
-	
-	
-	/**
-	 * Make sleep the current thread for 150ms
-	 * Calling it into render method call allow to avoid useless CPU utilisation
-	 */
+
 	private static void displayMenu(ApplicationContext context, KeyboardEvent event) {
 		context.render(new ApplicationRenderCode() {
 			@Override
