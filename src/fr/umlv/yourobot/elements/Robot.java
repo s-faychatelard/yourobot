@@ -15,7 +15,7 @@ import fr.umlv.yourobot.physics.World;
 import fr.umlv.yourobot.utils.ImageFactory;
 
 public abstract class Robot extends Element {
-	final static int INITIAL_SPEED = 50;
+	final static int INITIAL_SPEED = 100;
 	private final static int ROBOT_SIZE = 40;
 	private CircleShape blockShape;
 	private int life;
@@ -55,8 +55,18 @@ public abstract class Robot extends Element {
 		}
 		else {
 			graphics.setColor(Color.WHITE);
-			graphics.fillOval((int)this.body.getPosition().x, (int)this.body.getPosition().y, (int)ROBOT_SIZE, (int)ROBOT_SIZE);
+			int x = (int)this.body.getPosition().x;
+			int y = (int)this.body.getPosition().y;
+
+			graphics.fillOval(x, y, (int)ROBOT_SIZE, (int)ROBOT_SIZE);
 			graphics.drawImage(ImageFactory.getImage(getImagePath()), affineTransform, null);
+			graphics.setColor(Color.GRAY);
+			graphics.drawRect(x + 10, y - 10, 26, 4);
+			if(this.getLife() < 30)
+				graphics.setColor(Color.RED);
+			else 
+				graphics.setColor(Color.GREEN);
+			graphics.fillRect(x + 10+1, y - 10+1, (int)(this.getLife() / 4), 3);
 		}
 	}
 	
@@ -98,8 +108,8 @@ public abstract class Robot extends Element {
 		direction = direction - 90;
 		if(direction<0) direction = 360 + direction;
 		vec = new Vec2();
-		vec.x = (float)Math.cos(Math.toRadians(direction))*INITIAL_SPEED*500;
-		vec.y = (float)Math.sin(Math.toRadians(direction))*INITIAL_SPEED*500;
+		vec.x = (float)Math.cos(Math.toRadians(direction))*INITIAL_SPEED*1000;
+		vec.y = (float)Math.sin(Math.toRadians(direction))*INITIAL_SPEED*1000;
 		this.body.setLinearVelocity(vec);
 	}
 

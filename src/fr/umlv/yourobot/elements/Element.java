@@ -16,11 +16,12 @@ public abstract class Element {
 	
 	public void setBody(Body body) {
 		this.body = Objects.requireNonNull(body);
+		//Setup volume friction
+		this.body.setLinearDamping(.5f);	
 	}
 	
 	public Body getBody() {
-		//Setup volume friction
-		this.body.setLinearDamping(.8f);
+
 		return this.body;
 	}
 	
