@@ -27,7 +27,7 @@ import org.jbox2d.dynamics.FixtureDef;
 import fr.umlv.yourobot.utils.ImageFactory;
 
 public abstract class Wall extends Element {
-	public final static int WALL_SIZE = 50;
+	public final static int SIZE = 50;
 	private int life = 100;
 
 	public Wall(Vec2 position) {	
@@ -37,23 +37,20 @@ public abstract class Wall extends Element {
 		bodyDef.type = BodyType.STATIC;
 		bodyDef.position = Objects.requireNonNull(position);
 		blockShape = new PolygonShape();
-		blockShape.setAsBox(WALL_SIZE/2, WALL_SIZE/2);
+		blockShape.setAsBox(SIZE/2, SIZE/2);
 		fixtureDef = new FixtureDef();
 		fixtureDef.shape = blockShape;
 		fixtureDef.density = 0.f;
-		fixtureDef.friction = .8f;
+		fixtureDef.friction = 0.8f;
 		fixtureDef.restitution = 0.f;
 	}
 	
-	public abstract int attackWithIce();
-	public abstract int attackWithStone();
-	public abstract int attackWithWood();
 	abstract String getImagePath();
 	
 	@Override
 	public void draw(Graphics2D graphics) {
 		Vec2 p = this.body.getPosition();
-	    graphics.drawImage(ImageFactory.getImage(getImagePath()), (int)p.x , (int)p.y, WALL_SIZE, WALL_SIZE, null);
+	    graphics.drawImage(ImageFactory.getImage(getImagePath()), (int)p.x , (int)p.y, SIZE, SIZE, null);
 	}
 	
 	public int getLife() {

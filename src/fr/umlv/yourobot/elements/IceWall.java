@@ -28,27 +28,6 @@ public class IceWall extends Wall {
 	}
 
 	@Override
-	public int attackWithIce() {
-		int life = getLife() - 100;
-		setLife(life);
-		return life;
-	}
-
-	@Override
-	public int attackWithStone() {
-		int life = getLife() - 50;
-		setLife(life);
-		return life;
-	}
-
-	@Override
-	public int attackWithWood() {
-		int life = getLife() - 50;
-		setLife(life);
-		return life;
-	}
-
-	@Override
 	String getImagePath() {
 		return imagePath;
 	}

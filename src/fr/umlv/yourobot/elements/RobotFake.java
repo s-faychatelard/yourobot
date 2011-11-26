@@ -13,25 +13,21 @@
  * @author Sylvain Fay-Chatelard <sfaychat@etudiant.univ-mlv.fr>
  * @version 1.0
  */
-package fr.umlv.yourobot.physics;
+package fr.umlv.yourobot.elements;
 
-import org.jbox2d.callbacks.RayCastCallback;
 import org.jbox2d.common.Vec2;
-import org.jbox2d.dynamics.Fixture;
 
-public class RayCastCallbackRobotIA implements RayCastCallback {
-	private int count;
+public class RobotFake extends Robot {
+	
+	private static final String imagePath = "fakeRobot.png";
 
-	public void init() {
-		count=0;
-	}
-
-	public float reportFixture(Fixture fixture, Vec2 point, Vec2 normal, float fraction) {
-		count++;
-		return 1f;
+	public RobotFake(Vec2 position) {
+		//Null is test by super
+		super(position);
 	}
 	
-	public int getCount() {
-		return this.count;
+	@Override
+	public String getImagePath() {
+		return imagePath;
 	}
-};
+}
