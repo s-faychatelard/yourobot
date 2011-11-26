@@ -1,4 +1,4 @@
-package fr.umlv.yourobot;
+package fr.umlv.yourobot.elements;
 
 import java.awt.Graphics2D;
 import java.util.Objects;
@@ -8,6 +8,9 @@ import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.BodyDef;
 import org.jbox2d.dynamics.BodyType;
 import org.jbox2d.dynamics.FixtureDef;
+
+import fr.umlv.yourobot.Main;
+import fr.umlv.yourobot.utils.ImageFactory;
 
 public abstract class Bonus extends Element {
 	protected final static int QUARTER_DIAGONAL = (int)Math.sqrt((Main.WIDTH*Main.WIDTH) + (Main.HEIGHT*Main.HEIGHT)) / 4;

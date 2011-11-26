@@ -1,4 +1,4 @@
-package fr.umlv.yourobot;
+package fr.umlv.yourobot.elements;
 
 import java.awt.Graphics2D;
 import java.util.Objects;
@@ -8,9 +8,9 @@ import org.jbox2d.dynamics.BodyDef;
 import org.jbox2d.dynamics.FixtureDef;
 
 public abstract class Element {
-	protected BodyDef bodyDef;
-	protected FixtureDef fixtureDef;
-	protected Body body;
+	BodyDef bodyDef;
+	FixtureDef fixtureDef;
+	Body body;
 	
 	public abstract void draw(Graphics2D graphics);
 	

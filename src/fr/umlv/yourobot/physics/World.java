@@ -1,4 +1,4 @@
-package fr.umlv.yourobot;
+package fr.umlv.yourobot.physics;
 
 import java.awt.Graphics2D;
 import java.util.Objects;
@@ -12,42 +12,46 @@ import org.jbox2d.dynamics.Body;
 import org.jbox2d.dynamics.BodyDef;
 import org.jbox2d.dynamics.BodyType;
 import org.jbox2d.dynamics.FixtureDef;
-import org.jbox2d.dynamics.World;
 import org.jbox2d.dynamics.joints.Joint;
 import org.jbox2d.dynamics.joints.JointDef;
 
+import fr.umlv.yourobot.Main;
+import fr.umlv.yourobot.elements.BomberBonus;
+import fr.umlv.yourobot.elements.Bonus;
+import fr.umlv.yourobot.elements.Element;
+import fr.umlv.yourobot.elements.EndPoint;
+import fr.umlv.yourobot.elements.FakeRobot;
+import fr.umlv.yourobot.elements.FakeRobotBonus;
+import fr.umlv.yourobot.elements.IceWall;
+import fr.umlv.yourobot.elements.Robot;
+import fr.umlv.yourobot.elements.RobotIA;
+import fr.umlv.yourobot.elements.RobotPlayer;
+import fr.umlv.yourobot.elements.SnapBonus;
+import fr.umlv.yourobot.elements.StartPoint;
+import fr.umlv.yourobot.elements.StoneWall;
+import fr.umlv.yourobot.elements.Wall;
+import fr.umlv.yourobot.elements.WoodWall;
 import fr.umlv.zen.KeyboardKey;
 
-
-public class PhysicsWorld {
+public class World {
 	private static final int MAX_ELEMENT=200;
-	private static World world;
+	private static final org.jbox2d.dynamics.World world = new org.jbox2d.dynamics.World(new Vec2(0,0), true);
 	//LinkedBlockingDeque offer concurrent list and addFirst, addLast methods
-	private static LinkedBlockingDeque<Element> elementList;
-	private static LinkedBlockingDeque<Robot> robots;
-	boolean matrix[][];
-	private static Lock lock;
-	static RobotPlayer []robot;
+	private static final LinkedBlockingDeque<Element> elementList = new LinkedBlockingDeque<>(MAX_ELEMENT);
+	private static final LinkedBlockingDeque<Robot> robots = new LinkedBlockingDeque<>(MAX_ELEMENT);
+	private boolean matrix[][];
+	private final static Lock lock = new ReentrantLock();
+	//private static 
+	private static RobotPlayer []fr;
 
 
 	//TODO add level difficulty
-	public PhysicsWorld(int numberOfPlayer) {
+	public World(int numberOfPlayer) {
 		if(numberOfPlayer<=0 || numberOfPlayer>2) throw new IllegalArgumentException("Number of player need to at least 1 and not more than 2");
-		
-		if(lock==null) {
-			lock = new ReentrantLock();
-		}
 
 		//world must be create before adding element
-		world = new World(new Vec2(0,0), true);
-		world.setContinuousPhysics(true);
-		world.setContactListener(new PhysicsCollision());
-		if(elementList == null) {
-			elementList = new LinkedBlockingDeque<>(MAX_ELEMENT);
-		}
-		if(robots==null) {
-			robots = new LinkedBlockingDeque<>(MAX_ELEMENT);
-		}
+		//world.setContinuousPhysics(true);
+		world.setContactListener(new Collision());
 
 		//Need to create robot before IA to add detection for each RobotPlayer TODO change static position when generate world
 		generateWorldBounds();
@@ -56,13 +60,13 @@ public class PhysicsWorld {
 		//Generate Player
 		Random rand = new Random();
 		int x,y;
-		robot = new RobotPlayer[numberOfPlayer];
+		fr = new RobotPlayer[numberOfPlayer];
 		for(int i=0;i<numberOfPlayer;i++) {
 			//Try to start in the top left
 			x=rand.nextInt(150);
 			y=rand.nextInt(150);
-			robot[i] = (RobotPlayer)this.addElement(new RobotPlayer(new Vec2(x, y)));
-			robots.add(robot[i]);
+			fr[i] = (RobotPlayer)this.addElement(new RobotPlayer(new Vec2(x, y)));
+			robots.add(fr[i]);
 			//Add it start circle
 			this.addElement(new StartPoint(new Vec2(x, y)));
 		}
@@ -70,12 +74,12 @@ public class PhysicsWorld {
 		this.addElement(new EndPoint(new Vec2(Main.WIDTH-50, Main.HEIGHT-50)));
 
 		//Generate IA TODO calculate number of IA with the difficulty level
-		/*for(int i=0;i<4;i++) {
+		for(int i=0;i<4;i++) {
 			x=rand.nextInt(Main.WIDTH);
 			y=rand.nextInt(Main.HEIGHT);
 			RobotIA r = ((RobotIA)this.addElement(new RobotIA(new Vec2(x, y))));
 			r.start();
-		}*/
+		}
 
 		bonusManager();
 	}
@@ -83,32 +87,32 @@ public class PhysicsWorld {
 	public void setKey(KeyboardKey key) {
 		switch(key) {
 		case UP:
-			robot[0].throttle();
+			fr[0].throttle();
 			break;
 		case M:
-			robot[0].useBonus();
+			fr[0].useBonus();
 			break;
 		case LEFT:
-			robot[0].rotateLeft();
+			fr[0].rotateLeft();
 			break;
 		case RIGHT:
-			robot[0].rotateRight();
+			fr[0].rotateRight();
 			break;
 		case Z:
-			if(robot.length==1) break;
-			robot[1].throttle();
+			if(fr.length==1) break;
+			fr[1].throttle();
 			break;
 		case A:
-			if(robot.length==1) break;
-			robot[1].useBonus();
+			if(fr.length==1) break;
+			fr[1].useBonus();
 			break;
 		case Q:
-			if(robot.length==1) break;
-			robot[1].rotateLeft();
+			if(fr.length==1) break;
+			fr[1].rotateLeft();
 			break;
 		case D:
-			if(robot.length==1) break;
-			robot[1].rotateRight();
+			if(fr.length==1) break;
+			fr[1].rotateRight();
 			break;
 		}
 	}
@@ -197,7 +201,7 @@ public class PhysicsWorld {
 							if(matrix[(i+r1)%matrix.length][(j+r2)%matrix[0].length]) {
 								continue;
 							}
-							Vec2 v = new Vec2((float)((i+r1)%matrix.length) * Wall.WALL_WIDTH, (float)((j+r2)%matrix[0].length) * Wall.WALL_HEIGTH);
+							Vec2 v = new Vec2((float)((i+r1)%matrix.length) * Wall.WALL_SIZE, (float)((j+r2)%matrix[0].length) * Wall.WALL_SIZE);
 							final Bonus b;
 							int r = rand.nextInt(3);
 							switch(r) {
@@ -231,11 +235,11 @@ public class PhysicsWorld {
 	 */
 	private void generateWalls(int difficulty){
 		if(difficulty<0) throw new IllegalArgumentException("difficulty cannot be lower than 0");
-		int cellWidth = Main.WIDTH / Wall.WALL_WIDTH;
-		int cellHeight = Main.HEIGHT / Wall.WALL_HEIGTH;
+		int cellWidth = Main.WIDTH / Wall.WALL_SIZE;
+		int cellHeight = Main.HEIGHT / Wall.WALL_SIZE;
 		boolean matrix[][] =  new boolean[cellWidth][cellHeight];
 
-		int numberOfWalls = Main.WIDTH * Main.HEIGHT / (Wall.WALL_WIDTH * Wall.WALL_HEIGTH) / 20;
+		int numberOfWalls = Main.WIDTH * Main.HEIGHT / (Wall.WALL_SIZE * Wall.WALL_SIZE) / 20;
 		numberOfWalls = Math.round (numberOfWalls * (1 + (difficulty/10)));
 
 		Random rand = new Random();
@@ -244,7 +248,7 @@ public class PhysicsWorld {
 				if(rand.nextInt(matrix[0].length * matrix.length) < numberOfWalls) {
 
 					int r = rand.nextInt(3);
-					Vec2 v = new Vec2((i * Wall.WALL_WIDTH), (j * Wall.WALL_HEIGTH));
+					Vec2 v = new Vec2((i * Wall.WALL_SIZE), (j * Wall.WALL_SIZE));
 					switch(r) {
 					case 0 :
 						this.addElement(new IceWall(v));
@@ -285,13 +289,7 @@ public class PhysicsWorld {
 	public Element addElement(Element element) {
 		Objects.requireNonNull(element);
 		Body elementBody = null;
-		while (!lock.tryLock()) {
-			try {
-				Thread.sleep(10);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-		}
+		lock.lock();
 		try {
 			//createBody is already auto lock
 			elementBody = world.createBody(element.getBodyDef());
@@ -311,38 +309,32 @@ public class PhysicsWorld {
 		return element;
 	}
 
-	public static void addRobotToDetectableList(Robot robot) {
+	public static void addLeurre(FakeRobot fr) {
+		Objects.requireNonNull(fr);
+		//Is insert in top of the queue so he is the first robot to be detect
 		//Cannot call addElement because we are in a static method
-		//createBody is already auto lock
-		Body elementBody = null;
-		elementBody = world.createBody(robot.getBodyDef());
-		if(robot.getFixtureDef() != null)
-			elementBody.createFixture(robot.getFixtureDef());
-		elementBody.setType(robot.getBodyDef().type);		
-		robot.setBody(elementBody);
-		elementBody.setUserData(robot);
-		if(robot.getClass().getSuperclass() == Robot.class || robot.getClass().getSuperclass() == Wall.class)
-			elementList.addLast(robot);
-		else
-			elementList.addFirst(robot);
-		robots.addFirst(robot);
+		//createBody is already auto loc
+		lock.lock();
+		try {
+			Body elementBody = world.createBody(fr.getBodyDef());
+			elementBody.createFixture(fr.getFixtureDef());
+			elementBody.setType(fr.getBodyDef().type);		
+			fr.setBody(elementBody);
+			elementBody.setUserData(fr);
+			if(fr.getClass().getSuperclass() == Robot.class || fr.getClass().getSuperclass() == Wall.class)
+				elementList.addLast(fr);
+			else
+				elementList.addFirst(fr);
+			robots.addFirst(fr);
+		} finally {
+			lock.unlock();
+		}
 	}
 
-	public static void addLeurre(FakeRobot fr) {
-		//Is insert in top of the queue so he is the first robot to be detect
-		addRobotToDetectableList(fr);
-	}
-	
 	public static void removeBody(Element element) {
-		world.destroyBody(element.getBody());
-		while (!lock.tryLock()) {
-			try {
-				Thread.sleep(10);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-		}
+		lock.lock();
 		try {
+			world.destroyBody(element.getBody());
 			elementList.remove(element);
 		} finally {
 			lock.unlock();
@@ -350,16 +342,10 @@ public class PhysicsWorld {
 	}
 
 	public static void removeLeurre(FakeRobot fr) {
-		world.destroyBody(fr.getBody());
-		robots.remove(fr);
-		while (!lock.tryLock()) {
-			try {
-				Thread.sleep(10);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-		}
+		lock.lock();
 		try {
+			world.destroyBody(fr.getBody());
+			robots.remove(fr);
 			elementList.remove(fr);
 		} finally {
 			lock.unlock();
@@ -374,27 +360,36 @@ public class PhysicsWorld {
 		Objects.requireNonNull(raycastCallback);
 		Objects.requireNonNull(point1);
 		Objects.requireNonNull(point2);
-		world.raycast(raycastCallback, point1, point2);
+		lock.lock();
+		try {
+			world.raycast(raycastCallback, point1, point2);
+		} finally {
+			lock.unlock();
+		}
 	}
 
 	public static Joint addJoint(JointDef joint) {
 		Objects.requireNonNull(joint);
-		return world.createJoint(joint);
+		lock.lock();
+		try {
+			return world.createJoint(joint);
+		} finally {
+			lock.unlock();
+		}
 	}
 
 	public static void deleteJoint(Joint joint) {
 		Objects.requireNonNull(joint);
-		world.destroyJoint(joint);
+		lock.lock();
+		try {
+			world.destroyJoint(joint);
+		} finally {
+			lock.unlock();
+		}
 	}
 
 	public void updateWorld() {
-		while(!lock.tryLock()) {
-			try {
-				Thread.sleep(10);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-		}
+		lock.lock();
 		try {
 			world.step(1/30f, 15, 8);
 		} finally {

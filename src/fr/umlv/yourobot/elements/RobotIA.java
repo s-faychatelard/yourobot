@@ -1,8 +1,10 @@
-package fr.umlv.yourobot;
+package fr.umlv.yourobot.elements;
 
 import java.util.Random;
 
 import org.jbox2d.common.Vec2;
+
+import fr.umlv.yourobot.physics.RobotDetection;
 
 public class RobotIA extends Robot {
 	private Vec2 enemyPosition;
@@ -56,7 +58,7 @@ public class RobotIA extends Robot {
 					else {
 						jumpTo(enemyPosition);
 						try {
-							Thread.sleep(3000);
+							Thread.sleep(4000);
 						} catch (InterruptedException e) {
 							e.printStackTrace();
 						}

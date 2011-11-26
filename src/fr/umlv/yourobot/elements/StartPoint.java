@@ -1,4 +1,4 @@
-package fr.umlv.yourobot;
+package fr.umlv.yourobot.elements;
 
 import java.awt.Graphics2D;
 import java.awt.Image;

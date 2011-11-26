@@ -1,4 +1,4 @@
-package fr.umlv.yourobot;
+package fr.umlv.yourobot.elements;
 
 import java.awt.Graphics2D;
 import java.util.Objects;
@@ -9,9 +9,10 @@ import org.jbox2d.dynamics.BodyDef;
 import org.jbox2d.dynamics.BodyType;
 import org.jbox2d.dynamics.FixtureDef;
 
+import fr.umlv.yourobot.utils.ImageFactory;
+
 public abstract class Wall extends Element {
-	final static int WALL_WIDTH = 50;
-	final static int WALL_HEIGTH = WALL_WIDTH;
+	public final static int WALL_SIZE = 50;
 	private int life = 100;
 
 
@@ -22,7 +23,7 @@ public abstract class Wall extends Element {
 		bodyDef.type = BodyType.STATIC;
 		bodyDef.position = Objects.requireNonNull(position);
 		blockShape = new PolygonShape();
-		blockShape.setAsBox(WALL_WIDTH/2, WALL_HEIGTH/2);
+		blockShape.setAsBox(WALL_SIZE/2, WALL_SIZE/2);
 		fixtureDef = new FixtureDef();
 		fixtureDef.shape = blockShape;
 		fixtureDef.density = 0.f;
@@ -38,7 +39,7 @@ public abstract class Wall extends Element {
 	@Override
 	public void draw(Graphics2D graphics) {
 		Vec2 p = this.body.getPosition();
-	    graphics.drawImage(ImageFactory.getImage(getImagePath()), (int)p.x , (int)p.y, WALL_WIDTH, WALL_HEIGTH, null);
+	    graphics.drawImage(ImageFactory.getImage(getImagePath()), (int)p.x , (int)p.y, WALL_SIZE, WALL_SIZE, null);
 	}
 	
 	public int getLife() {

@@ -1,4 +1,4 @@
-package fr.umlv.yourobot;
+package fr.umlv.yourobot.physics;
 
 import java.util.Random;
 
@@ -8,7 +8,12 @@ import org.jbox2d.collision.Manifold;
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.contacts.Contact;
 
-public class PhysicsCollision implements ContactListener {
+import fr.umlv.yourobot.elements.Bonus;
+import fr.umlv.yourobot.elements.EndPoint;
+import fr.umlv.yourobot.elements.RobotIA;
+import fr.umlv.yourobot.elements.RobotPlayer;
+
+public class Collision implements ContactListener {
 
 	private final static Random rand = new Random();
 
@@ -44,6 +49,7 @@ public class PhysicsCollision implements ContactListener {
 		}
 		//End WIN
 
+		//RobotPlayer collide by RobotIA
 		if(contact.getFixtureA().getBody().getUserData() instanceof RobotPlayer && contact.getFixtureB().getBody().getUserData() instanceof RobotIA) {
 			RobotPlayer robotPlayer = (RobotPlayer)contact.getFixtureA().getBody().getUserData();
 			RobotIA robotIA = (RobotIA)contact.getFixtureB().getBody().getUserData();
@@ -55,6 +61,8 @@ public class PhysicsCollision implements ContactListener {
 			System.out.println("Life decrease : " + (robotPlayer.getLife()-hypo/2));
 			robotPlayer.setLife((int)(robotPlayer.getLife()-hypo/2));
 		}
+		//End RobotPlayer collide by RobotIA
+		//RobotIA collide something turn it
 		if(contact.getFixtureA().getBody().getUserData() instanceof RobotIA) {
 			RobotIA robotIA = (RobotIA)contact.getFixtureA().getBody().getUserData();
 			if(rand.nextBoolean())
@@ -71,6 +79,7 @@ public class PhysicsCollision implements ContactListener {
 				robotIA.rotate(-rand.nextInt(180));
 			robotIA.jumpTo(null);
 		}
+		//End RobotIA collide something turn it
 	}
 
 	@Override
@@ -91,7 +100,7 @@ public class PhysicsCollision implements ContactListener {
 			contact.setEnabled(false);
 			return;
 		}
-		//RobotPlayer take Bonus
+		//End RobotPlayer take Bonus
 		if((contact.getFixtureA().getBody().getUserData() instanceof EndPoint && contact.getFixtureB().getBody().getUserData() instanceof RobotIA) ||
 				(contact.getFixtureB().getBody().getUserData() instanceof EndPoint && contact.getFixtureA().getBody().getUserData() instanceof RobotIA)) {
 			//RobotIA can pass over the endPoint

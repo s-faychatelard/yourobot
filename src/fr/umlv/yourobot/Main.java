@@ -5,6 +5,7 @@ import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Toolkit;
 
+import fr.umlv.yourobot.physics.World;
 import fr.umlv.zen.Application;
 import fr.umlv.zen.ApplicationCode;
 import fr.umlv.zen.ApplicationContext;
@@ -21,7 +22,7 @@ public class Main {
 			@Override
 			public void run(final ApplicationContext context) {
 				//Create world (walls, robots, players, start, finish)
-				final PhysicsWorld world = new PhysicsWorld(2);
+				final World world = new World(2);
 				//Load background textures
 				ground = Toolkit.getDefaultToolkit().getImage("ground.jpg");
 

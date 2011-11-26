@@ -1,4 +1,4 @@
-package fr.umlv.yourobot;
+package fr.umlv.yourobot.elements;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -11,8 +11,10 @@ import org.jbox2d.dynamics.BodyDef;
 import org.jbox2d.dynamics.BodyType;
 import org.jbox2d.dynamics.FixtureDef;
 
+import fr.umlv.yourobot.utils.ImageFactory;
+
 public abstract class Robot extends Element {
-	public final static int INITIAL_SPEED = 5;
+	final static int INITIAL_SPEED = 5;
 	private final static int ROBOT_SIZE = 40;
 	private CircleShape blockShape;
 	private int life;
