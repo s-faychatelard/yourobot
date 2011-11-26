@@ -14,9 +14,8 @@ public class ImageFactory {
 		Objects.requireNonNull(path);
 		Image image = imagePool.get(path);
 		if (image == null) {
-			//TODO manage case if image does not exist
 			image = Toolkit.getDefaultToolkit().getImage(path);
-			imagePool.put(path, image);
+			imagePool.put(path, Objects.requireNonNull(image));
 		}
 		return image;
 	}

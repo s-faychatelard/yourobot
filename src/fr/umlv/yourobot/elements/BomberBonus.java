@@ -1,6 +1,7 @@
 package fr.umlv.yourobot.elements;
 
 import java.util.LinkedList;
+import java.util.Random;
 
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.BodyType;
@@ -9,10 +10,29 @@ import fr.umlv.yourobot.physics.World;
 
 public class BomberBonus extends Bonus {
 	private static final String imagePath = "bomberBonus.png";
+	private final WallType wallType;
+
+	private enum WallType {
+		ICE,
+		WOOD,
+		STONE
+	}
 
 	public BomberBonus(Vec2 position) {
 		//Null is test by super
 		super(position);
+		Random rand = new Random();
+		switch(rand.nextInt(4)) {
+		case 0:
+			wallType=WallType.ICE;
+			break;
+		case 1:
+			wallType=WallType.WOOD;
+			break;
+		default:
+			wallType=WallType.STONE;
+			break;
+		}
 	}
 
 	@Override
@@ -24,7 +44,7 @@ public class BomberBonus extends Bonus {
 	public void execute(RobotPlayer robot) {
 		LinkedList<Element> elements = World.getAllElement();
 		for(Element element : elements) {
-			if((element instanceof RobotPlayer) || (element instanceof EndPoint)) continue;
+			if((element instanceof RobotPlayer) || (element instanceof StartPoint) || (element instanceof EndPoint)) continue;
 			//Get the distance from the robot to the element
 			Vec2 pos = new Vec2(robot.getBody().getPosition());
 			int x = (int)robot.getBody().getPosition().x - (int)element.getBody().getPosition().x;
@@ -36,8 +56,14 @@ public class BomberBonus extends Bonus {
 			double coeffForce = QUARTER_DIAGONAL/distance;
 
 			Vec2 force = pos.sub(element.getBody().getPosition()).negate();
-			//TODO change coeffForce for wall type
-			double coeffWallForce = 10000*coeffForce;
+			int wallCoeff=5000;
+			if((element instanceof IceWall) && wallType == WallType.ICE)
+				wallCoeff=10000;
+			else if((element instanceof WoodWall) && wallType == WallType.WOOD)
+				wallCoeff=10000;
+			else if((element instanceof StoneWall) && wallType == WallType.STONE)
+				wallCoeff=10000;
+			double coeffWallForce = wallCoeff*coeffForce;
 
 			final BodyType oldType = element.getBody().getType();
 			element.getBody().setType(BodyType.DYNAMIC);	

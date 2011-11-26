@@ -2,6 +2,7 @@ package fr.umlv.yourobot.elements;
 
 import java.util.LinkedList;
 import java.util.Objects;
+import java.util.Random;
 
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.BodyType;
@@ -43,8 +44,9 @@ public class SnapBonus extends Bonus {
 					element.getBody().setType(BodyType.DYNAMIC);
 					djd.initialize(robot.getBody(), element.getBody(), new Vec2(100,100), new Vec2(100,100));
 					Joint j = World.addJoint(djd);
+					Random rand = new Random();
 					try {
-						Thread.sleep(6000);
+						Thread.sleep(rand.nextInt(6000));
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}
