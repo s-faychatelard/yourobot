@@ -1,23 +1,20 @@
 package fr.umlv.yourobot.elements;
 
 import java.awt.Graphics2D;
-import java.awt.Image;
-import java.awt.Toolkit;
 import java.util.Objects;
 
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.BodyDef;
 import org.jbox2d.dynamics.BodyType;
 
+import fr.umlv.yourobot.utils.ImageFactory;
+
 public class StartPoint extends Element {
 	
-	final static int STARTPOINT_WIDTH = 50;
-	final static int STARTPOINT_HEIGTH = STARTPOINT_WIDTH;
-	private static Image image;
+	private final static int STARTPOINT_SIZE = 50;
+	private static final String imagePath = "startPoint.png";
 	
-	public StartPoint(Vec2 position) {	
-		if(image == null)
-			image = Toolkit.getDefaultToolkit().getImage("startPoint.png");
+	public StartPoint(Vec2 position) {
 			
 		//PolygonShape blockShape;
 		bodyDef = new BodyDef();
@@ -32,6 +29,6 @@ public class StartPoint extends Element {
 	@Override
 	public void draw(Graphics2D graphics) {
 		Vec2 p = this.body.getPosition();
-	    graphics.drawImage(image, (int)p.x , (int)p.y, STARTPOINT_WIDTH, STARTPOINT_HEIGTH, null);
+	    graphics.drawImage(ImageFactory.getImage(imagePath), (int)p.x , (int)p.y, STARTPOINT_SIZE, STARTPOINT_SIZE, null);
 	}
 }

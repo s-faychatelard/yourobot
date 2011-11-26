@@ -13,7 +13,7 @@ import fr.umlv.yourobot.utils.ImageFactory;
 
 public class EndPoint extends Element {
 	
-	private final static int ENDPOINT_RADIUS = 40/2;
+	private static final int ENDPOINT_RADIUS = 40/2;
 	private static final String imagePath = "endPoint.png";
 	
 	public EndPoint(Vec2 position) {
@@ -26,7 +26,6 @@ public class EndPoint extends Element {
 		
 		blockShape = new CircleShape();
 		blockShape.m_radius = ENDPOINT_RADIUS;
-		//blockShape.setAsBox(ENDPOINT_WIDTH/2, ENDPOINT_HEIGTH/2);
 
 		fixtureDef = new FixtureDef();
 		fixtureDef.shape = blockShape;

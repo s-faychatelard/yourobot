@@ -1,6 +1,6 @@
 package fr.umlv.yourobot.elements;
 
-import java.util.concurrent.LinkedBlockingDeque;
+import java.util.LinkedList;
 
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.BodyType;
@@ -8,7 +8,7 @@ import org.jbox2d.dynamics.BodyType;
 import fr.umlv.yourobot.physics.World;
 
 public class BomberBonus extends Bonus {
-	private final String imagePath = "bomberBonus.png";
+	private static final String imagePath = "bomberBonus.png";
 
 	public BomberBonus(Vec2 position) {
 		//Null is test by super
@@ -22,7 +22,7 @@ public class BomberBonus extends Bonus {
 
 	@Override
 	public void execute(RobotPlayer robot) {
-		LinkedBlockingDeque<Element> elements = World.getAllElement();
+		LinkedList<Element> elements = World.getAllElement();
 		for(Element element : elements) {
 			if((element instanceof RobotPlayer) || (element instanceof EndPoint)) continue;
 			//Get the distance from the robot to the element
@@ -32,13 +32,14 @@ public class BomberBonus extends Bonus {
 			double distance = Math.sqrt(x*x + y*y);
 			if(distance>QUARTER_DIAGONAL) continue;
 
-			//Calculate the coefficiant force (more if the element is near the robot)
+			//Calculate the coefficient force (more if the element is near the robot)
 			double coeffForce = QUARTER_DIAGONAL/distance;
 
 			Vec2 force = pos.sub(element.getBody().getPosition()).negate();
 			//TODO change coeffForce for wall type
 			double coeffWallForce = 10000*coeffForce;
 
+			final BodyType oldType = element.getBody().getType();
 			element.getBody().setType(BodyType.DYNAMIC);	
 			element.getBody().setLinearDamping(.8f);
 			element.getBody().setAwake(true);
@@ -55,7 +56,7 @@ public class BomberBonus extends Bonus {
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}
-					element.getBody().setType(BodyType.STATIC);
+					element.getBody().setType(oldType);
 				}
 			}).start();
 		}

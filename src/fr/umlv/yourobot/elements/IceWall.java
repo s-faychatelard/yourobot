@@ -4,7 +4,7 @@ import org.jbox2d.common.Vec2;
 
 public class IceWall extends Wall {
 	
-	private final String imagePath = "IceWall.jpg";
+	private static final String imagePath = "IceWall.jpg";
 
 	
 	public IceWall(Vec2 position) {
@@ -35,6 +35,6 @@ public class IceWall extends Wall {
 
 	@Override
 	String getImagePath() {
-		return this.imagePath;
+		return imagePath;
 	}
 }

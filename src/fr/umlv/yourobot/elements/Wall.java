@@ -15,7 +15,6 @@ public abstract class Wall extends Element {
 	public final static int WALL_SIZE = 50;
 	private int life = 100;
 
-
 	public Wall(Vec2 position) {	
 		PolygonShape blockShape;
 

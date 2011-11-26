@@ -1,7 +1,7 @@
 package fr.umlv.yourobot.elements;
 
+import java.util.LinkedList;
 import java.util.Objects;
-import java.util.concurrent.LinkedBlockingDeque;
 
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.BodyType;
@@ -12,7 +12,7 @@ import fr.umlv.yourobot.physics.World;
 
 public class SnapBonus extends Bonus {
 
-	private final String imagePath = "snapBonus.png";
+	private static final String imagePath = "snapBonus.png";
 
 	public SnapBonus(Vec2 position) {
 		//Null is test by super
@@ -27,7 +27,7 @@ public class SnapBonus extends Bonus {
 	@Override
 	public void execute(final RobotPlayer robot) {
 		Objects.requireNonNull(robot);
-		LinkedBlockingDeque<Element> elements = World.getAllElement();
+		LinkedList<Element> elements = World.getAllElement();
 		for(final Element element : elements) {
 			if(element instanceof EndPoint || element instanceof StartPoint || element instanceof RobotIA || element instanceof Bonus || element instanceof FakeRobot) continue;
 			//Get the distance from the robot to the element

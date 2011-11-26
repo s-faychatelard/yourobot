@@ -6,7 +6,7 @@ import fr.umlv.yourobot.physics.World;
 
 public class FakeRobotBonus extends Bonus {
 	
-	private final String imagePath = "fakeRobotBonus.png";
+	private static final String imagePath = "fakeRobotBonus.png";
 
 	public FakeRobotBonus(Vec2 position) {
 		//Null is test by super
