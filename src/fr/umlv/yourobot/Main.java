@@ -8,6 +8,7 @@ import java.awt.RenderingHints;
 import java.awt.Toolkit;
 
 import fr.umlv.yourobot.physics.World;
+import fr.umlv.yourobot.utils.ImageFactory;
 import fr.umlv.zen.Application;
 import fr.umlv.zen.ApplicationCode;
 import fr.umlv.zen.ApplicationContext;
@@ -19,9 +20,13 @@ public class Main {
 	public static final int WIDTH = 800;
 	public static final int HEIGHT = 600;
 	private static GameState gameState = GameState.MENU;
+	private static MenuState menuState = MenuState.ONE_PLAYER;
+
 	private static Image ground;
 	private static World world;
 	private static int level=1;
+	private static int numberOfPlayers=1;
+
 
 	public enum GameState {
 		PLAY,
@@ -32,6 +37,11 @@ public class Main {
 		LOSE
 	}
 
+	private enum MenuState {
+		ONE_PLAYER,
+		TWO_PLAYERS,
+	}
+	
 	public static void main(String[] args) {
 		Application.run("YRobot", Main.WIDTH, Main.HEIGHT, new ApplicationCode() {
 			@Override
@@ -67,10 +77,7 @@ public class Main {
 					case QUIT:
 						return;
 					case MENU:
-						System.out.println("MENU");
-						if(event != null && event.getKey() == KeyboardKey.P) {
-							generateWorld(level);
-						}
+							displayMenu(context, event);
 						break;
 					case WIN:
 						System.out.println("YOU WIN LEVEL UP");
@@ -91,7 +98,7 @@ public class Main {
 							}
 						});
 						if(event != null && event.getKey() == KeyboardKey.C) {
-							generateWorld(++level);
+							generateWorld(numberOfPlayers, ++level);
 						} else if(event != null && event.getKey() == KeyboardKey.Q) {
 							gameState = GameState.QUIT;
 						}
@@ -115,7 +122,7 @@ public class Main {
 							}
 						});
 						if(event != null && event.getKey() == KeyboardKey.R) {
-							generateWorld(level);
+							generateWorld(numberOfPlayers, level);
 						} else if(event != null && event.getKey() == KeyboardKey.Q) {
 							gameState = GameState.QUIT;
 						}
@@ -134,9 +141,9 @@ public class Main {
 		gameState = GameState.LOSE;
 	}
 	
-	private static void generateWorld(int level) {
+	private static void generateWorld(int numberOfPlayers, int level) {
 		//Create world (walls, robots, players, start, finish)
-		world = new World(1,level);
+		world = new World(numberOfPlayers,level);
 		//Load background textures
 		ground = Toolkit.getDefaultToolkit().getImage("ground.jpg");
 		//Start game
@@ -163,6 +170,66 @@ public class Main {
 			Thread.sleep(20);
 		} catch (InterruptedException e) {
 			gameState = GameState.QUIT;
+		}
+	}
+	
+	/**
+	 * Make sleep the current thread for 150ms
+	 * Calling it into render method call allow to avoid useless CPU utilisation
+	 */
+	private static void sleep() {
+		try {Thread.sleep(150);} catch (InterruptedException e) {}
+	}
+	
+	
+	/**
+	 * Make sleep the current thread for 150ms
+	 * Calling it into render method call allow to avoid useless CPU utilisation
+	 */
+	private static void displayMenu(ApplicationContext context, KeyboardEvent event) {
+		context.render(new ApplicationRenderCode() {
+			@Override
+			public void render(Graphics2D graphics) {
+				graphics.setBackground(Color.WHITE);
+				graphics.fillRect(0, 0, Main.WIDTH, Main.HEIGHT);
+				graphics.drawImage(ImageFactory.getImage("menu.png"), (Main.WIDTH - 500)/2, (Main.HEIGHT - 400)/2, 500, 400, null);
+
+				System.out.println(menuState);
+				
+				graphics.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+				graphics.setFont(new Font("Roman", Font.ROMAN_BASELINE | Font.BOLD, 30));
+				graphics.setColor(Color.BLACK);
+				
+				if(menuState == MenuState.ONE_PLAYER)
+					graphics.setColor(Color.BLACK);
+				else 
+					graphics.setColor(Color.GRAY);
+				
+				graphics.drawString(" 1 player", Main.WIDTH/2 - 70, Main.HEIGHT/2 - 50);
+				
+				if(menuState == MenuState.TWO_PLAYERS)
+					graphics.setColor(Color.BLACK);
+				else 
+					graphics.setColor(Color.GRAY);
+				graphics.drawString("2 players", Main.WIDTH/2 - 70, Main.HEIGHT/2);
+				
+
+			}
+		});
+		sleep();
+		if(event != null) 
+		if(event.getKey() == KeyboardKey.UP || event.getKey() == KeyboardKey.DOWN) {
+			if(menuState == MenuState.ONE_PLAYER) {
+				menuState = MenuState.TWO_PLAYERS;
+				numberOfPlayers = 2;
+			}
+			else {
+				menuState = MenuState.ONE_PLAYER;
+				numberOfPlayers = 1;
+			}
+		}
+		else if(event.getKey() == KeyboardKey.SPACE) {
+			generateWorld(numberOfPlayers, level);
 		}
 	}
 }
