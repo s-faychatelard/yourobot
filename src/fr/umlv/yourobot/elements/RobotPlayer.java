@@ -21,16 +21,16 @@ public class RobotPlayer extends Robot {
 	public void takeBonus(Bonus bonus) {
 		if(this.bonus.contains(bonus)) return;
 		World.removeBody(bonus);
-		this.bonus.add(bonus);
+		this.bonus.push(bonus);
 		bonus.setTaken();
 	}
 
 	public void useBonus() {
 		if(this.getLife()<=0) return;
-		System.out.println(bonus.size());
+		if(currentExecuteBonus!=null) return;
 		if(bonus.size()<=0) return;
-		Bonus b = bonus.poll();
-		b.execute(this);
+		currentExecuteBonus = bonus.pop();
+		currentExecuteBonus.execute(this);
 	}
 
 	@Override

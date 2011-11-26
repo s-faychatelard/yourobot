@@ -88,7 +88,7 @@ public class World {
 			}
 			matrix[(x+j)%matrix.length][(y+k)%matrix[0].length] = true;
 			RobotIA r = ((RobotIA)this.addElement(new RobotIA(new Vec2(((x+j)%matrix.length)*CELL_SIZE, ((y+k)%matrix[0].length)*CELL_SIZE))));
-			robotIA.add(r);
+			robotsIA.add(r);
 		}
 	}
 

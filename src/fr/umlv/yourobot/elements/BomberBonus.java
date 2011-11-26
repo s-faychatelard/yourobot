@@ -1,5 +1,6 @@
 package fr.umlv.yourobot.elements;
 
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.Objects;
 import java.util.Random;
@@ -11,9 +12,11 @@ import fr.umlv.yourobot.physics.World;
 
 public class BomberBonus extends Bonus {
 	private static final String imagePath = "bomberBonus.png";
-	private Vec2 lastPosition;
+	private static final int executionTime = 2500;
+	private Date date;
+	private long startTime;
 	private final WallType wallType;
-	private LinkedList<BomberElement> elements;
+	private LinkedList<BomberElement> bomberElements;
 
 	private enum WallType {
 		ICE,
@@ -57,6 +60,9 @@ public class BomberBonus extends Bonus {
 	public void execute(RobotPlayer robot) {
 		Objects.requireNonNull(robot);
 		LinkedList<Element> elements = World.getAllElement();
+		bomberElements = new LinkedList<>();
+		date = new Date();
+		startTime = date.getTime();
 		for(Element element : elements) {
 			if((element instanceof RobotPlayer) || (element instanceof StartPoint) || (element instanceof EndPoint)) continue;
 			//Get the distance from the robot to the element
@@ -82,23 +88,24 @@ public class BomberBonus extends Bonus {
 			BomberElement bomberElement = new BomberElement();
 			bomberElement.element = element;
 			bomberElement.oldBodyType = element.getBody().getType();
-			lastPosition = element.getBody().getPosition();
 			element.getBody().setType(BodyType.DYNAMIC);	
 			element.getBody().setLinearDamping(.8f);
 			element.getBody().setAwake(true);
 			element.getBody().applyForce(new Vec2((int)(force.x*coeffWallForce),(int)(force.y*coeffWallForce)), element.getBody().getPosition());
+			bomberElements.add(bomberElement);
 		}
 	}
 	
 	@Override
 	public Bonus update() {
-		for(BomberElement bomberElement : elements) {
-			if(bomberElement.element.getBody().getPosition().x == lastPosition.x && bomberElement.element.getBody().getPosition().y == lastPosition.y) {
-				bomberElement.element.getBody().setType(bomberElement.oldBodyType);
-				elements.remove(bomberElement);
-			}
-		}
-		if(elements.size()>0) return this;
+		date = new Date();
+		long time = date.getTime();
+		System.out.println(time + " " + startTime + " " + executionTime);
+		if(time<startTime+executionTime) return this;
+		for(BomberElement bomberElement : bomberElements)
+			bomberElement.element.getBody().setType(bomberElement.oldBodyType);
+		bomberElements.clear();
+		System.out.println("NULL");
 		return null;
 	}
 }

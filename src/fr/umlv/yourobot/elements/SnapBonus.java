@@ -18,7 +18,7 @@ public class SnapBonus extends Bonus {
 	private final int executionTime;
 	private Date date;
 	private long startTime;
-	private LinkedList<SnapElement> elements;
+	private LinkedList<SnapElement> snapElements;
 	
 	private static class SnapElement {
 		Element element;
@@ -49,7 +49,7 @@ public class SnapBonus extends Bonus {
 		date = new Date();
 		startTime = date.getTime();
 		LinkedList<Element> elements = World.getAllElement();
-		elements = new LinkedList<>();
+		snapElements = new LinkedList<>();
 		for(final Element element : elements) {
 			if(element instanceof EndPoint || element instanceof StartPoint || element instanceof RobotIA || element instanceof Bonus || element instanceof FakeRobot) continue;
 			//Get the distance from the robot to the element
@@ -65,7 +65,7 @@ public class SnapBonus extends Bonus {
 			element.getBody().setType(BodyType.DYNAMIC);
 			djd.initialize(robot.getBody(), element.getBody(), new Vec2(100,100), new Vec2(100,100));
 			snapElement.joint = World.addJoint(djd);
-			elements.add(element);
+			snapElements.add(snapElement);
 		}
 	}
 	
@@ -73,11 +73,12 @@ public class SnapBonus extends Bonus {
 	public Bonus update() {
 		date = new Date();
 		long time = date.getTime();
-		if(time>startTime+executionTime) return this;
-		for(SnapElement snapElement : elements) {
+		if(time<startTime+executionTime) return this;
+		for(SnapElement snapElement : snapElements) {
 			World.deleteJoint(snapElement.joint);
 			snapElement.element.getBody().setType(snapElement.oldBodyType);
 		}
+		snapElements.clear();
 		return null;
 	}
 }
