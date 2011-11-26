@@ -25,6 +25,8 @@ public class Main {
 	private static Image ground;
 	private static World world;
 	private static int level=1;
+	private static int numberOfPlayers=1;
+
 
 	public enum GameState {
 		PLAY,
@@ -96,7 +98,7 @@ public class Main {
 							}
 						});
 						if(event != null && event.getKey() == KeyboardKey.C) {
-							generateWorld(++level);
+							generateWorld(numberOfPlayers, ++level);
 						} else if(event != null && event.getKey() == KeyboardKey.Q) {
 							gameState = GameState.QUIT;
 						}
@@ -120,7 +122,7 @@ public class Main {
 							}
 						});
 						if(event != null && event.getKey() == KeyboardKey.R) {
-							generateWorld(level);
+							generateWorld(numberOfPlayers, level);
 						} else if(event != null && event.getKey() == KeyboardKey.Q) {
 							gameState = GameState.QUIT;
 						}
@@ -139,9 +141,9 @@ public class Main {
 		gameState = GameState.LOSE;
 	}
 	
-	private static void generateWorld(int level) {
+	private static void generateWorld(int numberOfPlayers, int level) {
 		//Create world (walls, robots, players, start, finish)
-		world = new World(1,level);
+		world = new World(numberOfPlayers,level);
 		//Load background textures
 		ground = Toolkit.getDefaultToolkit().getImage("ground.jpg");
 		//Start game
@@ -194,22 +196,40 @@ public class Main {
 
 				System.out.println(menuState);
 				
-				switch(menuState) {
-					case ONE_PLAYER:
-						graphics.drawString("2 joueurs", Main.WIDTH/2, Main.HEIGHT/2);
-					break;
-					case TWO_PLAYERS:
-						graphics.drawString("1 joueurs", 100, 100);
-					break;
-				}
+				graphics.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+				graphics.setFont(new Font("Roman", Font.ROMAN_BASELINE | Font.BOLD, 30));
+				graphics.setColor(Color.BLACK);
+				
+				if(menuState == MenuState.ONE_PLAYER)
+					graphics.setColor(Color.BLACK);
+				else 
+					graphics.setColor(Color.GRAY);
+				
+				graphics.drawString(" 1 player", Main.WIDTH/2 - 70, Main.HEIGHT/2 - 50);
+				
+				if(menuState == MenuState.TWO_PLAYERS)
+					graphics.setColor(Color.BLACK);
+				else 
+					graphics.setColor(Color.GRAY);
+				graphics.drawString("2 players", Main.WIDTH/2 - 70, Main.HEIGHT/2);
+				
+
 			}
 		});
 		sleep();
-		if(event != null && (event.getKey() == KeyboardKey.UP || event.getKey() == KeyboardKey.DOWN)) {
-			if(menuState == MenuState.ONE_PLAYER)
+		if(event != null) 
+		if(event.getKey() == KeyboardKey.UP || event.getKey() == KeyboardKey.DOWN) {
+			if(menuState == MenuState.ONE_PLAYER) {
 				menuState = MenuState.TWO_PLAYERS;
-			else 
+				numberOfPlayers = 2;
+			}
+			else {
 				menuState = MenuState.ONE_PLAYER;
+				numberOfPlayers = 1;
+			}
+		}
+		else if(event.getKey() == KeyboardKey.SPACE) {
+			generateWorld(numberOfPlayers, level);
 		}
 	}
 }
