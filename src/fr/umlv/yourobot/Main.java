@@ -1,3 +1,18 @@
+/**
+ * ESIPE Project - IR2 2011/2012 - Advanced Java
+ * Copyright (C) 2011 ESIPE - Universite Paris-Est Marne-la-Vallee 
+ *
+ * This is a free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 3 of the License, or (at your option) any later version.
+ * 
+ * Please see : http://www.gnu.org/licenses/gpl.html
+ * 
+ * @author Damien Jubeau <djubeau@etudiant.univ-mlv.fr>
+ * @author Sylvain Fay-Chatelard <sfaychat@etudiant.univ-mlv.fr>
+ * @version 1.0
+ */
 package fr.umlv.yourobot;
 
 import java.awt.Color;
@@ -19,8 +34,9 @@ import fr.umlv.zen.KeyboardKey;
 public class Main {
 	public static final int WIDTH = 800;
 	public static final int HEIGHT = 600;
+	private static final int MAX_OF_PLAYERS=2;
+
 	private static GameState gameState = GameState.MENU;
-	private static MenuState menuState = MenuState.ONE_PLAYER;
 
 	private static Image ground;
 	private static World world;
@@ -35,11 +51,6 @@ public class Main {
 		MENU,
 		WIN,
 		LOSE
-	}
-
-	private enum MenuState {
-		ONE_PLAYER,
-		TWO_PLAYERS,
 	}
 	
 	public static void main(String[] args) {
@@ -62,10 +73,10 @@ public class Main {
 							public void render(Graphics2D graphics) {
 								graphics.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 								graphics.setColor(Color.BLACK);
-								graphics.setFont(new Font("Roman", Font.ROMAN_BASELINE | Font.BOLD, 72));
+								graphics.setFont(new Font("Verdana", Font.ROMAN_BASELINE | Font.BOLD, 72));
 								graphics.drawString("PAUSE", Main.WIDTH/2+2-125, Main.HEIGHT/2+2);
 								graphics.setColor(Color.WHITE);
-								graphics.setFont(new Font("Roman", Font.ROMAN_BASELINE | Font.BOLD, 72));
+								graphics.setFont(new Font("Verdana", Font.ROMAN_BASELINE | Font.BOLD, 72));
 								graphics.drawString("PAUSE", Main.WIDTH/2-125, Main.HEIGHT/2);
 								sleep();
 							}
@@ -77,16 +88,15 @@ public class Main {
 							displayMenu(context, event);
 						break;
 					case WIN:
-						System.out.println("YOU WIN LEVEL UP");
 						context.render(new ApplicationRenderCode() {
 							@Override
 							public void render(Graphics2D graphics) {
 								graphics.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 								graphics.setColor(Color.BLACK);
-								graphics.setFont(new Font("Roman", Font.ROMAN_BASELINE | Font.BOLD, 72));
+								graphics.setFont(new Font("Verdana", Font.ROMAN_BASELINE | Font.BOLD, 72));
 								graphics.drawString("You WIN", Main.WIDTH/2+2-125, Main.HEIGHT/2+2);
 								graphics.setColor(Color.WHITE);
-								graphics.setFont(new Font("Roman", Font.ROMAN_BASELINE | Font.BOLD, 72));
+								graphics.setFont(new Font("Verdana", Font.ROMAN_BASELINE | Font.BOLD, 72));
 								graphics.drawString("You WIN", Main.WIDTH/2-125, Main.HEIGHT/2);
 								sleep();
 							}
@@ -98,16 +108,15 @@ public class Main {
 						}
 						break;
 					case LOSE:
-						System.out.println("YOU LOSE QUIT GAME OR RETRY");
 						context.render(new ApplicationRenderCode() {
 							@Override
 							public void render(Graphics2D graphics) {
 								graphics.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 								graphics.setColor(Color.BLACK);
-								graphics.setFont(new Font("Roman", Font.ROMAN_BASELINE | Font.BOLD, 72));
+								graphics.setFont(new Font("Verdana", Font.ROMAN_BASELINE | Font.BOLD, 72));
 								graphics.drawString("GAME OVER", Main.WIDTH/2+2-125, Main.HEIGHT/2+2);
 								graphics.setColor(Color.WHITE);
-								graphics.setFont(new Font("Roman", Font.ROMAN_BASELINE | Font.BOLD, 72));
+								graphics.setFont(new Font("Verdana", Font.ROMAN_BASELINE | Font.BOLD, 72));
 								graphics.drawString("GAME OVER", Main.WIDTH/2-125, Main.HEIGHT/2);
 								sleep();
 							}
@@ -174,6 +183,14 @@ public class Main {
 	}
 
 	private static void displayMenu(ApplicationContext context, KeyboardEvent event) {
+		
+		if(event != null) {
+			if(event.getKey() == KeyboardKey.UP || event.getKey() == KeyboardKey.DOWN) 
+				numberOfPlayers = (numberOfPlayers % MAX_OF_PLAYERS) + 1;
+			else if(event.getKey() == KeyboardKey.SPACE) 
+				generateWorld(numberOfPlayers, level);
+		}
+		
 		context.render(new ApplicationRenderCode() {
 			@Override
 			public void render(Graphics2D graphics) {
@@ -181,42 +198,27 @@ public class Main {
 				graphics.fillRect(0, 0, Main.WIDTH, Main.HEIGHT);
 				graphics.drawImage(ImageFactory.getImage("menu.png"), (Main.WIDTH - 500)/2, (Main.HEIGHT - 400)/2, 500, 400, null);
 
-				System.out.println(menuState);
 				
 				graphics.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-				graphics.setFont(new Font("Roman", Font.ROMAN_BASELINE | Font.BOLD, 30));
-				graphics.setColor(Color.BLACK);
+				graphics.setFont(new Font("Verdana", Font.ROMAN_BASELINE | Font.BOLD, 30));
 				
-				if(menuState == MenuState.ONE_PLAYER)
+				graphics.setColor(Color.GRAY);
+				if(numberOfPlayers == 1)
 					graphics.setColor(Color.BLACK);
-				else 
-					graphics.setColor(Color.GRAY);
 				
-				graphics.drawString(" 1 player", Main.WIDTH/2 - 70, Main.HEIGHT/2 - 50);
+				graphics.drawString(" 1 Player", Main.WIDTH/2 - 80, Main.HEIGHT/2 - 50); // Positioned text
 				
-				if(menuState == MenuState.TWO_PLAYERS)
+				graphics.setColor(Color.GRAY);
+				
+				if(numberOfPlayers == 2)
 					graphics.setColor(Color.BLACK);
-				else 
-					graphics.setColor(Color.GRAY);
-				graphics.drawString("2 players", Main.WIDTH/2 - 70, Main.HEIGHT/2);
+					
+				graphics.drawString("2 Players", Main.WIDTH/2 - 80, Main.HEIGHT/2); // Positioned text
 				
 
 			}
 		});
+
 		sleep();
-		if(event != null) 
-		if(event.getKey() == KeyboardKey.UP || event.getKey() == KeyboardKey.DOWN) {
-			if(menuState == MenuState.ONE_PLAYER) {
-				menuState = MenuState.TWO_PLAYERS;
-				numberOfPlayers = 2;
-			}
-			else {
-				menuState = MenuState.ONE_PLAYER;
-				numberOfPlayers = 1;
-			}
-		}
-		else if(event.getKey() == KeyboardKey.SPACE) {
-			generateWorld(numberOfPlayers, level);
-		}
 	}
 }

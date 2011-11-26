@@ -1,3 +1,18 @@
+/**
+ * ESIPE Project - IR2 2011/2012 - Advanced Java
+ * Copyright (C) 2011 ESIPE - Universite Paris-Est Marne-la-Vallee 
+ *
+ * This is a free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 3 of the License, or (at your option) any later version.
+ * 
+ * Please see : http://www.gnu.org/licenses/gpl.html
+ * 
+ * @author Damien Jubeau <djubeau@etudiant.univ-mlv.fr>
+ * @author Sylvain Fay-Chatelard <sfaychat@etudiant.univ-mlv.fr>
+ * @version 1.0
+ */
 package fr.umlv.yourobot.elements;
 
 import java.awt.Color;
@@ -70,8 +85,12 @@ public abstract class Robot extends Element {
 		}
 	}
 	
-	public double getDirection() {
+	protected double getDirection() {
 		return this.direction;
+	}
+	
+	protected void setDirection(double direction) {
+		this.direction = direction;
 	}
 	
 	public void throttle() {
@@ -94,23 +113,6 @@ public abstract class Robot extends Element {
 
 	public void rotateRight() {
 		rotate(10);
-	}
-
-	public void jumpToDetectedRobot(Vec2 vec) {
-		Objects.requireNonNull(vec);
-		Vec2 p1 = this.getBody().getPosition();
-		Vec2 p2 = vec;
-		int x = (int)(p2.x - p1.x);
-		int y = -(int)(p2.y - p1.y);
-		double hypo = Math.sqrt(x*x + y*y);
-		direction = Math.toDegrees(Math.acos(y/hypo));
-		if(x<0) direction = 360 - direction;
-		direction = direction - 90;
-		if(direction<0) direction = 360 + direction;
-		vec = new Vec2();
-		vec.x = (float)Math.cos(Math.toRadians(direction))*INITIAL_SPEED*1000;
-		vec.y = (float)Math.sin(Math.toRadians(direction))*INITIAL_SPEED*1000;
-		this.body.setLinearVelocity(vec);
 	}
 
 	public void setLife(int life) {
