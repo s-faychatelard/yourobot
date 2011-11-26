@@ -32,16 +32,20 @@ import fr.umlv.yourobot.elements.WoodWall;
 import fr.umlv.zen.KeyboardKey;
 
 public class World {
+	private static final int CELL_SIZE = Wall.WALL_SIZE;
+	
+	// Size (number of cells) of the top left and right bottom corners without walls/bonuses/AIs
+	private static final int SAFE_AREA_SIZE = 3;
+	
 	private static org.jbox2d.dynamics.World world;
-	//LinkedBlockingDeque offer addFirst, addLast methods
 	private static final LinkedList<Element> elementsList = new LinkedList<>();
 	private static final LinkedList<Robot> detectabelRobots = new LinkedList<>();
 	private static RobotPlayer []robotsPlayer;
 	private final ArrayList<RobotIA> robotIA = new ArrayList<>();
 	private boolean matrix[][];
 
-	public World(int numberOfPlayer, int level) {
-		if(numberOfPlayer<=0 || numberOfPlayer>2) throw new IllegalArgumentException("Number of player need to at least 1 and not more than 2");
+	public World(int numberOfPlayers, int level) {
+		if(numberOfPlayers<=0 || numberOfPlayers>2) throw new IllegalArgumentException("Number of player need to at least 1 and not more than 2");
 
 		//world must be create before adding element
 		world = new org.jbox2d.dynamics.World(new Vec2(0,0), true);
@@ -52,34 +56,59 @@ public class World {
 		if(detectabelRobots!=null) detectabelRobots.clear();
 
 		//Generate global world
-		matrix =  new boolean[Main.WIDTH / Wall.WALL_SIZE][Main.HEIGHT / Wall.WALL_SIZE];
+		matrix =  new boolean[Main.WIDTH / CELL_SIZE][Main.HEIGHT / CELL_SIZE];
+		
+		// Book spaces on the top left and bottom right corners (start and end points) 
+		for (int i=0; i < SAFE_AREA_SIZE; i++)
+			for (int j=0; j< SAFE_AREA_SIZE; j++)
+				matrix[i][j] = true;
+		for (int i=matrix.length - 1 - SAFE_AREA_SIZE; i < matrix.length; i++) 
+			for (int j=matrix[0].length - 1 - SAFE_AREA_SIZE; j< matrix[0].length; j++)
+				matrix[i][j] = true;
+		
 		generateWorldBounds();
 		generateWallsAndBonuses(level, matrix);
+		generatePlayersAndGates(numberOfPlayers);
+		generateAI(level);
+	}
 
-		//Generate Player
+	private void generateAI(int level) {
 		Random rand = new Random();
-		int x,y;
-		robotsPlayer = new RobotPlayer[numberOfPlayer];
-		for(int i=0;i<numberOfPlayer;i++) {
+		int numberOfAI = level % 5;
+		for(int i=0; i<numberOfAI; i++) {
+			int x = rand.nextInt(matrix.length - 1 - SAFE_AREA_SIZE) + SAFE_AREA_SIZE; // TODO - 4 = -1 - 3 (3 for booked space in start area)
+			int y = rand.nextInt(matrix[0].length - 1 - SAFE_AREA_SIZE) + SAFE_AREA_SIZE;
+			int j = 0, k = 0;
+			
+			// if the cell is busy, we try the next
+			while(matrix[(x+j)%matrix.length][(y+k)%matrix[y].length] && // busy cell 
+					j< matrix.length && k < matrix[0].length){ // full matrix
+				j++;
+				k++;
+			}
+			matrix[(x+j)%matrix.length][(y+k)%matrix[0].length] = true;
+			RobotIA r = ((RobotIA)this.addElement(new RobotIA(new Vec2(((x+j)%matrix.length)*CELL_SIZE, ((y+k)%matrix[0].length)*CELL_SIZE))));
+			robotIA.add(r);
+		}
+	}
+
+	private void generatePlayersAndGates(int numberOfPlayers) {
+		//Generate Players
+		Random rand = new Random();
+		robotsPlayer = new RobotPlayer[numberOfPlayers];
+		for(int i=0;i<numberOfPlayers;i++) {
 			//Try to start in the top left
-			x=rand.nextInt(150);
-			y=rand.nextInt(150);
+			int x = rand.nextInt(2) * CELL_SIZE;
+			int y = rand.nextInt(2) * CELL_SIZE;
 			robotsPlayer[i] = (RobotPlayer)this.addElement(new RobotPlayer(new Vec2(x, y)));
 			detectabelRobots.add(robotsPlayer[i]);
+			
 			//Add it start circle
 			this.addElement(new StartPoint(new Vec2(x, y)));
 		}
+		
 		//Add the end
-		this.addElement(new EndPoint(new Vec2(Main.WIDTH-50, Main.HEIGHT-50)));
-
-		//Generate IA
-		int numberOfIA = level%5;
-		for(int i=0;i<numberOfIA;i++) {
-			x=rand.nextInt(Main.WIDTH);
-			y=rand.nextInt(Main.HEIGHT);
-			RobotIA r = ((RobotIA)this.addElement(new RobotIA(new Vec2(x, y))));
-			robotIA.add(r);
-		}
+		this.addElement(new EndPoint(new Vec2((matrix.length-1)*CELL_SIZE, (matrix[0].length-1)*CELL_SIZE)));
 	}
 
 	public void setKey(KeyboardKey key) {
@@ -265,21 +294,22 @@ public class World {
 	private void generateWallsAndBonuses(int difficulty, boolean matrix[][]){
 		if(difficulty<0) throw new IllegalArgumentException("difficulty cannot be lower than 0");
 
-		difficulty = 40;
-		int numberOfWalls = Main.WIDTH * Main.HEIGHT / (Wall.WALL_SIZE * Wall.WALL_SIZE) / 20;
-		numberOfWalls = 100; //= Math.round (numberOfWalls * (1 + (difficulty/5)));
+		int numberOfWalls = Main.WIDTH * Main.HEIGHT / (CELL_SIZE * CELL_SIZE) / 20;
+		numberOfWalls = Math.round (numberOfWalls * (1 + (difficulty/5)));
 		
-		int numberOfBonus = Main.WIDTH * Main.HEIGHT / (Wall.WALL_SIZE * Wall.WALL_SIZE) / 30;
+		int numberOfBonus = Main.WIDTH * Main.HEIGHT / (CELL_SIZE * CELL_SIZE) / 30;
 		numberOfBonus = Math.round (numberOfBonus * (1 + (difficulty/5)));
 
 		Random rand = new Random();
+		
+		
 		for (int i=0; i < matrix.length; i++) {
 			for (int j=0; j< matrix[0].length; j++) {
 				
-				if (!(i<3 && j<3) && !(i > matrix.length - 4 && j > matrix.length - 4)) { // reserve top left and bottom right corners
+				if (!matrix[i][j]) { // do not write on busy spaces
 					if(rand.nextInt(matrix[0].length * matrix.length) < numberOfWalls) {
-						Vec2 v = new Vec2((i * Wall.WALL_SIZE), (j * Wall.WALL_SIZE));
-						int r = rand.nextInt(2);
+						Vec2 v = new Vec2((i * CELL_SIZE), (j * CELL_SIZE));
+						int r = rand.nextInt(3);
 						switch(r) {
 						case 0 :
 							this.addElement(new IceWall(v));
@@ -293,8 +323,8 @@ public class World {
 						}
 						matrix[i][j] = true;					
 					} else if(rand.nextInt(matrix[0].length * matrix.length) < numberOfBonus) {
-						Vec2 v = new Vec2((i * Wall.WALL_SIZE), (j * Wall.WALL_SIZE));
-						int r = rand.nextInt(2);
+						Vec2 v = new Vec2((i * CELL_SIZE), (j * CELL_SIZE));
+						int r = rand.nextInt(3);
 						switch(r) {
 						case 0 :
 							this.addElement(new FakeRobotBonus(v));

@@ -6,6 +6,7 @@ import java.awt.Image;
 import java.awt.Toolkit;
 
 import fr.umlv.yourobot.physics.World;
+import fr.umlv.yourobot.utils.ImageFactory;
 import fr.umlv.zen.Application;
 import fr.umlv.zen.ApplicationCode;
 import fr.umlv.zen.ApplicationContext;
@@ -17,6 +18,8 @@ public class Main {
 	public static final int WIDTH = 800;
 	public static final int HEIGHT = 600;
 	private static GameState gameState = GameState.MENU;
+	private static MenuState menuState = MenuState.ONE_PLAYER;
+
 	private static Image ground;
 	private static World world;
 	private static int level=1;
@@ -30,6 +33,11 @@ public class Main {
 		LOSE
 	}
 
+	private enum MenuState {
+		ONE_PLAYER,
+		TWO_PLAYERS,
+	}
+	
 	public static void main(String[] args) {
 		Application.run("YRobot", Main.WIDTH, Main.HEIGHT, new ApplicationCode() {
 			@Override
@@ -55,15 +63,7 @@ public class Main {
 					case QUIT:
 						return;
 					case MENU:
-						context.render(new ApplicationRenderCode() {
-							@Override
-							public void render(Graphics2D graphics) {
-								graphics.fillRect(0, 0, Main.WIDTH, Main.HEIGHT);
-							}
-						});
-						if(event != null && event.getKey() == KeyboardKey.P) {
-							generateWorld(level);
-						}
+							displayMenu(context, event);
 						break;
 					case WIN:
 						System.out.println("YOU WIN LEVEL UP");
@@ -136,6 +136,48 @@ public class Main {
 			Thread.sleep(20);
 		} catch (InterruptedException e) {
 			gameState = GameState.QUIT;
+		}
+	}
+	
+	/**
+	 * Make sleep the current thread for 150ms
+	 * Calling it into render method call allow to avoid useless CPU utilisation
+	 */
+	private static void sleep() {
+		try {Thread.sleep(150);} catch (InterruptedException e) {}
+	}
+	
+	
+	/**
+	 * Make sleep the current thread for 150ms
+	 * Calling it into render method call allow to avoid useless CPU utilisation
+	 */
+	private static void displayMenu(ApplicationContext context, KeyboardEvent event) {
+		context.render(new ApplicationRenderCode() {
+			@Override
+			public void render(Graphics2D graphics) {
+				graphics.setBackground(Color.WHITE);
+				graphics.fillRect(0, 0, Main.WIDTH, Main.HEIGHT);
+				graphics.drawImage(ImageFactory.getImage("menu.png"), (Main.WIDTH - 500)/2, (Main.HEIGHT - 400)/2, 500, 400, null);
+
+				System.out.println(menuState);
+				
+				switch(menuState) {
+					case ONE_PLAYER:
+						graphics.drawString("2 joueurs", Main.WIDTH/2, Main.HEIGHT/2);
+					break;
+					case TWO_PLAYERS:
+						graphics.drawString("1 joueurs", 100, 100);
+					break;
+				}
+			}
+		});
+		sleep();
+		if(event != null && (event.getKey() == KeyboardKey.UP || event.getKey() == KeyboardKey.DOWN)) {
+			if(menuState == MenuState.ONE_PLAYER)
+				menuState = MenuState.TWO_PLAYERS;
+			else 
+				menuState = MenuState.ONE_PLAYER;
 		}
 	}
 }
