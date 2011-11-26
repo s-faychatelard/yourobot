@@ -1,8 +1,10 @@
 package fr.umlv.yourobot;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.RenderingHints;
 import java.awt.Toolkit;
 
 import fr.umlv.yourobot.physics.World;
@@ -56,7 +58,17 @@ public class Main {
 						context.render(new ApplicationRenderCode() {
 							@Override
 							public void render(Graphics2D graphics) {
-								graphics.drawString("PAUSE", Main.WIDTH/2, Main.HEIGHT/2);
+								graphics.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+								graphics.setColor(Color.BLACK);
+								graphics.setFont(new Font("Roman", Font.ROMAN_BASELINE | Font.BOLD, 72));
+								graphics.drawString("PAUSE", Main.WIDTH/2+2-125, Main.HEIGHT/2+2);
+								graphics.setColor(Color.WHITE);
+								graphics.setFont(new Font("Roman", Font.ROMAN_BASELINE | Font.BOLD, 72));
+								graphics.drawString("PAUSE", Main.WIDTH/2-125, Main.HEIGHT/2);
+								try {
+									//150ms is not visible by human
+									Thread.sleep(150);
+								} catch (InterruptedException e) { }
 							}
 						});
 						break;
@@ -70,7 +82,17 @@ public class Main {
 						context.render(new ApplicationRenderCode() {
 							@Override
 							public void render(Graphics2D graphics) {
-								graphics.drawString("WIN", Main.WIDTH/2, Main.HEIGHT/2);
+								graphics.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+								graphics.setColor(Color.BLACK);
+								graphics.setFont(new Font("Roman", Font.ROMAN_BASELINE | Font.BOLD, 72));
+								graphics.drawString("You WIN", Main.WIDTH/2+2-125, Main.HEIGHT/2+2);
+								graphics.setColor(Color.WHITE);
+								graphics.setFont(new Font("Roman", Font.ROMAN_BASELINE | Font.BOLD, 72));
+								graphics.drawString("You WIN", Main.WIDTH/2-125, Main.HEIGHT/2);
+								try {
+									//150ms is not visible by human
+									Thread.sleep(150);
+								} catch (InterruptedException e) { }
 							}
 						});
 						if(event != null && event.getKey() == KeyboardKey.C) {
@@ -84,7 +106,17 @@ public class Main {
 						context.render(new ApplicationRenderCode() {
 							@Override
 							public void render(Graphics2D graphics) {
-								graphics.drawString("GAME OVER", Main.WIDTH/2, Main.HEIGHT/2);
+								graphics.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+								graphics.setColor(Color.BLACK);
+								graphics.setFont(new Font("Roman", Font.ROMAN_BASELINE | Font.BOLD, 72));
+								graphics.drawString("GAME OVER", Main.WIDTH/2+2-125, Main.HEIGHT/2+2);
+								graphics.setColor(Color.WHITE);
+								graphics.setFont(new Font("Roman", Font.ROMAN_BASELINE | Font.BOLD, 72));
+								graphics.drawString("GAME OVER", Main.WIDTH/2-125, Main.HEIGHT/2);
+								try {
+									//150ms is not visible by human
+									Thread.sleep(150);
+								} catch (InterruptedException e) { }
 							}
 						});
 						if(event != null && event.getKey() == KeyboardKey.R) {

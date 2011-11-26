@@ -44,7 +44,6 @@ public class Collision implements ContactListener {
 		//WIN 
 		if((contact.getFixtureA().getBody().getUserData() instanceof EndPoint && contact.getFixtureB().getBody().getUserData() instanceof RobotPlayer) ||
 				(contact.getFixtureB().getBody().getUserData() instanceof EndPoint && contact.getFixtureA().getBody().getUserData() instanceof RobotPlayer)) {
-			//TODO WIN
 			Main.Win();
 			return;
 		}
