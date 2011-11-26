@@ -14,7 +14,7 @@ import fr.umlv.yourobot.utils.ImageFactory;
 
 public abstract class Bonus extends Element {
 	final static int QUARTER_DIAGONAL = (int)Math.sqrt((Main.WIDTH*Main.WIDTH) + (Main.HEIGHT*Main.HEIGHT)) / 4;
-	private final static int BONUS_SIZE = 40;
+	private static final int BONUS_SIZE = 40;
 	private boolean isTaken;
 
 	public  Bonus(Vec2 position) {	

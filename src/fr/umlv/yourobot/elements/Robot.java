@@ -11,6 +11,7 @@ import org.jbox2d.dynamics.BodyDef;
 import org.jbox2d.dynamics.BodyType;
 import org.jbox2d.dynamics.FixtureDef;
 
+import fr.umlv.yourobot.physics.World;
 import fr.umlv.yourobot.utils.ImageFactory;
 
 public abstract class Robot extends Element {
@@ -35,7 +36,7 @@ public abstract class Robot extends Element {
 		fixtureDef.density = 0.f;
 		fixtureDef.friction = .8f;
 		fixtureDef.restitution = 0.f;
-
+		
 		life = 100;
 	}
 
@@ -93,10 +94,9 @@ public abstract class Robot extends Element {
 		int y = -(int)(p2.y - p1.y);
 		double hypo = Math.sqrt(x*x + y*y);
 		direction = Math.toDegrees(Math.acos(y/hypo));
-		if(x<0)
-			direction = 360 - direction;
+		if(x<0) direction = 360 - direction;
 		direction = direction - 90;
-		if(direction<0) direction = 360+direction;
+		if(direction<0) direction = 360 + direction;
 		vec = new Vec2();
 		vec.x = (float)Math.cos(Math.toRadians(direction))*INITIAL_SPEED*500;
 		vec.y = (float)Math.sin(Math.toRadians(direction))*INITIAL_SPEED*500;
@@ -107,7 +107,7 @@ public abstract class Robot extends Element {
 		this.life = life;
 		if(this.life <= 0) {
 			this.body.setLinearVelocity(new Vec2(-this.getBody().getLinearVelocity().x,-this.getBody().getLinearVelocity().y));
-			//TODO dead
+			World.checkRobotsLife();
 		}
 	}
 

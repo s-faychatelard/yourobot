@@ -2,9 +2,9 @@ package fr.umlv.yourobot.physics;
 
 import java.awt.Graphics2D;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.Objects;
 import java.util.Random;
-import java.util.concurrent.LinkedBlockingDeque;
 import org.jbox2d.collision.shapes.PolygonShape;
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.Body;
@@ -32,18 +32,14 @@ import fr.umlv.yourobot.elements.WoodWall;
 import fr.umlv.zen.KeyboardKey;
 
 public class World {
-	private static final int MAX_ELEMENT=200;
 	private static org.jbox2d.dynamics.World world;
-	//LinkedBlockingDeque offer concurrent list and addFirst, addLast methods
-	private static final LinkedBlockingDeque<Element> elementsList = new LinkedBlockingDeque<>(MAX_ELEMENT);
-	private static final LinkedBlockingDeque<Robot> detectabelRobots = new LinkedBlockingDeque<>(MAX_ELEMENT);
-	private RobotPlayer []robotsPlayer;
+	//LinkedBlockingDeque offer addFirst, addLast methods
+	private static final LinkedList<Element> elementsList = new LinkedList<>();
+	private static final LinkedList<Robot> detectabelRobots = new LinkedList<>();
+	private static RobotPlayer []robotsPlayer;
 	private final ArrayList<RobotIA> robotIA = new ArrayList<>();
-
 	private boolean matrix[][];
 
-
-	//TODO add level difficulty
 	public World(int numberOfPlayer, int level) {
 		if(numberOfPlayer<=0 || numberOfPlayer>2) throw new IllegalArgumentException("Number of player need to at least 1 and not more than 2");
 
@@ -52,10 +48,8 @@ public class World {
 		world.setContinuousPhysics(true);
 		world.setContactListener(new Collision());
 
-		if(elementsList!=null)
-			elementsList.clear();
-		if(detectabelRobots!=null)
-			detectabelRobots.clear();
+		if(elementsList!=null) elementsList.clear();
+		if(detectabelRobots!=null) detectabelRobots.clear();
 
 		//Generate global world
 		matrix =  new boolean[Main.WIDTH / Wall.WALL_SIZE][Main.HEIGHT / Wall.WALL_SIZE];
@@ -78,8 +72,9 @@ public class World {
 		//Add the end
 		this.addElement(new EndPoint(new Vec2(Main.WIDTH-50, Main.HEIGHT-50)));
 
-		//Generate IA TODO calculate number of IA with the difficulty level
-		for(int i=0;i<4;i++) {
+		//Generate IA
+		int numberOfIA = level%5;
+		for(int i=0;i<numberOfIA;i++) {
 			x=rand.nextInt(Main.WIDTH);
 			y=rand.nextInt(Main.HEIGHT);
 			RobotIA r = ((RobotIA)this.addElement(new RobotIA(new Vec2(x, y))));
@@ -123,14 +118,6 @@ public class World {
 	public void updateWorld() {
 		for(RobotIA ia : robotIA)
 			ia.update();
-		int counter=0;
-		for(RobotPlayer rp : robotsPlayer)
-			if(rp.getLife()<=0) counter++;
-
-		if(counter==robotsPlayer.length) {
-			Main.Lose();
-			return;
-		}
 		world.step(1/30f, 15, 8);
 	}
 
@@ -138,8 +125,18 @@ public class World {
 		for(Element e : elementsList)
 			e.draw(graphics);
 	}
+	
+	public static void checkRobotsLife() {
+		int counter=0;
+		for(RobotPlayer rp : robotsPlayer)
+			if(rp.getLife()<=0) counter++;
 
-	public static LinkedBlockingDeque<Element> getAllElement() {
+		if(counter==robotsPlayer.length) {
+			Main.Lose();
+		}
+	}
+
+	public static LinkedList<Element> getAllElement() {
 		return elementsList;
 	}
 
@@ -170,10 +167,7 @@ public class World {
 		elementBody.setType(fr.getBodyDef().type);		
 		fr.setBody(elementBody);
 		elementBody.setUserData(fr);
-		if(fr.getClass().getSuperclass() == Robot.class || fr.getClass().getSuperclass() == Wall.class)
-			elementsList.addLast(fr);
-		else
-			elementsList.addFirst(fr);
+		elementsList.addFirst(fr);
 		detectabelRobots.addFirst(fr);
 	}
 
@@ -188,7 +182,7 @@ public class World {
 		elementsList.remove(fr);
 	}
 
-	public static LinkedBlockingDeque<Robot> getDetectableRobot() {
+	public static LinkedList<Robot> getDetectableRobot() {
 		return detectabelRobots;
 	}
 

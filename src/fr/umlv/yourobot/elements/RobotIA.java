@@ -1,9 +1,9 @@
 package fr.umlv.yourobot.elements;
 
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.Objects;
 import java.util.Random;
-import java.util.concurrent.LinkedBlockingDeque;
 
 import org.jbox2d.common.Vec2;
 
@@ -75,7 +75,7 @@ public class RobotIA extends Robot {
 	}
 
 	public boolean detect() {
-		LinkedBlockingDeque<Robot> robots = World.getDetectableRobot();
+		LinkedList<Robot> robots = World.getDetectableRobot();
 		for(Robot robot : robots) {
 			if(detect(robot)) {
 				Vec2 vec1 = this.getBody().getPosition();
