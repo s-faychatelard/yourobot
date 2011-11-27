@@ -45,7 +45,7 @@ public class Main {
 	private static int numberOfPlayers=1;
 
 
-	public enum GameState {
+	private enum GameState {
 		PLAY,
 		PAUSE,
 		QUIT,
