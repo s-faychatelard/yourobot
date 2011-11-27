@@ -20,7 +20,6 @@ import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.RenderingHints;
-import java.awt.Toolkit;
 
 import fr.umlv.yourobot.physics.World;
 import fr.umlv.yourobot.utils.ImageFactory;
