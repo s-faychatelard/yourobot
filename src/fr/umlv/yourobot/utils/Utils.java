@@ -25,6 +25,6 @@ public class Utils {
 	 * @return the resources path folder
 	 */
 	public static String getResourcesFolder() {
-		return "resources/";
+		return "./resources/";
 	}
 }
