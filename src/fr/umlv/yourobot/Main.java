@@ -24,7 +24,6 @@ import java.awt.Toolkit;
 
 import fr.umlv.yourobot.physics.World;
 import fr.umlv.yourobot.utils.ImageFactory;
-import fr.umlv.yourobot.utils.Utils;
 import fr.umlv.zen.Application;
 import fr.umlv.zen.ApplicationCode;
 import fr.umlv.zen.ApplicationContext;
@@ -146,10 +145,7 @@ public class Main {
 		//Create world (walls, robots, players, start, finish)
 		world = new World(numberOfPlayers,level);
 		//Load background textures
-		StringBuilder sb = new StringBuilder();
-		sb.append(Utils.getResourcesFolder());
-		sb.append("ground.jpg");
-		ground = Toolkit.getDefaultToolkit().getImage(sb.toString());
+		ground = ImageFactory.getImage("ground.jpg");
 		//Start game
 		gameState = GameState.PLAY;
 	}
