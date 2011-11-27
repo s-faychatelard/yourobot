@@ -33,7 +33,7 @@ public abstract class Bonus extends Element {
 	private static final int BONUS_SIZE = 40;
 	private boolean isTaken;
 
-	public  Bonus(Vec2 position) {	
+	public Bonus(Vec2 position) {	
 			
 			PolygonShape blockShape;
 
@@ -54,7 +54,13 @@ public abstract class Bonus extends Element {
 	}
 	
 	public abstract Bonus update();
+	
+	/**
+	 * @return String the path (from the resources folder) to the image 
+	 * representing the bonus
+	 */
 	public abstract String getImagePath();
+	
 	public abstract void execute(RobotPlayer robot);
 	
 	/** 

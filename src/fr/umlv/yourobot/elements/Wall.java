@@ -28,7 +28,6 @@ import fr.umlv.yourobot.utils.ImageFactory;
 
 public abstract class Wall extends Element {
 	public final static int SIZE = 50;
-	private int life = 100;
 
 	public Wall(Vec2 position) {	
 		PolygonShape blockShape;
@@ -45,19 +44,15 @@ public abstract class Wall extends Element {
 		fixtureDef.restitution = 0.f;
 	}
 	
+	/**
+	 * @return String the path (from the resources folder) to the image 
+	 * representing the wall
+	 */
 	abstract String getImagePath();
 	
 	@Override
 	public void draw(Graphics2D graphics) {
 		Vec2 p = this.body.getPosition();
 	    graphics.drawImage(ImageFactory.getImage(getImagePath()), (int)p.x , (int)p.y, SIZE, SIZE, null);
-	}
-	
-	public int getLife() {
-		return life;
-	}
-
-	public void setLife(int life) {
-		this.life = life;
 	}
 }
