@@ -30,7 +30,9 @@ import fr.umlv.yourobot.physics.World;
 public class SnapBonus extends Bonus {
 
 	private static final String imagePath = "snapBonus.png";
-	private final int executionTime;
+	private static final int MINIMUM_DURATION = 2;
+	private static final int MAXIMUM_DURATION = 6;
+	private final int duration;
 	private Date date;
 	private long startTime;
 	private LinkedList<SnapElement> snapElements;
@@ -44,8 +46,7 @@ public class SnapBonus extends Bonus {
 	public SnapBonus(Vec2 position) {
 		//Null is test by super
 		super(position);
-		Random rand = new Random();
-		executionTime = rand.nextInt(4000)+2000;
+		duration = (new Random()).nextInt(MAXIMUM_DURATION - MINIMUM_DURATION) + MINIMUM_DURATION;
 	}
 
 	@Override
@@ -83,12 +84,17 @@ public class SnapBonus extends Bonus {
 	public Bonus update() {
 		date = new Date();
 		long time = date.getTime();
-		if(time<startTime+executionTime) return this;
+		if(time<startTime+(duration*1000)) return this;
 		for(SnapElement snapElement : snapElements) {
 			World.deleteJoint(snapElement.joint);
 			snapElement.element.getBody().setType(snapElement.oldBodyType);
 		}
 		snapElements.clear();
 		return null;
+	}
+
+	@Override
+	public int getDuration() {
+		return this.duration;
 	}
 }

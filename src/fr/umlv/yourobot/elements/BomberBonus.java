@@ -26,7 +26,8 @@ import org.jbox2d.dynamics.BodyType;
 import fr.umlv.yourobot.physics.World;
 
 public class BomberBonus extends Bonus {
-	private static final int executionTime = 2500;
+	private static final int breathDuration = 2500;
+	
 	private Date date;
 	private long startTime;
 	private final WallType wallType;
@@ -115,10 +116,15 @@ public class BomberBonus extends Bonus {
 	public Bonus update() {
 		date = new Date();
 		long time = date.getTime();
-		if(time<startTime+executionTime) return this;
+		if(time<startTime+breathDuration) return this;
 		for(BomberElement bomberElement : bomberElements)
 			bomberElement.element.getBody().setType(bomberElement.oldBodyType);
 		bomberElements.clear();
 		return null;
+	}
+
+	@Override
+	public int getDuration() {
+		return 0;
 	}
 }
