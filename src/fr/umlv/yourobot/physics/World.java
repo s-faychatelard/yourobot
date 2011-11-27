@@ -77,8 +77,8 @@ public class World {
 		for (int i=0; i < SAFE_AREA_SIZE; i++)
 			for (int j=0; j< SAFE_AREA_SIZE; j++)
 				matrix[i][j] = true;
-		for (int i=matrix.length - 1 - SAFE_AREA_SIZE; i < matrix.length; i++) 
-			for (int j=matrix[0].length - 1 - SAFE_AREA_SIZE; j< matrix[0].length; j++)
+		for (int i=matrix.length - SAFE_AREA_SIZE; i < matrix.length; i++) 
+			for (int j=matrix[0].length - SAFE_AREA_SIZE; j< matrix[0].length; j++)
 				matrix[i][j] = true;
 		
 		generateWorldBounds();
@@ -88,11 +88,11 @@ public class World {
 	}
 
 	private void generateAI(int level) {
+		int numberOfAI = (level / 5) + 1;
 		Random rand = new Random();
-		int numberOfAI = level % 5;
 		for(int i=0; i<numberOfAI; i++) {
-			int x = rand.nextInt(matrix.length - 1 - SAFE_AREA_SIZE) + SAFE_AREA_SIZE; // TODO - 4 = -1 - 3 (3 for booked space in start area)
-			int y = rand.nextInt(matrix[0].length - 1 - SAFE_AREA_SIZE) + SAFE_AREA_SIZE;
+			int x = rand.nextInt(matrix.length - SAFE_AREA_SIZE) + SAFE_AREA_SIZE;
+			int y = rand.nextInt(matrix[0].length - SAFE_AREA_SIZE) + SAFE_AREA_SIZE;
 			int j = 0, k = 0;
 			
 			// if the cell is busy, we try the next
@@ -112,7 +112,7 @@ public class World {
 		Random rand = new Random();
 		robotsPlayer = new RobotPlayer[numberOfPlayers];
 		for(int i=0;i<numberOfPlayers;i++) {
-			//Try to start in the top left
+			// start in the top left corner 
 			int x = rand.nextInt(2) * CELL_SIZE;
 			int y = rand.nextInt(2) * CELL_SIZE;
 			robotsPlayer[i] = (RobotPlayer)this.addElement(new RobotPlayer(new Vec2(x, y)));
@@ -308,21 +308,26 @@ public class World {
 		limits[3].createFixture(fixtureDef);
 	}
 
-	private void generateWallsAndBonuses(int difficulty, boolean matrix[][]){
-		if(difficulty<0) throw new IllegalArgumentException("difficulty cannot be lower than 0");
+	/**
+	 * Generate randomly walls and bonus on the map
+	 * The number of walls and the number of bonuses increase with the levels
+	 * @param level
+	 * @param matrix : virtual matrix mapping the map level (to know if a cell is empty or not)
+	 */
+	private void generateWallsAndBonuses(int level, boolean matrix[][]){
+		if(level<0) throw new IllegalArgumentException("Level cannot be lower than 0");
 
+		// number of walls and number of bonuses are adapted to the window size and are level dependent
+		// that numbers are used forward with a computed random value to display the elements on the map
 		int numberOfWalls = Main.WIDTH * Main.HEIGHT / (CELL_SIZE * CELL_SIZE) / 20;
-		numberOfWalls = Math.round (numberOfWalls * (1 + (difficulty/5)));
-		
+		numberOfWalls = Math.round (numberOfWalls * (1 + (level/5)));
+		System.out.println(numberOfWalls);
 		int numberOfBonus = Main.WIDTH * Main.HEIGHT / (CELL_SIZE * CELL_SIZE) / 30;
-		numberOfBonus = Math.round (numberOfBonus * (1 + (difficulty/5)));
+		numberOfBonus = Math.round (numberOfBonus * (1 + (level/5)));
 
 		Random rand = new Random();
-		
-		
 		for (int i=0; i < matrix.length; i++) {
 			for (int j=0; j< matrix[0].length; j++) {
-				
 				if (!matrix[i][j]) { // do not write on busy spaces
 					if(rand.nextInt(matrix[0].length * matrix.length) < numberOfWalls) {
 						Vec2 v = new Vec2((i * CELL_SIZE), (j * CELL_SIZE));

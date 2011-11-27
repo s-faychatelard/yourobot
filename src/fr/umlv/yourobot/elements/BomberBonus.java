@@ -26,7 +26,6 @@ import org.jbox2d.dynamics.BodyType;
 import fr.umlv.yourobot.physics.World;
 
 public class BomberBonus extends Bonus {
-	private static final String imagePath = "bomberBonus.png";
 	private static final int executionTime = 2500;
 	private Date date;
 	private long startTime;
@@ -34,9 +33,15 @@ public class BomberBonus extends Bonus {
 	private LinkedList<BomberElement> bomberElements;
 
 	private enum WallType {
-		ICE,
-		WOOD,
-		STONE
+		ICE("bomberIceBonus.png"), 
+		WOOD("bomberWoodBonus.png"), 
+		STONE("bomberStoneBonus.png");
+		
+		private String imagePath;
+		private WallType(String imagePath) {
+			this.imagePath = imagePath;
+		}
+		
 	}
 	
 	private static class BomberElement {
@@ -63,7 +68,7 @@ public class BomberBonus extends Bonus {
 
 	@Override
 	public String getImagePath() {
-		return imagePath;
+		return wallType.imagePath;
 	}
 	
 	@Override
