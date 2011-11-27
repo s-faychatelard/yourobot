@@ -61,6 +61,6 @@ public class EndPoint extends Element {
 	@Override
 	public void draw(Graphics2D graphics) {
 		Vec2 p = this.body.getPosition();
-	    graphics.drawImage(ImageFactory.getImage(imagePath), (int)p.x , (int)p.y, RADIUS*2, RADIUS*2, null);
+	    graphics.drawImage(ImageFactory.getImage(imagePath), (int)p.x-5 , (int)p.y-5, RADIUS*2+10, RADIUS*2+10, null);
 	}
 }
