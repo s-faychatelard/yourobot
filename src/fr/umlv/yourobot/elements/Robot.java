@@ -17,6 +17,7 @@ package fr.umlv.yourobot.elements;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.awt.geom.AffineTransform;
 import java.util.LinkedList;
 import java.util.Objects;
@@ -62,6 +63,7 @@ public abstract class Robot extends Element {
 
 	@Override
 	public void draw(Graphics2D graphics) {
+		graphics.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 		generateTail(graphics);
 		Vec2 p = this.body.getPosition();
 		AffineTransform affineTransform = new AffineTransform();
