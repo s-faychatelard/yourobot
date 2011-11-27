@@ -28,7 +28,7 @@ import fr.umlv.yourobot.utils.ImageFactory;
 
 public class EndPoint extends Element {
 	
-	private static final int ENDPOINT_RADIUS = 40/2;
+	private static final int RADIUS = 40/2;
 	private static final String imagePath = "endPoint.png";
 	
 	public EndPoint(Vec2 position) {
@@ -40,7 +40,7 @@ public class EndPoint extends Element {
 		bodyDef.position = Objects.requireNonNull(position);
 		
 		blockShape = new CircleShape();
-		blockShape.m_radius = ENDPOINT_RADIUS;
+		blockShape.m_radius = RADIUS;
 
 		fixtureDef = new FixtureDef();
 		fixtureDef.shape = blockShape;
@@ -53,6 +53,6 @@ public class EndPoint extends Element {
 	@Override
 	public void draw(Graphics2D graphics) {
 		Vec2 p = this.body.getPosition();
-	    graphics.drawImage(ImageFactory.getImage(imagePath), (int)p.x , (int)p.y, ENDPOINT_RADIUS*2, ENDPOINT_RADIUS*2, null);
+	    graphics.drawImage(ImageFactory.getImage(imagePath), (int)p.x , (int)p.y, RADIUS*2, RADIUS*2, null);
 	}
 }

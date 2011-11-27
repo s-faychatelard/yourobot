@@ -27,6 +27,11 @@ public abstract class Element {
 	FixtureDef fixtureDef;
 	Body body;
 	
+	/**
+	 * At refresh time, draw method of all the elements of the world are called
+	 * in order to draw their graphic representation
+	 * @param graphics to draw
+	 */
 	public abstract void draw(Graphics2D graphics);
 	
 	public void setBody(Body body) {
@@ -35,15 +40,23 @@ public abstract class Element {
 		this.body.setLinearDamping(.5f);	
 	}
 	
+	/**
+	 * @return body, the body of the element
+	 */
 	public Body getBody() {
-
 		return this.body;
 	}
 	
+	/**
+	 * @return bodyDef, the bodyDef of the element
+	 */
 	public BodyDef getBodyDef() {
 		return this.bodyDef;
 	}
 	
+	/**
+	 * @return fixtureDef, the fixtureDef of the element
+	 */
 	public FixtureDef getFixtureDef() {
 		return this.fixtureDef;
 	}

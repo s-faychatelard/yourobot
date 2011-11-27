@@ -33,6 +33,10 @@ public abstract class Bonus extends Element {
 	private static final int BONUS_SIZE = 40;
 	private boolean isTaken;
 
+	/**
+	 * Construct a BodyDef and FixtureDef for the Bonus that will be used in Jbox2D world
+	 * @param position
+	 */
 	public Bonus(Vec2 position) {	
 			
 			PolygonShape blockShape;
@@ -52,6 +56,7 @@ public abstract class Bonus extends Element {
 			
 			isTaken=false;
 	}
+
 	
 	public abstract Bonus update();
 	
@@ -82,7 +87,5 @@ public abstract class Bonus extends Element {
 	    graphics.setFont(new Font("Verdana", Font.BOLD, 10));
 	    if(getDuration() != 0)
 	    	graphics.drawString(getDuration()+"s", (int)p.x, (int)p.y);
-
-
 	}
 }

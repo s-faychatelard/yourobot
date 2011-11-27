@@ -26,6 +26,8 @@ import org.jbox2d.dynamics.BodyType;
 import fr.umlv.yourobot.physics.World;
 
 public class BomberBonus extends Bonus {
+	
+	 // when a bomb is launched, breathDuration is the duration of its effect
 	private static final int breathDuration = 2500;
 	
 	private Date date;
@@ -39,6 +41,8 @@ public class BomberBonus extends Bonus {
 		STONE("bomberStoneBonus.png");
 		
 		private String imagePath;
+		
+		//Each type of bomber has its own graphic representation
 		private WallType(String imagePath) {
 			this.imagePath = imagePath;
 		}
@@ -80,7 +84,10 @@ public class BomberBonus extends Bonus {
 		date = new Date();
 		startTime = date.getTime();
 		for(Element element : elements) {
+			
+			// These elements are not impacted by bombers
 			if((element instanceof RobotPlayer) || (element instanceof StartPoint) || (element instanceof EndPoint)) continue;
+			
 			//Get the distance from the robot to the element
 			Vec2 pos = new Vec2(robot.getBody().getPosition());
 			int x = (int)robot.getBody().getPosition().x - (int)element.getBody().getPosition().x;

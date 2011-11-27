@@ -40,6 +40,10 @@ public abstract class Robot extends Element {
 	private double direction = 0.;
 	private final LinkedList<Vec2> tail;
 	
+	/**
+	 * @return path (from the resources folder) to the image 
+	 * representing the robot
+	 */
 	public abstract String getImagePath();
 
 	public Robot(Vec2 position) {

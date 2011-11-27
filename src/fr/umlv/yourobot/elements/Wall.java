@@ -45,7 +45,7 @@ public abstract class Wall extends Element {
 	}
 	
 	/**
-	 * @return String the path (from the resources folder) to the image 
+	 * @return path (from the resources folder) to the image 
 	 * representing the wall
 	 */
 	abstract String getImagePath();
