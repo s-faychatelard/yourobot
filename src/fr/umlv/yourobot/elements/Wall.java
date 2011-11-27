@@ -61,6 +61,6 @@ public abstract class Wall extends Element {
 	@Override
 	public void draw(Graphics2D graphics) {
 		Vec2 p = this.body.getPosition();
-	    graphics.drawImage(ImageFactory.getImage(getImagePath()), (int)p.x , (int)p.y, SIZE, SIZE, null);
+	    graphics.drawImage(ImageFactory.getImage(getImagePath()), (int)p.x-5, (int)p.y-5, SIZE, SIZE, null);
 	}
 }

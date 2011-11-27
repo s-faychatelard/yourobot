@@ -81,7 +81,7 @@ public class RobotFakeBonus extends Bonus {
 		date = new Date();
 		long time = date.getTime();
 		if(time<startTime+(duration*1000)) return this;
-		World.removeLeurre(currentRobot);
+		World.removeRobotFake(currentRobot);
 		return null;
 	}
 

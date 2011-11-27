@@ -49,8 +49,14 @@ public class World {
 	// matrix dividing  the level map in cells, in order to put the elements
 	private boolean matrix[][];
 
+	/**
+	 * Create a new world
+	 * 
+	 * @param numberOfPlayers who wants to play
+	 * @param level to generate (corresponding also to the difficulty)
+	 */
 	public World(int numberOfPlayers, int level) {
-		if(numberOfPlayers<=0 || numberOfPlayers>2) throw new IllegalArgumentException("Number of player need to at least 1 and not more than 2");
+		if(numberOfPlayers<=0 || numberOfPlayers>2) throw new IllegalArgumentException("Number of players need to at least 1 and not more than 2");
 
 		//world must be create before adding element
 		world = new org.jbox2d.dynamics.World(new Vec2(0,0), true);
@@ -80,6 +86,7 @@ public class World {
 	/**
 	 * Generate positioned AI on the map
 	 * Number of AI increase with the levels
+	 * 
 	 * @param int level 
 	 */
 	private void generateAI(int level) {
@@ -162,7 +169,12 @@ public class World {
 		}
 	}
 
-
+	/**
+	 * Update the world
+	 * Update AI for movement
+	 * Update bonus in player if there is one
+	 * Create a new step in the physics environment
+	 */
 	public void updateWorld() {
 		for(RobotAI ia : robotsIA)
 			ia.update();
@@ -171,12 +183,21 @@ public class World {
 		world.step(1/30f, 15, 8);
 	}
 
+	/**
+	 * Check player life
+	 * 
+	 * @param graphics 
+	 */
 	public void render(Graphics2D graphics) {
 		for(Element e : elementsList)
 			e.draw(graphics);
 		graphics.setColor(Color.BLACK);
 	}
 	
+	/**
+	 * Check player life
+	 * If all player are dead, end the game
+	 */
 	public static void checkRobotsLife() {
 		int counter=0;
 		for(RobotPlayer rp : robotsPlayer)
@@ -186,11 +207,31 @@ public class World {
 			Main.Lose();
 		}
 	}
+	
+	/**
+	 * Get all detectable robots
+	 * 
+	 * @return list of detectable robots (player and fake)
+	 */
+	public static LinkedList<Robot> getDetectableRobot() {
+		return detectabelRobots;
+	}
 
+	/**
+	 * Get all elements in the world
+	 * 
+	 * @return list of elements in the world
+	 */
 	public static LinkedList<Element> getAllElement() {
 		return elementsList;
 	}
 
+	/**
+	 * Add an element to the world
+	 * 
+	 * @param element to add
+	 * @return the element
+	 */
 	private Element addElement(Element element) {
 		Objects.requireNonNull(element);
 		//createBody is already auto lock
@@ -207,7 +248,23 @@ public class World {
 
 		return element;
 	}
-
+	
+	/**
+	 * Remove an element from the world
+	 * 
+	 * @param element to remove
+	 */
+	public static void removeBody(Element element) {
+		//element.getBody().getFixtureList().destroy();
+		world.destroyBody(element.getBody());
+		elementsList.remove(element);
+	}
+	
+	/**
+	 * Add a fake robot to the world
+	 * 
+	 * @param fr to add
+	 */
 	public static void addRobotFake(RobotFake fr) {
 		Objects.requireNonNull(fr);
 		//Is insert in top of the queue so he is the first robot to be detect
@@ -221,28 +278,35 @@ public class World {
 		elementsList.addFirst(fr);
 		detectabelRobots.addFirst(fr);
 	}
-
-	public static void removeBody(Element element) {
-		//element.getBody().getFixtureList().destroy();
-		world.destroyBody(element.getBody());
-		elementsList.remove(element);
-	}
-
-	public static void removeLeurre(RobotFake fr) {
+	
+	/**
+	 * Remove a fake robot
+	 * 
+	 * @param fr 
+	 */
+	public static void removeRobotFake(RobotFake fr) {
 		world.destroyBody(fr.getBody());
 		detectabelRobots.remove(fr);
 		elementsList.remove(fr);
 	}
 
-	public static LinkedList<Robot> getDetectableRobot() {
-		return detectabelRobots;
-	}
-
+	/**
+	 * Add a joint
+	 * Can append when a snap start
+	 * 
+	 * @param joint to add
+	 */
 	public static Joint addJoint(JointDef joint) {
 		Objects.requireNonNull(joint);
 		return world.createJoint(joint);
 	}
 
+	/**
+	 * Remove a joint
+	 * Can append when a snap end
+	 * 
+	 * @param joint to remove
+	 */
 	public static void deleteJoint(Joint joint) {
 		Objects.requireNonNull(joint);
 		world.destroyJoint(joint);
