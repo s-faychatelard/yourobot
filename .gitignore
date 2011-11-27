@@ -1,5 +1,15 @@
+/.gitignore
 /.classpath
 /.settings
 /.project
 /.DS_Store
+/.svn
+/lib/.svn
+/bin
 /doc
+/src/.svn
+/src/fr/.svn
+/src/fr/umlv/.svn
+/src/fr/umlv/yourobot/.svn
+/src/resources/.DS_Store
+/YouRobot.jar
