@@ -24,7 +24,6 @@ import java.awt.Toolkit;
 
 import fr.umlv.yourobot.physics.World;
 import fr.umlv.yourobot.utils.ImageFactory;
-import fr.umlv.yourobot.utils.Utils;
 import fr.umlv.zen.Application;
 import fr.umlv.zen.ApplicationCode;
 import fr.umlv.zen.ApplicationContext;
