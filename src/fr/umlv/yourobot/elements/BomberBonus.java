@@ -112,7 +112,7 @@ public class BomberBonus extends Bonus {
 			int x = (int)robot.getBody().getPosition().x - (int)element.getBody().getPosition().x;
 			int y = (int)robot.getBody().getPosition().y - (int)element.getBody().getPosition().y;
 			double distance = Math.sqrt(x*x + y*y);
-			if(distance>QUARTER_DIAGONAL) continue;
+			if(distance>QUARTER_DIAGONAL/2) continue;
 
 			//Calculate the coefficient force (more if the element is near the robot)
 			double coeffForce = QUARTER_DIAGONAL/distance;
