@@ -25,7 +25,7 @@ import fr.umlv.yourobot.physics.World;
 
 public class RobotFakeBonus extends Bonus {
 	
-	private static final String imagePath = "fakeRobotBonus.png";
+	private static final String imagePath = "robotFakeBonus.png";
 	private final int executionTime;
 	private Date date;
 	private long startTime;
