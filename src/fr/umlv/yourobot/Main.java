@@ -16,10 +16,12 @@
 package fr.umlv.yourobot;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.RenderingHints;
+import java.awt.Toolkit;
 
 import fr.umlv.yourobot.physics.World;
 import fr.umlv.yourobot.utils.ImageFactory;
@@ -31,8 +33,8 @@ import fr.umlv.zen.KeyboardEvent;
 import fr.umlv.zen.KeyboardKey;
 
 public class Main {
-	public static final int WIDTH = 800;
-	public static final int HEIGHT = 600;
+	public static int WIDTH = 800;
+	public static int HEIGHT = 600;
 	private static final int MAX_OF_PLAYERS=2;
 
 	private static GameState gameState = GameState.MENU;
@@ -51,8 +53,12 @@ public class Main {
 		WIN,
 		LOSE
 	}
-	
+
 	public static void main(String[] args) {
+		// Get the current screen size
+		Dimension screenSize =  Toolkit.getDefaultToolkit().getScreenSize();
+		WIDTH = screenSize.width-50;
+		HEIGHT = screenSize.height-80;
 		Application.run("YRobot", Main.WIDTH, Main.HEIGHT, new ApplicationCode() {
 			@Override
 			public void run(final ApplicationContext context) {
@@ -84,7 +90,7 @@ public class Main {
 					case QUIT:
 						return;
 					case MENU:
-							displayMenu(context, event);
+						displayMenu(context, event);
 						break;
 					case WIN:
 						context.render(new ApplicationRenderCode() {
@@ -131,15 +137,15 @@ public class Main {
 			}
 		});
 	}
-	
+
 	public static void Win() {
 		gameState = GameState.WIN;
 	}
-	
+
 	public static void Lose() {
 		gameState = GameState.LOSE;
 	}
-	
+
 	private static void generateWorld(int numberOfPlayers, int level) {
 		//Create world (walls, robots, players, start, finish)
 		world = new World(numberOfPlayers,level);
@@ -171,7 +177,7 @@ public class Main {
 			gameState = GameState.QUIT;
 		}
 	}
-	
+
 	/**
 	 * Make sleep the current thread for 150ms
 	 * Calling it into render method call allow to avoid useless CPU utilization
@@ -182,14 +188,14 @@ public class Main {
 	}
 
 	private static void displayMenu(ApplicationContext context, KeyboardEvent event) {
-		
+
 		if(event != null) {
 			if(event.getKey() == KeyboardKey.UP || event.getKey() == KeyboardKey.DOWN) 
 				numberOfPlayers = (numberOfPlayers % MAX_OF_PLAYERS) + 1;
 			else if(event.getKey() == KeyboardKey.SPACE) 
 				generateWorld(numberOfPlayers, level);
 		}
-		
+
 		context.render(new ApplicationRenderCode() {
 			@Override
 			public void render(Graphics2D graphics) {
@@ -197,23 +203,23 @@ public class Main {
 				graphics.fillRect(0, 0, Main.WIDTH, Main.HEIGHT);
 				graphics.drawImage(ImageFactory.getImage("menu.png"), (Main.WIDTH - 500)/2, (Main.HEIGHT - 400)/2, 500, 400, null);
 
-				
+
 				graphics.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 				graphics.setFont(new Font("Verdana", Font.ROMAN_BASELINE | Font.BOLD, 30));
-				
+
 				graphics.setColor(Color.GRAY);
 				if(numberOfPlayers == 1)
 					graphics.setColor(Color.BLACK);
-				
+
 				graphics.drawString(" 1 Player", Main.WIDTH/2 - 80, Main.HEIGHT/2 - 50); // Positioned text
-				
+
 				graphics.setColor(Color.GRAY);
-				
+
 				if(numberOfPlayers == 2)
 					graphics.setColor(Color.BLACK);
-					
+
 				graphics.drawString("2 Players", Main.WIDTH/2 - 80, Main.HEIGHT/2); // Positioned text
-				
+
 
 			}
 		});
