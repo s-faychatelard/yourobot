@@ -146,10 +146,7 @@ public class Main {
 		//Create world (walls, robots, players, start, finish)
 		world = new World(numberOfPlayers,level);
 		//Load background textures
-		StringBuilder sb = new StringBuilder();
-		sb.append(Utils.getResourcesFolder());
-		sb.append("ground.jpg");
-		ground = Toolkit.getDefaultToolkit().getImage(sb.toString());
+		ground = ImageFactory.getImage("ground.jpg");
 		//Start game
 		gameState = GameState.PLAY;
 	}

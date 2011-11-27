@@ -40,12 +40,9 @@ public class ImageFactory {
 	 */
 	public static Image getImage(String path) {
 		Objects.requireNonNull(path);
-		StringBuilder sb = new StringBuilder();
-		sb.append(Utils.getResourcesFolder());
-		sb.append(path);
-		Image image = imagePool.get(sb.toString());
+		Image image = imagePool.get(path);
 		if (image == null) {
-			image = Toolkit.getDefaultToolkit().getImage(sb.toString());
+			image = Toolkit.getDefaultToolkit().getImage(ImageFactory.class.getClass().getResource("/resources/"+path));
 			imagePool.put(path, Objects.requireNonNull(image));
 		}
 		return image;
