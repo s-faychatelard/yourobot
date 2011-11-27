@@ -218,6 +218,7 @@ public class World {
 	}
 
 	public static void removeBody(Element element) {
+		//element.getBody().getFixtureList().destroy();
 		world.destroyBody(element.getBody());
 		elementsList.remove(element);
 	}
@@ -230,13 +231,6 @@ public class World {
 
 	public static LinkedList<Robot> getDetectableRobot() {
 		return detectabelRobots;
-	}
-
-	public void raycast(RayCastCallbackRobotAI raycastCallback, Vec2 point1, Vec2 point2) {
-		Objects.requireNonNull(raycastCallback);
-		Objects.requireNonNull(point1);
-		Objects.requireNonNull(point2);
-		world.raycast(raycastCallback, point1, point2);
 	}
 
 	public static Joint addJoint(JointDef joint) {

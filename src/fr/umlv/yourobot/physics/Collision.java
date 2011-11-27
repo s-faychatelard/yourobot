@@ -43,7 +43,7 @@ public class Collision implements ContactListener {
 		//End RobotIA ignore EndPoint
 
 		//RobotIA ignore Bonus
-		if((contact.getFixtureA().getBody().getUserData() instanceof Bonus && contact.getFixtureB().getBody().getUserData() instanceof RobotAI) ||
+		/*if((contact.getFixtureA().getBody().getUserData() instanceof Bonus && contact.getFixtureB().getBody().getUserData() instanceof RobotAI) ||
 				(contact.getFixtureB().getBody().getUserData() instanceof Bonus && contact.getFixtureA().getBody().getUserData() instanceof RobotAI)) {
 			return;
 		}
@@ -53,7 +53,7 @@ public class Collision implements ContactListener {
 		if((contact.getFixtureA().getBody().getUserData() instanceof Bonus && contact.getFixtureB().getBody().getUserData() instanceof RobotPlayer) ||
 				(contact.getFixtureB().getBody().getUserData() instanceof Bonus && contact.getFixtureA().getBody().getUserData() instanceof RobotPlayer)) {
 			return;
-		}
+		}*/
 		//End RobotPlayer take Bonus
 
 		//WIN 
@@ -106,6 +106,7 @@ public class Collision implements ContactListener {
 			contact.setEnabled(false);
 			return;
 		}
+		//TODO seems never catch
 		if((contact.getFixtureB().getBody().getUserData() instanceof Bonus && contact.getFixtureA().getBody().getUserData() instanceof RobotPlayer)) {
 			RobotPlayer rp = (RobotPlayer) contact.getFixtureA().getBody().getUserData();
 			rp.takeBonus((Bonus)contact.getFixtureB().getBody().getUserData());
