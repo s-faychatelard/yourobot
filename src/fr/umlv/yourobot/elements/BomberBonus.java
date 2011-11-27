@@ -35,6 +35,9 @@ public class BomberBonus extends Bonus {
 	private final WallType wallType;
 	private LinkedList<BomberElement> bomberElements;
 
+	/**
+	 * Enum which define the type of the bomb
+	 */
 	private enum WallType {
 		ICE("bomberIceBonus.png"), 
 		WOOD("bomberWoodBonus.png"), 
@@ -49,11 +52,19 @@ public class BomberBonus extends Bonus {
 		
 	}
 	
+	/**
+	 * Private class define all elements affected by the bomb
+	 */
 	private static class BomberElement {
 		Element element;
 		BodyType oldBodyType;
 	}
 
+	/**
+	 * Create a bonus with random type
+	 * 
+	 * @param position the position where you want to add the bonus
+	 */
 	public BomberBonus(Vec2 position) {
 		//Null is test by super
 		super(position);
@@ -71,11 +82,19 @@ public class BomberBonus extends Bonus {
 		}
 	}
 
+	/**
+	 * Get the resource nam of the bonus
+	 */
 	@Override
 	public String getImagePath() {
 		return wallType.imagePath;
 	}
-
+	
+	/**
+	 * Start the execution of the bonus
+	 * Create a list of affected elements.
+	 * Only elements near the executor robot can be affect (around a quarter diagonal of the screen)
+	 */
 	@Override
 	public void execute(RobotPlayer robot) {
 		Objects.requireNonNull(robot);
@@ -119,6 +138,11 @@ public class BomberBonus extends Bonus {
 		}
 	}
 	
+	/**
+	 * Update the bonus state
+	 * 
+	 * @return the bonus if it continue to work or null if it terminate
+	 */
 	@Override
 	public Bonus update() {
 		date = new Date();
@@ -130,6 +154,10 @@ public class BomberBonus extends Bonus {
 		return null;
 	}
 
+	/**
+	 * Get the duration of the bonus
+	 * Not use hear
+	 */
 	@Override
 	public int getDuration() {
 		return 0;

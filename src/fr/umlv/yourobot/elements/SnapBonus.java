@@ -42,23 +42,39 @@ public class SnapBonus extends Bonus {
 	private long startTime;
 	private LinkedList<SnapElement> snapElements;
 	
+	/**
+	 * Private class represents element affected by the snap
+	 */
 	private static class SnapElement {
 		Element element;
 		BodyType oldBodyType;
 		Joint joint;
 	}
 
+	/**
+	 * Create a snap bonus
+	 * 
+	 * @param position of the bonus
+	 */
 	public SnapBonus(Vec2 position) {
 		//Null is test by super
 		super(position);
 		duration = (new Random()).nextInt(MAXIMUM_DURATION - MINIMUM_DURATION) + MINIMUM_DURATION;
 	}
 
+	/**
+	 * Return the resource name of the snap bonus
+	 */
 	@Override
 	public String getImagePath() {
 		return imagePath;
 	}
 
+	/**
+	 * Start the snap
+	 * Create a list of affected elements.
+	 * Only elements near the executor robot can be affect (around eigth diagonal of the screen)
+	 */
 	@Override
 	public void execute(final RobotPlayer robot) {
 		Objects.requireNonNull(robot);
@@ -85,6 +101,11 @@ public class SnapBonus extends Bonus {
 		}
 	}
 	
+	/**
+	 * Update the bonus state
+	 * 
+	 * @return the bonus if it continue to work or null if it terminate
+	 */
 	@Override
 	public Bonus update() {
 		date = new Date();
@@ -98,6 +119,9 @@ public class SnapBonus extends Bonus {
 		return null;
 	}
 
+	/**
+	 * Get the duration of the bonus
+	 */
 	@Override
 	public int getDuration() {
 		return this.duration;

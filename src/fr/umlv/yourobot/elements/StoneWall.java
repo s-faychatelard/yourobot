@@ -21,11 +21,19 @@ public class StoneWall extends Wall {
 	
 	private static final String imagePath = "stoneWall.png";
 
+	/**
+	 * Create a stone wall
+	 * 
+	 * @param position of the wall
+	 */
 	public StoneWall(Vec2 position) {
 		//Null is test by super
 		super(position);
 	}
 
+	/**
+	 * Return the resource name of the wall
+	 */
 	@Override
 	String getImagePath() {
 		return imagePath;

@@ -29,6 +29,11 @@ import fr.umlv.yourobot.utils.ImageFactory;
 public abstract class Wall extends Element {
 	public final static int SIZE = 50;
 
+	/**
+	 * Create a wall
+	 * 
+	 * @param position of the wall
+	 */
 	public Wall(Vec2 position) {	
 		PolygonShape blockShape;
 
@@ -50,6 +55,9 @@ public abstract class Wall extends Element {
 	 */
 	abstract String getImagePath();
 	
+	/**
+	 * Draw the wall
+	 */
 	@Override
 	public void draw(Graphics2D graphics) {
 		Vec2 p = this.body.getPosition();

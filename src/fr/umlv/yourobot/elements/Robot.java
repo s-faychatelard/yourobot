@@ -18,7 +18,6 @@ package fr.umlv.yourobot.elements;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
-import java.awt.geom.AffineTransform;
 import java.util.LinkedList;
 import java.util.Objects;
 
@@ -34,7 +33,7 @@ import fr.umlv.yourobot.utils.ImageFactory;
 public abstract class Robot extends Element {
 	private static final int SIZE_OF_TAIL = 8;
 	private final static int SIZE = 40;
-	protected final static int INITIAL_SPEED = 100; //used by RobotAI
+	protected final static int INITIAL_SPEED = 100;
 	private CircleShape blockShape;
 	private int life;
 	private double direction = 0.;
@@ -46,6 +45,11 @@ public abstract class Robot extends Element {
 	 */
 	public abstract String getImagePath();
 
+	/**
+	 * Create a robot
+	 * 
+	 * @param position of the robot
+	 */
 	public Robot(Vec2 position) {
 		bodyDef = new BodyDef();
 		bodyDef.type = BodyType.DYNAMIC;
@@ -65,16 +69,16 @@ public abstract class Robot extends Element {
 		life = 100;
 	}
 
+	/**
+	 * Draw the robot
+	 * Differ if it's a player, an AI, or a fake robot.
+	 */
 	@Override
 	public void draw(Graphics2D graphics) {
 		graphics.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 		generateTail(graphics);
-		Vec2 p = this.body.getPosition();
-		AffineTransform affineTransform = new AffineTransform();
-		affineTransform.setToTranslation(p.x, p.y);
-		affineTransform.rotate(Math.toRadians(this.direction), SIZE/2, SIZE/2);
 		if(this instanceof RobotFake) {
-			graphics.drawImage(ImageFactory.getImage(getImagePath()), affineTransform, null);
+			graphics.drawImage(ImageFactory.getImage(getImagePath()), (int)this.body.getPosition().x, (int)this.body.getPosition().y, null);
 		}
 		else if(this instanceof RobotAI) {
 			graphics.setColor(new Color(.3f, .3f, .3f));
@@ -89,7 +93,6 @@ public abstract class Robot extends Element {
 			graphics.fillOval(x, y, SIZE, SIZE);
 			graphics.setColor(new Color(.9f, .9f, .9f));
 			graphics.fillOval(x+2, y+2, SIZE-4, SIZE-4);
-			//graphics.drawImage(ImageFactory.getImage(getImagePath()), affineTransform, null);
 			graphics.setColor(Color.GRAY);
 			graphics.drawRect(x + 10, y - 10, 26, 4);
 			if(this.getLife() < 30)
@@ -100,6 +103,12 @@ public abstract class Robot extends Element {
 		}
 	}
 
+	/**
+	 * Generate the tail of the robot
+	 * Only for player
+	 * 
+	 * @param graphics is the graphics where we draw the robot
+	 */
 	private void generateTail(Graphics2D graphics) {
 		if(this instanceof RobotFake || this instanceof RobotAI) return;
 		Vec2 lastPosition = tail.peekFirst();
@@ -127,14 +136,27 @@ public abstract class Robot extends Element {
 		tail.addFirst(this.getBody().getPosition().clone());
 	}
 
+	/**
+	 * Get the direction of the robot
+	 * 
+	 * @return the current direction
+	 */
 	protected double getDirection() {
 		return this.direction;
 	}
 	
+	/**
+	 * Set the direction of the robot
+	 * 
+	 * @param direction is the new direction
+	 */
 	protected void setDirection(double direction) {
 		this.direction = direction;
 	}
 	
+	/**
+	 * Push a little bit the robot by applying a linear force
+	 */
 	public void throttle() {
 		if(this.life<=0) return;
 		Vec2 vec = new Vec2();
@@ -143,20 +165,36 @@ public abstract class Robot extends Element {
 		this.body.applyLinearImpulse(vec, this.body.getLocalCenter());
 	}
 
+	/**
+	 * Rotate the robot
+	 * 
+	 * @param rotation in degrees
+	 */
 	public void rotate(int rotation) {
 		if(this.life<=0) return;
 		direction = (direction + rotation)%360;
 		if(direction<0) direction = 360+direction;
 	}
 
+	/**
+	 * Rotate left by 10 degrees
+	 */
 	public void rotateLeft() {
 		rotate(-10);
 	}
 
+	/**
+	 * Rotate right by 10 degrees
+	 */
 	public void rotateRight() {
 		rotate(10);
 	}
 
+	/**
+	 * Set the new life of the robot
+	 * 
+	 * @param life
+	 */
 	public void setLife(int life) {
 		this.life = life;
 		if(this.life <= 0) {
@@ -165,6 +203,11 @@ public abstract class Robot extends Element {
 		}
 	}
 
+	/**
+	 * Get the current life of the robot
+	 * 
+	 * @return the current life
+	 */
 	public int getLife() {
 		return this.life;
 	}

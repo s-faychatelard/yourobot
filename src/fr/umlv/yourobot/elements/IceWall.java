@@ -21,12 +21,19 @@ public class IceWall extends Wall {
 	
 	private static final String imagePath = "IceWall.png";
 
-	
+	/**
+	 * Create an ice wall
+	 *
+	 * @param position of the wall
+	 */
 	public IceWall(Vec2 position) {
 		//Null is test by super
 		super(position);
 	}
 
+	/**
+	 * Get the resource name of the wall
+	 */
 	@Override
 	String getImagePath() {
 		return imagePath;

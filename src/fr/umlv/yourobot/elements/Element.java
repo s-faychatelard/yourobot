@@ -34,6 +34,12 @@ public abstract class Element {
 	 */
 	public abstract void draw(Graphics2D graphics);
 	
+	/**
+	 * When you call addElement in World class, it set the body reference in this class.
+	 * Also set the damping of all element
+	 * 
+	 * @param body reference
+	 */
 	public void setBody(Body body) {
 		this.body = Objects.requireNonNull(body);
 		//Setup volume friction

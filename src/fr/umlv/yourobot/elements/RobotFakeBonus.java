@@ -38,17 +38,30 @@ public class RobotFakeBonus extends Bonus {
 	private long startTime;
 	private RobotFake currentRobot;
 
+	/**
+	 * Create a fake robot bonus
+	 * 
+	 * @param position of the fake robot bonus
+	 */
 	public RobotFakeBonus(Vec2 position) {
 		//Null is test by super
 		super(position);
 		duration = (new Random()).nextInt(MAXIMUM_DURATION - MINIMUM_DURATION) + MINIMUM_DURATION;
 	}
 	
+	/**
+	 * Return the resource name of the fake robot bonus
+	 */
 	@Override
 	public String getImagePath() {
 		return imagePath;
 	}
 
+	/**
+	 * Execute the bonus
+	 * 
+	 * @param robot correspond to player who launch the fake robot
+	 */
 	@Override
 	public void execute(final RobotPlayer robot) {
 		Objects.requireNonNull(robot);
@@ -58,6 +71,11 @@ public class RobotFakeBonus extends Bonus {
 		World.addRobotFake(currentRobot);
 	}
 	
+	/**
+	 * Update the bonus state
+	 * 
+	 * @return the bonus if it continue to work or null if it terminate
+	 */
 	@Override
 	public Bonus update() {
 		date = new Date();
@@ -67,6 +85,9 @@ public class RobotFakeBonus extends Bonus {
 		return null;
 	}
 
+	/**
+	 * Get the duration of the bonus
+	 */
 	@Override
 	public int getDuration() {
 		return this.duration;
