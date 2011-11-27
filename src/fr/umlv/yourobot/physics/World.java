@@ -15,6 +15,7 @@
  */
 package fr.umlv.yourobot.physics;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -170,6 +171,7 @@ public class World {
 	public void render(Graphics2D graphics) {
 		for(Element e : elementsList)
 			e.draw(graphics);
+		graphics.setColor(Color.BLACK);
 	}
 	
 	public static void checkRobotsLife() {
@@ -245,10 +247,10 @@ public class World {
 
 	private void generateWorldBounds() {
 		// Top border
-		Body [] limits = new Body[4];
+		Body body;
 		BodyDef bodyDef = new BodyDef();
 		bodyDef.type = BodyType.STATIC;
-		bodyDef.position.set(0, -15);
+		bodyDef.position.set(0, -28);
 		PolygonShape blockShape = new PolygonShape();
 		blockShape.setAsBox(Main.WIDTH, 15/2);
 		FixtureDef fixtureDef = new FixtureDef();
@@ -256,13 +258,13 @@ public class World {
 		fixtureDef.density = 1.f;
 		fixtureDef.friction = 1.f;
 		fixtureDef.restitution = .1f;
-		limits[0] = world.createBody(bodyDef);
-		limits[0].createFixture(fixtureDef);
+		body = world.createBody(bodyDef);
+		body.createFixture(fixtureDef);
 
 		// left border
 		bodyDef = new BodyDef();
 		bodyDef.type = BodyType.STATIC;
-		bodyDef.position.set(-15, 0);
+		bodyDef.position.set(-29, 0);
 		blockShape = new PolygonShape();
 		blockShape.setAsBox(15/2, Main.HEIGHT);
 		fixtureDef = new FixtureDef();
@@ -270,13 +272,13 @@ public class World {
 		fixtureDef.density = 1.f;
 		fixtureDef.friction = 1.f;
 		fixtureDef.restitution = .1f;
-		limits[1] = world.createBody(bodyDef);
-		limits[1].createFixture(fixtureDef);
+		body = world.createBody(bodyDef);
+		body.createFixture(fixtureDef);
 
 		//bottom
 		bodyDef = new BodyDef();
 		bodyDef.type = BodyType.STATIC;
-		bodyDef.position.set(0, Main.HEIGHT);
+		bodyDef.position.set(0, Main.HEIGHT-12);
 		blockShape = new PolygonShape();
 		blockShape.setAsBox(Main.WIDTH, 15/2);
 		fixtureDef = new FixtureDef();
@@ -284,13 +286,13 @@ public class World {
 		fixtureDef.density = 1.f;
 		fixtureDef.friction = 1.f;
 		fixtureDef.restitution = .1f;
-		limits[2] = world.createBody(bodyDef);
-		limits[2].createFixture(fixtureDef);
+		body = world.createBody(bodyDef);
+		body.createFixture(fixtureDef);
 
 		// right
 		bodyDef = new BodyDef();
 		bodyDef.type = BodyType.STATIC;
-		bodyDef.position.set(Main.WIDTH, 0);
+		bodyDef.position.set(Main.WIDTH-12, 0);
 		blockShape = new PolygonShape();
 		blockShape.setAsBox(15/2, Main.HEIGHT);
 		fixtureDef = new FixtureDef();
@@ -298,8 +300,8 @@ public class World {
 		fixtureDef.density = 1.f;
 		fixtureDef.friction = 1.f;
 		fixtureDef.restitution = .1f;
-		limits[3] = world.createBody(bodyDef);
-		limits[3].createFixture(fixtureDef);
+		body = world.createBody(bodyDef);
+		body.createFixture(fixtureDef);
 	}
 
 	/**
