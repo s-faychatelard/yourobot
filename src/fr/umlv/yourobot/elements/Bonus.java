@@ -33,7 +33,7 @@ public abstract class Bonus extends Element {
 	private static final int BONUS_SIZE = 40;
 	private boolean isTaken;
 
-	public  Bonus(Vec2 position) {	
+	public Bonus(Vec2 position) {	
 			
 			PolygonShape blockShape;
 
@@ -65,6 +65,10 @@ public abstract class Bonus extends Element {
 	
 	public void setTaken() {
 		isTaken=true;
+	}
+	
+	public boolean isTaken() {
+		return this.isTaken;
 	}
 	
 	@Override

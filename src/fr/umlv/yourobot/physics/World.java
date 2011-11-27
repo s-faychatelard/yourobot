@@ -186,7 +186,7 @@ public class World {
 		return elementsList;
 	}
 
-	public Element addElement(Element element) {
+	private Element addElement(Element element) {
 		Objects.requireNonNull(element);
 		//createBody is already auto lock
 		Body elementBody = world.createBody(element.getBodyDef());

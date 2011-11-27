@@ -42,20 +42,6 @@ public class Collision implements ContactListener {
 		}
 		//End RobotIA ignore EndPoint
 
-		//RobotIA ignore Bonus
-		/*if((contact.getFixtureA().getBody().getUserData() instanceof Bonus && contact.getFixtureB().getBody().getUserData() instanceof RobotAI) ||
-				(contact.getFixtureB().getBody().getUserData() instanceof Bonus && contact.getFixtureA().getBody().getUserData() instanceof RobotAI)) {
-			return;
-		}
-		//End RobotIA ignore Bonus
-
-		//RobotPlayer take Bonus
-		if((contact.getFixtureA().getBody().getUserData() instanceof Bonus && contact.getFixtureB().getBody().getUserData() instanceof RobotPlayer) ||
-				(contact.getFixtureB().getBody().getUserData() instanceof Bonus && contact.getFixtureA().getBody().getUserData() instanceof RobotPlayer)) {
-			return;
-		}*/
-		//End RobotPlayer take Bonus
-
 		//WIN 
 		if((contact.getFixtureA().getBody().getUserData() instanceof EndPoint && contact.getFixtureB().getBody().getUserData() instanceof RobotPlayer) ||
 				(contact.getFixtureB().getBody().getUserData() instanceof EndPoint && contact.getFixtureA().getBody().getUserData() instanceof RobotPlayer)) {
