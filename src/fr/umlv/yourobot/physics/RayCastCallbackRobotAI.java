@@ -22,15 +22,27 @@ import org.jbox2d.dynamics.Fixture;
 public class RayCastCallbackRobotAI implements RayCastCallback {
 	private int count;
 
+	/**
+	 * Initialize the Callback
+	 * Must be call before every raycast()
+	 */
 	public void init() {
 		count=0;
 	}
 
+	/**
+	 * When a fixture is detect during raycast() this method is called
+	 */
 	public float reportFixture(Fixture fixture, Vec2 point, Vec2 normal, float fraction) {
 		count++;
 		return 1f;
 	}
 	
+	/**
+	 * Get the number of object detect by the raycast()
+	 * 
+	 * @return the number of report element
+	 */
 	public int getCount() {
 		return this.count;
 	}
