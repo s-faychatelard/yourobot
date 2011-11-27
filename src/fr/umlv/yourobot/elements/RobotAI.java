@@ -23,7 +23,7 @@ import java.util.Random;
 import org.jbox2d.common.Vec2;
 
 import fr.umlv.yourobot.Main;
-import fr.umlv.yourobot.physics.RayCastCallbackRobotAI;
+import fr.umlv.yourobot.physics.RobotAIRaycastCallback;
 import fr.umlv.yourobot.physics.World;
 
 public class RobotAI extends Robot {
@@ -31,7 +31,7 @@ public class RobotAI extends Robot {
 	private Date date;
 	private long lastDetectionTime=-1;
 	private String imagePath = "robot.png";
-	private final static RayCastCallbackRobotAI callback = new RayCastCallbackRobotAI();
+	private final static RobotAIRaycastCallback callback = new RobotAIRaycastCallback();
 	private final static double diagonal= Math.sqrt((Main.WIDTH*Main.WIDTH) + (Main.HEIGHT*Main.HEIGHT)) / 4;
 
 	/**

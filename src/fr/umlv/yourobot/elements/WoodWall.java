@@ -21,11 +21,19 @@ public class WoodWall extends Wall {
 	
 	private static final String imagePath = "woodWall.png";
 
+	/**
+	 * Create a wood wall
+	 * 
+	 * @param position of the wall
+	 */
 	public WoodWall(Vec2 position) {
 		//Null is test by super
 		super(position);
 	}
 	
+	/**
+	 * Return the resource name of the wall
+	 */
 	@Override
 	String getImagePath() {
 		return imagePath;

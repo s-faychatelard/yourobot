@@ -29,6 +29,11 @@ public class StartPoint extends Element {
 	private final static int SIZE = 50;
 	private static final String imagePath = "startPoint.png";
 	
+	/**
+	 * Create a start point
+	 * 
+	 * @param position of the start point
+	 */
 	public StartPoint(Vec2 position) {
 		bodyDef = new BodyDef();
 		bodyDef.type = BodyType.STATIC;
@@ -36,6 +41,9 @@ public class StartPoint extends Element {
 		fixtureDef = null;
 	}
 	
+	/**
+	 * Draw the start point
+	 */
 	@Override
 	public void draw(Graphics2D graphics) {
 		Vec2 p = this.body.getPosition();

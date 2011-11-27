@@ -72,7 +72,7 @@ public class RobotFakeBonus extends Bonus {
 	}
 	
 	/**
-	 * Update the bonus
+	 * Update the bonus state
 	 * 
 	 * @return the bonus if it continue to work or null if it terminate
 	 */
