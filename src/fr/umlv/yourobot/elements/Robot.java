@@ -31,7 +31,7 @@ import fr.umlv.yourobot.physics.World;
 import fr.umlv.yourobot.utils.ImageFactory;
 
 public abstract class Robot extends Element {
-	private static final int SIZE_OF_TAIL = 5;
+	private static final int SIZE_OF_TAIL = 8;
 	private final static int SIZE = 40;
 	protected final static int INITIAL_SPEED = 100; //used by RobotAI
 	private CircleShape blockShape;
@@ -55,9 +55,9 @@ public abstract class Robot extends Element {
 		fixtureDef.friction = .8f;
 		fixtureDef.restitution = 0.f;
 		
-		life = 100;
-		
 		tail = new LinkedList<>();
+		tail.add(position);
+		life = 100;
 	}
 
 	@Override
@@ -71,16 +71,19 @@ public abstract class Robot extends Element {
 			graphics.drawImage(ImageFactory.getImage(getImagePath()), affineTransform, null);
 		}
 		else if(this instanceof RobotAI) {
-			graphics.setColor(Color.BLACK);
+			graphics.setColor(new Color(.3f, .3f, .3f));
 			graphics.fillOval((int)this.body.getPosition().x, (int)this.body.getPosition().y, (int)SIZE, (int)SIZE);
+			graphics.setColor(Color.BLACK);
+			graphics.fillOval((int)this.body.getPosition().x+2, (int)this.body.getPosition().y+2, (int)SIZE-4, (int)SIZE-4);
 		}
 		else {
-			graphics.setColor(Color.WHITE);
 			int x = (int)this.body.getPosition().x;
 			int y = (int)this.body.getPosition().y;
-
-			graphics.fillOval(x, y, (int)SIZE, (int)SIZE);
-			graphics.drawImage(ImageFactory.getImage(getImagePath()), affineTransform, null);
+			graphics.setColor(Color.GRAY);
+			graphics.fillOval(x, y, SIZE, SIZE);
+			graphics.setColor(new Color(.9f, .9f, .9f));
+			graphics.fillOval(x+2, y+2, SIZE-4, SIZE-4);
+			//graphics.drawImage(ImageFactory.getImage(getImagePath()), affineTransform, null);
 			graphics.setColor(Color.GRAY);
 			graphics.drawRect(x + 10, y - 10, 26, 4);
 			if(this.getLife() < 30)
@@ -92,10 +95,30 @@ public abstract class Robot extends Element {
 	}
 
 	private void generateTail(Graphics2D graphics) {
-		Vec2 firstPosition = tail.peekFirst();
-		//if()
-		if(tail.size()==SIZE_OF_TAIL) tail.removeFirst();
+		if(this instanceof RobotFake || this instanceof RobotAI) return;
+		Vec2 lastPosition = tail.peekFirst();
 		
+		int x = (int)this.getBody().getLinearVelocity().x;
+		int y = (int)this.getBody().getLinearVelocity().y;
+		double distance = Math.sqrt(x*x + y*y);
+		
+		int radius = 24;
+		float alpha = (float)distance/60;
+		for(Vec2 pos : tail) {
+			graphics.setColor(new Color(1.f, 1.f, .5f, alpha));
+			graphics.fillOval((int)pos.x+SIZE/4, (int)pos.y+SIZE/4, radius, radius);
+			radius-=3;
+			alpha-=.1f;
+			if(alpha<0.f) alpha=0.f;
+		}
+		
+		x = (int)this.getBody().getPosition().x - (int)lastPosition.x;
+		y = (int)this.getBody().getPosition().y - (int)lastPosition.y;
+		distance = Math.sqrt(x*x + y*y);
+		if(distance<10) return;
+		
+		if(tail.size()==SIZE_OF_TAIL) tail.removeLast();
+		tail.addFirst(this.getBody().getPosition().clone());
 	}
 
 	protected double getDirection() {

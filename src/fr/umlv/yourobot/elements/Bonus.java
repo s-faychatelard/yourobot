@@ -53,7 +53,6 @@ public abstract class Bonus extends Element {
 	}
 	
 	public abstract Bonus update();
-	public abstract int getExecutionTime();
 	public abstract String getImagePath();
 	public abstract void execute(RobotPlayer robot);
 	

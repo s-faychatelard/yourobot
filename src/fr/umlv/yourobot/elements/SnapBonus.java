@@ -54,11 +54,6 @@ public class SnapBonus extends Bonus {
 	}
 
 	@Override
-	public int getExecutionTime() {
-		return this.executionTime;
-	}
-
-	@Override
 	public void execute(final RobotPlayer robot) {
 		Objects.requireNonNull(robot);
 		date = new Date();
