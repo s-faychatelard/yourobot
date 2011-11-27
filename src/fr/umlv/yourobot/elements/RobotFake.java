@@ -19,7 +19,7 @@ import org.jbox2d.common.Vec2;
 
 public class RobotFake extends Robot {
 	
-	private static final String imagePath = "fakeRobot.png";
+	private static final String imagePath = "robotFake.png";
 
 	public RobotFake(Vec2 position) {
 		//Null is test by super
