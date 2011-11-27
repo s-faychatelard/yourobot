@@ -27,12 +27,22 @@ public class RobotPlayer extends Robot {
 	private final LinkedList<Bonus> bonus;
 	private Bonus currentExecutedBonus=null;
 
+	/**
+	 * Create a player 
+	 * 
+	 * @param position of the player
+	 */
 	public RobotPlayer(Vec2 position) {
 		//Null is test by super
 		super(position);
 		bonus = new LinkedList<>();
 	}
 
+	/**
+	 * Take a bonus and add it to the bonuses queue
+	 * 
+	 * @param bonus
+	 */
 	public void takeBonus(Bonus bonus) {
 		if(bonus.isTaken()) return;
 		bonus.setTaken();
@@ -40,6 +50,9 @@ public class RobotPlayer extends Robot {
 		this.bonus.push(bonus);
 	}
 
+	/**
+	 * Try to use a bonus if there is one in the queue
+	 */
 	public void useBonus() {
 		if(this.getLife()<=0) return;
 		if(currentExecutedBonus!=null) return;
@@ -48,11 +61,17 @@ public class RobotPlayer extends Robot {
 		currentExecutedBonus.execute(this);
 	}
 
+	/**
+	 * Return the resource name of the fake robot
+	 */
 	@Override
 	public String getImagePath() {
 		return imagePath;
 	}
 
+	/**
+	 * Try to update a bonus if there is one in execution
+	 */
 	public void update() {
 		if(currentExecutedBonus==null) return;
 		currentExecutedBonus = currentExecutedBonus.update();
