@@ -27,9 +27,14 @@ public class ImageFactory {
 	
 	public static Image getImage(String path) {
 		Objects.requireNonNull(path);
-		Image image = imagePool.get(path);
+		
+		StringBuilder sb = new StringBuilder();
+		sb.append(Utils.getResourcesFolder());
+		sb.append(path);
+		//System.out.println(Paths.get(sb.toString()));
+		Image image = imagePool.get(sb.toString());
 		if (image == null) {
-			image = Toolkit.getDefaultToolkit().getImage(path);
+			image = Toolkit.getDefaultToolkit().getImage(sb.toString());
 			imagePool.put(path, Objects.requireNonNull(image));
 		}
 		return image;
