@@ -34,10 +34,10 @@ public class RobotPlayer extends Robot {
 	}
 
 	public void takeBonus(Bonus bonus) {
-		if(this.bonus.contains(bonus)) return;
+		if(bonus.isTaken()) return;
+		bonus.setTaken();
 		World.removeBody(bonus);
 		this.bonus.push(bonus);
-		bonus.setTaken();
 	}
 
 	public void useBonus() {

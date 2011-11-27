@@ -78,6 +78,10 @@ public abstract class Bonus extends Element {
 		isTaken=true;
 	}
 	
+	public boolean isTaken() {
+		return this.isTaken;
+	}
+	
 	@Override
 	public void draw(Graphics2D graphics) {
 		if(isTaken) return;

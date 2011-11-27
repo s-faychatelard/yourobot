@@ -21,10 +21,23 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
+/**
+ * Group images in one class
+ * Contains access to all images needed for the game
+ */
 public class ImageFactory {
 	
+	/**
+	 * Contains all loaded images
+	 */
 	private final static Map<String, Image> imagePool = new HashMap<String, Image>();
 	
+	/**
+	 * Give a path and the corresponding image
+	 * 
+	 * @param path is the generally the filename
+	 * @return the image corresponding to the path
+	 */
 	public static Image getImage(String path) {
 		Objects.requireNonNull(path);
 		StringBuilder sb = new StringBuilder();
