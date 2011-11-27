@@ -19,7 +19,7 @@ import org.jbox2d.common.Vec2;
 
 public class WoodWall extends Wall {
 	
-	private static final String imagePath = "woodWall.jpg";
+	private static final String imagePath = "woodWall.png";
 
 	public WoodWall(Vec2 position) {
 		//Null is test by super
