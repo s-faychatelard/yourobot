@@ -106,10 +106,10 @@ public class Main {
 								sleep();
 							}
 						});
-						if(event != null && event.getKey() == KeyboardKey.C) {
-							generateWorld(numberOfPlayers, ++level);
-						} else if(event != null && event.getKey() == KeyboardKey.Q) {
+						if(event != null && event.getKey() == KeyboardKey.Q) {
 							gameState = GameState.QUIT;
+						} else if(event != null) {
+							generateWorld(numberOfPlayers, ++level);
 						}
 						break;
 					case LOSE:
@@ -126,11 +126,11 @@ public class Main {
 								sleep();
 							}
 						});
-						if(event != null && event.getKey() == KeyboardKey.R) {
-							generateWorld(numberOfPlayers, level);
-						} else if(event != null && event.getKey() == KeyboardKey.Q) {
+						if(event != null && event.getKey() == KeyboardKey.Q) {
 							gameState = GameState.QUIT;
-						}
+						} else if(event != null) {
+							generateWorld(numberOfPlayers, level);
+						} 
 						break;
 					}
 				}
