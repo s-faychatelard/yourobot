@@ -119,7 +119,6 @@ public class BomberBonus extends Bonus {
 		for(BomberElement bomberElement : bomberElements)
 			bomberElement.element.getBody().setType(bomberElement.oldBodyType);
 		bomberElements.clear();
-		System.out.println("NULL");
 		return null;
 	}
 }

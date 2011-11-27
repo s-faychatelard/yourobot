@@ -321,7 +321,6 @@ public class World {
 		// that numbers are used forward with a computed random value to display the elements on the map
 		int numberOfWalls = Main.WIDTH * Main.HEIGHT / (CELL_SIZE * CELL_SIZE) / 20;
 		numberOfWalls = Math.round (numberOfWalls * (1 + (level/5)));
-		System.out.println(numberOfWalls);
 		int numberOfBonus = Main.WIDTH * Main.HEIGHT / (CELL_SIZE * CELL_SIZE) / 30;
 		numberOfBonus = Math.round (numberOfBonus * (1 + (level/5)));
 
