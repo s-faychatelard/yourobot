@@ -31,6 +31,11 @@ public class EndPoint extends Element {
 	private static final int RADIUS = 40/2;
 	private static final String imagePath = "endPoint.png";
 	
+	/**
+	 * Create an end point
+	 * 
+	 * @param position of the end point
+	 */
 	public EndPoint(Vec2 position) {
 			
 		CircleShape blockShape;
@@ -50,6 +55,9 @@ public class EndPoint extends Element {
 		fixtureDef.filter.categoryBits = 3;
 	}
 	
+	/**
+	 * Draw the end point
+	 */
 	@Override
 	public void draw(Graphics2D graphics) {
 		Vec2 p = this.body.getPosition();

@@ -34,16 +34,27 @@ public class RobotAI extends Robot {
 	private final static RayCastCallbackRobotAI callback = new RayCastCallbackRobotAI();
 	private final static double diagonal= Math.sqrt((Main.WIDTH*Main.WIDTH) + (Main.HEIGHT*Main.HEIGHT)) / 4;
 
+	/**
+	 * Create an AI
+	 * 
+	 * @param position of the AI
+	 */
 	public RobotAI(Vec2 position) {
 		//Null is test by super
 		super(position);
 	}
 
+	/**
+	 * Return the resource name of an AI
+	 */
 	@Override
 	public String getImagePath() {
 		return this.imagePath;
 	}
 
+	/**
+	 * Update the AI by changing direction, or detecting player
+	 */
 	public void update() {
 		Random rand = new Random();
 		if(lastDetectionTime!=-1) {
@@ -70,6 +81,9 @@ public class RobotAI extends Robot {
 		}
 	}
 	
+	/**
+	 * Go to the current direction
+	 */
 	private void go() {
 		Vec2 vec = new Vec2();
 		vec.x = (float) Math.cos(Math.toRadians(this.getDirection())) * Robot.INITIAL_SPEED*10;
@@ -77,6 +91,12 @@ public class RobotAI extends Robot {
 		this.getBody().setLinearVelocity(vec);
 	}
 
+	/**
+	 * Try to know if the player is near the AI
+	 * 
+	 * @param robot which you want to detect
+	 * @return true if the distance is less than a quarter of the diagonal screen else return false
+	 */
 	private boolean detect(Robot robot) {
 		Objects.requireNonNull(robot);
 		if(robot.getLife()<=0) return false;
@@ -89,6 +109,11 @@ public class RobotAI extends Robot {
 		return false;
 	}
 
+	/**
+	 * Try to detect a player
+	 * 
+	 * @return true if player was detected
+	 */
 	private boolean detect() {
 		LinkedList<Robot> robots = World.getDetectableRobot();
 		for(Robot robot : robots) {
@@ -106,6 +131,11 @@ public class RobotAI extends Robot {
 		return false;
 	}
 	
+	/**
+	 * When a player is detect use this method to jump in the direction of the detected player
+	 * 
+	 * @param vec correspond to the position of the detected player
+	 */
 	private void jumpToDetectedRobot(Vec2 vec) {
 		this.body.setLinearDamping(.05f);	
 		Objects.requireNonNull(vec);

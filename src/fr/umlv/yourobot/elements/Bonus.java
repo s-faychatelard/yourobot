@@ -57,7 +57,11 @@ public abstract class Bonus extends Element {
 			isTaken=false;
 	}
 
-	
+	/**
+	 * Update Bonus state
+	 * 
+	 * @return null if the Bonus is terminate else return the bonus
+	 */
 	public abstract Bonus update();
 	
 	/**
@@ -66,6 +70,11 @@ public abstract class Bonus extends Element {
 	 */
 	public abstract String getImagePath();
 	
+	/**
+	 * Start the execution of the Bonus by a player
+	 * 
+	 * @param robot who launch the bonus
+	 */
 	public abstract void execute(RobotPlayer robot);
 	
 	/** 
@@ -73,18 +82,25 @@ public abstract class Bonus extends Element {
 	 */
 	public abstract int getDuration();
 
-	
+	/**
+	 * Set the bonus has taken
+	 */
 	public void setTaken() {
 		isTaken=true;
 	}
 	
+	/**
+	 * @return true if the bonus is in the bonus queue of a robot else return false
+	 */
 	public boolean isTaken() {
 		return this.isTaken;
 	}
 	
+	/**
+	 * Draw the bonus
+	 */
 	@Override
 	public void draw(Graphics2D graphics) {
-		if(isTaken) return;
 		Vec2 p = this.body.getPosition();
 	    graphics.drawImage(ImageFactory.getImage(getImagePath()), (int)p.x , (int)p.y, BONUS_SIZE, BONUS_SIZE, null);
 		

@@ -21,11 +21,19 @@ public class RobotFake extends Robot {
 	
 	private static final String imagePath = "robotFake.png";
 
+	/**
+	 * Create a fake robot
+	 * 
+	 * @param position of the fake robot
+	 */
 	public RobotFake(Vec2 position) {
 		//Null is test by super
 		super(position);
 	}
 	
+	/**
+	 * Return the resource name of the fake robot
+	 */
 	@Override
 	public String getImagePath() {
 		return imagePath;
