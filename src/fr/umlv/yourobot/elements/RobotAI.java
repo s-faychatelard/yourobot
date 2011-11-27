@@ -89,7 +89,7 @@ public class RobotAI extends Robot {
 		return false;
 	}
 
-	public boolean detect() {
+	private boolean detect() {
 		LinkedList<Robot> robots = World.getDetectableRobot();
 		for(Robot robot : robots) {
 			if(detect(robot)) {
@@ -106,7 +106,7 @@ public class RobotAI extends Robot {
 		return false;
 	}
 	
-	public void jumpToDetectedRobot(Vec2 vec) {
+	private void jumpToDetectedRobot(Vec2 vec) {
 		this.body.setLinearDamping(.05f);	
 		Objects.requireNonNull(vec);
 		Vec2 p1 = this.getBody().getPosition();
