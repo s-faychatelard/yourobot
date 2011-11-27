@@ -19,7 +19,7 @@ import org.jbox2d.common.Vec2;
 
 public class StoneWall extends Wall {
 	
-	private static final String imagePath = "stoneWall.jpg";
+	private static final String imagePath = "stoneWall.png";
 
 	public StoneWall(Vec2 position) {
 		//Null is test by super

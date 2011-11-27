@@ -114,10 +114,10 @@ public class Main {
 								graphics.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 								graphics.setColor(Color.BLACK);
 								graphics.setFont(new Font("Verdana", Font.ROMAN_BASELINE | Font.BOLD, 72));
-								graphics.drawString("GAME OVER", Main.WIDTH/2+2-125, Main.HEIGHT/2+2);
+								graphics.drawString("GAME OVER", Main.WIDTH/2+2-235, Main.HEIGHT/2+2);
 								graphics.setColor(Color.WHITE);
 								graphics.setFont(new Font("Verdana", Font.ROMAN_BASELINE | Font.BOLD, 72));
-								graphics.drawString("GAME OVER", Main.WIDTH/2-125, Main.HEIGHT/2);
+								graphics.drawString("GAME OVER", Main.WIDTH/2-235, Main.HEIGHT/2);
 								sleep();
 							}
 						});
