@@ -26,7 +26,9 @@ import fr.umlv.yourobot.physics.World;
 public class RobotFakeBonus extends Bonus {
 	
 	private static final String imagePath = "robotFakeBonus.png";
-	private final int executionTime;
+	private static final int MINIMUM_DURATION = 2;
+	private static final int MAXIMUM_DURATION = 6;
+	private final int duration;
 	private Date date;
 	private long startTime;
 	private RobotFake currentRobot;
@@ -34,8 +36,7 @@ public class RobotFakeBonus extends Bonus {
 	public RobotFakeBonus(Vec2 position) {
 		//Null is test by super
 		super(position);
-		Random rand = new Random();
-		executionTime = rand.nextInt(4000)+2000;
+		duration = (new Random()).nextInt(MAXIMUM_DURATION - MINIMUM_DURATION) + MINIMUM_DURATION;
 	}
 	
 	@Override
@@ -56,8 +57,13 @@ public class RobotFakeBonus extends Bonus {
 	public Bonus update() {
 		date = new Date();
 		long time = date.getTime();
-		if(time<startTime+executionTime) return this;
+		if(time<startTime+(duration*1000)) return this;
 		World.removeLeurre(currentRobot);
 		return null;
+	}
+
+	@Override
+	public int getDuration() {
+		return this.duration;
 	}
 }

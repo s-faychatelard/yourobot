@@ -15,6 +15,7 @@
  */
 package fr.umlv.yourobot.elements;
 
+import java.awt.Font;
 import java.awt.Graphics2D;
 import java.util.Objects;
 
@@ -56,6 +57,12 @@ public abstract class Bonus extends Element {
 	public abstract String getImagePath();
 	public abstract void execute(RobotPlayer robot);
 	
+	/** 
+	 * @return the duration of the bonus effect. Return 0 if the bonus has not duration (ex : bombers)
+	 */
+	public abstract int getDuration();
+
+	
 	public void setTaken() {
 		isTaken=true;
 	}
@@ -65,5 +72,11 @@ public abstract class Bonus extends Element {
 		if(isTaken) return;
 		Vec2 p = this.body.getPosition();
 	    graphics.drawImage(ImageFactory.getImage(getImagePath()), (int)p.x , (int)p.y, BONUS_SIZE, BONUS_SIZE, null);
+		
+	    graphics.setFont(new Font("Verdana", Font.BOLD, 10));
+	    if(getDuration() != 0)
+	    	graphics.drawString(getDuration()+"s", (int)p.x, (int)p.y);
+
+
 	}
 }
