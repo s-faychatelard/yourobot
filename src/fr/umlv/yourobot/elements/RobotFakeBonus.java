@@ -42,18 +42,13 @@ public class RobotFakeBonus extends Bonus {
 	public String getImagePath() {
 		return imagePath;
 	}
-	
-	@Override
-	public int getExecutionTime() {
-		return this.executionTime;
-	}
 
 	@Override
 	public void execute(final RobotPlayer robot) {
 		Objects.requireNonNull(robot);
 		date = new Date();
 		startTime = date.getTime();
-		currentRobot = new RobotFake(new Vec2(robot.getBody().getPosition().x+25, robot.getBody().getPosition().y+25));
+		currentRobot = new RobotFake(new Vec2(robot.getBody().getPosition().x-25, robot.getBody().getPosition().y-25));
 		World.addRobotFake(currentRobot);
 	}
 	

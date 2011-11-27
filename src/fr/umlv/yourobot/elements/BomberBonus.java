@@ -65,11 +65,6 @@ public class BomberBonus extends Bonus {
 	public String getImagePath() {
 		return imagePath;
 	}
-	
-	@Override
-	public int getExecutionTime() {
-		return -1;
-	}
 
 	@Override
 	public void execute(RobotPlayer robot) {
@@ -115,7 +110,6 @@ public class BomberBonus extends Bonus {
 	public Bonus update() {
 		date = new Date();
 		long time = date.getTime();
-		System.out.println(time + " " + startTime + " " + executionTime);
 		if(time<startTime+executionTime) return this;
 		for(BomberElement bomberElement : bomberElements)
 			bomberElement.element.getBody().setType(bomberElement.oldBodyType);
