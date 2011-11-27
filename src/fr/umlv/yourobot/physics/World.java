@@ -31,20 +31,7 @@ import org.jbox2d.dynamics.joints.Joint;
 import org.jbox2d.dynamics.joints.JointDef;
 
 import fr.umlv.yourobot.Main;
-import fr.umlv.yourobot.elements.BomberBonus;
-import fr.umlv.yourobot.elements.Element;
-import fr.umlv.yourobot.elements.EndPoint;
-import fr.umlv.yourobot.elements.RobotFake;
-import fr.umlv.yourobot.elements.RobotFakeBonus;
-import fr.umlv.yourobot.elements.IceWall;
-import fr.umlv.yourobot.elements.Robot;
-import fr.umlv.yourobot.elements.RobotAI;
-import fr.umlv.yourobot.elements.RobotPlayer;
-import fr.umlv.yourobot.elements.SnapBonus;
-import fr.umlv.yourobot.elements.StartPoint;
-import fr.umlv.yourobot.elements.StoneWall;
-import fr.umlv.yourobot.elements.Wall;
-import fr.umlv.yourobot.elements.WoodWall;
+import fr.umlv.yourobot.elements.*;
 import fr.umlv.zen.KeyboardKey;
 
 public class World {
@@ -58,6 +45,8 @@ public class World {
 	private static final LinkedList<Robot> detectabelRobots = new LinkedList<>();
 	private static RobotPlayer []robotsPlayer;
 	private final ArrayList<RobotAI> robotsIA = new ArrayList<>();
+	
+	// matrix dividing  the level map in cells, in order to put the elements
 	private boolean matrix[][];
 
 	public World(int numberOfPlayers, int level) {
@@ -88,6 +77,11 @@ public class World {
 		generateAI(level);
 	}
 
+	/**
+	 * Generate positioned AI on the map
+	 * Number of AI increase with the levels
+	 * @param int level 
+	 */
 	private void generateAI(int level) {
 		int numberOfAI = (level / 5) + 1;
 		Random rand = new Random();
@@ -108,6 +102,10 @@ public class World {
 		}
 	}
 
+	/**
+	 * Generate the players, start points and end points
+	 * @param numberOfPlayers
+	 */
 	private void generatePlayersAndGates(int numberOfPlayers) {
 		//Generate Players
 		Random rand = new Random();
@@ -127,6 +125,10 @@ public class World {
 		this.addElement(new EndPoint(new Vec2((matrix.length-1)*CELL_SIZE, (matrix[0].length-1)*CELL_SIZE)));
 	}
 
+	/**
+	 * Manage controls for real players
+	 * @param key
+	 */
 	public void setKey(KeyboardKey key) {
 		switch(key) {
 		case UP:
@@ -159,6 +161,7 @@ public class World {
 			break;
 		}
 	}
+
 
 	public void updateWorld() {
 		for(RobotAI ia : robotsIA)
@@ -245,6 +248,10 @@ public class World {
 		world.destroyJoint(joint);
 	}
 
+	/**
+	 * Genereate the bounds of the level 
+	 * (to avoid elements to leave the screen)
+	 */
 	private void generateWorldBounds() {
 		// Top border
 		Body body;
