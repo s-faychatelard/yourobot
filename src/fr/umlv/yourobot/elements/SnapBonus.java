@@ -30,9 +30,14 @@ import fr.umlv.yourobot.physics.World;
 public class SnapBonus extends Bonus {
 
 	private static final String imagePath = "snapBonus.png";
+	
+	// Bound the random duration generated for each object
 	private static final int MINIMUM_DURATION = 2;
 	private static final int MAXIMUM_DURATION = 6;
+	
+	// effective duration of the RobotFake
 	private final int duration;
+	
 	private Date date;
 	private long startTime;
 	private LinkedList<SnapElement> snapElements;

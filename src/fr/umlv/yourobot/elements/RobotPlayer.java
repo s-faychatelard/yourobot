@@ -25,7 +25,7 @@ public class RobotPlayer extends Robot {
 
 	private static final String imagePath = "robot.png";
 	private final LinkedList<Bonus> bonus;
-	private Bonus currentExecuteBonus=null;
+	private Bonus currentExecutedBonus=null;
 
 	public RobotPlayer(Vec2 position) {
 		//Null is test by super
@@ -42,10 +42,10 @@ public class RobotPlayer extends Robot {
 
 	public void useBonus() {
 		if(this.getLife()<=0) return;
-		if(currentExecuteBonus!=null) return;
+		if(currentExecutedBonus!=null) return;
 		if(bonus.size()<=0) return;
-		currentExecuteBonus = bonus.pop();
-		currentExecuteBonus.execute(this);
+		currentExecutedBonus = bonus.pop();
+		currentExecutedBonus.execute(this);
 	}
 
 	@Override
@@ -54,7 +54,7 @@ public class RobotPlayer extends Robot {
 	}
 
 	public void update() {
-		if(currentExecuteBonus==null) return;
-		currentExecuteBonus = currentExecuteBonus.update();
+		if(currentExecutedBonus==null) return;
+		currentExecutedBonus = currentExecutedBonus.update();
 	}
 }
