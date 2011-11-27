@@ -184,7 +184,9 @@ public class Main {
 	 */
 	private static void sleep() {
 		//150ms is not visible by human eyes except Chuck Norris eye's
-		try {Thread.sleep(150);} catch (InterruptedException e) {}
+		try {Thread.sleep(150);} catch (InterruptedException e) {
+			gameState = GameState.QUIT;
+		}
 	}
 
 	private static void displayMenu(ApplicationContext context, KeyboardEvent event) {

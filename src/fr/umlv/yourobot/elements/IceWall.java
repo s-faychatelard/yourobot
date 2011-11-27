@@ -19,7 +19,7 @@ import org.jbox2d.common.Vec2;
 
 public class IceWall extends Wall {
 	
-	private static final String imagePath = "IceWall.png";
+	private static final String imagePath = "iceWall.png";
 
 	/**
 	 * Create an ice wall
