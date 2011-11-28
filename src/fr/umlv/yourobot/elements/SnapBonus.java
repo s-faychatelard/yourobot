@@ -22,8 +22,8 @@ import java.util.Random;
 
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.BodyType;
-import org.jbox2d.dynamics.joints.DistanceJointDef;
 import org.jbox2d.dynamics.joints.Joint;
+import org.jbox2d.dynamics.joints.RevoluteJointDef;
 
 import fr.umlv.yourobot.physics.World;
 
@@ -92,10 +92,10 @@ public class SnapBonus extends Bonus {
 			
 			SnapElement snapElement = new SnapElement();
 			snapElement.element = element;
-			DistanceJointDef djd = new DistanceJointDef();
+			RevoluteJointDef djd = new RevoluteJointDef();
 			snapElement.oldBodyType = element.getBody().getType();
 			element.getBody().setType(BodyType.DYNAMIC);
-			djd.initialize(robot.getBody(), element.getBody(), new Vec2(100,100), new Vec2(100,100));
+			djd.initialize(robot.getBody(), element.getBody(), new Vec2(100,100));
 			snapElement.joint = World.addJoint(djd);
 			snapElements.add(snapElement);
 		}

@@ -28,6 +28,7 @@ import fr.umlv.yourobot.elements.Bonus;
 import fr.umlv.yourobot.elements.EndPoint;
 import fr.umlv.yourobot.elements.RobotAI;
 import fr.umlv.yourobot.elements.RobotPlayer;
+import fr.umlv.yourobot.elements.Wall;
 
 /**
  * Manage all collisions in the World environment
@@ -101,7 +102,7 @@ public class Collision implements ContactListener {
 	 */
 	@Override
 	public void preSolve(Contact contact, Manifold oldManifold) {
-		//RobotPlayer take {@code Bonus}
+		//RobotPlayer take Bonus
 		if((contact.getFixtureA().getBody().getUserData() instanceof Bonus && contact.getFixtureB().getBody().getUserData() instanceof RobotPlayer)) {
 			RobotPlayer rp = (RobotPlayer) contact.getFixtureB().getBody().getUserData();
 			rp.takeBonus((Bonus)contact.getFixtureA().getBody().getUserData());
@@ -125,6 +126,15 @@ public class Collision implements ContactListener {
 		if((contact.getFixtureA().getBody().getUserData() instanceof Bonus && contact.getFixtureB().getBody().getUserData() instanceof RobotAI) ||
 				(contact.getFixtureB().getBody().getUserData() instanceof Bonus && contact.getFixtureA().getBody().getUserData() instanceof RobotAI)) {
 			//RobotAI can pass over the {@code Bonus}
+			contact.setEnabled(false);
+			return;
+		}
+		//Wall pass also over Bonus
+		if((contact.getFixtureA().getBody().getUserData() instanceof Bonus && contact.getFixtureB().getBody().getUserData() instanceof Wall)) {
+			contact.setEnabled(false);
+			return;
+		}
+		if((contact.getFixtureB().getBody().getUserData() instanceof Bonus && contact.getFixtureA().getBody().getUserData() instanceof Wall)) {
 			contact.setEnabled(false);
 			return;
 		}
