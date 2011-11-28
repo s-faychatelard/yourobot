@@ -92,11 +92,11 @@ public class SnapBonus extends Bonus {
 			
 			SnapElement snapElement = new SnapElement();
 			snapElement.element = element;
-			RevoluteJointDef djd = new RevoluteJointDef();
+			RevoluteJointDef rjd = new RevoluteJointDef();
 			snapElement.oldBodyType = element.getBody().getType();
 			element.getBody().setType(BodyType.DYNAMIC);
-			djd.initialize(robot.getBody(), element.getBody(), new Vec2(100,100));
-			snapElement.joint = World.addJoint(djd);
+			rjd.initialize(robot.getBody(), element.getBody(), new Vec2(100,100));
+			snapElement.joint = World.addJoint(rjd);
 			snapElements.add(snapElement);
 		}
 	}
