@@ -98,6 +98,7 @@ public class Collision implements ContactListener {
 	/**
 	 * Manage {@code Bonus} collision
 	 *  - RobotAI can pass over {@code Bonus} (Ignore collision)
+	 *  - Wall can pass over during snap {@code Bonus} (Ignore collision)
 	 *  - RobotPlayer take the {@code Bonus}.
 	 */
 	@Override
