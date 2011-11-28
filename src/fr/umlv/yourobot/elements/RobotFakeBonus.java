@@ -28,8 +28,8 @@ public class RobotFakeBonus extends Bonus {
 	private static final String imagePath = "robotFakeBonus.png";
 	
 	// Bound the random duration generated for each object
-	private static final int MINIMUM_DURATION = 2;
-	private static final int MAXIMUM_DURATION = 6;
+	private static final int MINIMUM_DURATION = 5;
+	private static final int MAXIMUM_DURATION = 10;
 	
 	// effective duration of the RobotFake
 	private final int duration;
